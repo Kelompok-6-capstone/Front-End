@@ -16,7 +16,7 @@ const PasswordInput = () => {
                         placeholder="Masukkan Kata Sandi"
                     />
                     <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <img src="/auth/passwd.svg" alt="logo password" />
+                        <img src="/images/auth/passwd.svg" alt="logo password" />
                     </div>
                     <button
                         type="button"
