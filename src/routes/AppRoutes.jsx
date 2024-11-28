@@ -4,6 +4,7 @@ import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
 import VerifyOTPPage from '../pages/auth/VerifyOTPPage';
+import Dashboard from '../pages/admin/Dashboard';
 
 const AppRoutes = () => (
     <Routes>
@@ -12,6 +13,7 @@ const AppRoutes = () => (
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/verify-otp" element={<VerifyOTPPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
     </Routes>
 );
 
