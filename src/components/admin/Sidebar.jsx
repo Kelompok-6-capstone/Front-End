@@ -28,7 +28,7 @@ const Sidebar = () => {
               <img src="/images/Calmind.svg" alt="logo" />
             </a>
             <div className="flex flex-col justify-center items-center mb-[36px]">
-              <img src="/images/admin-profil.png" alt="admin-profile" />
+              <img src="/images/admin/admin-profil.png" alt="admin-profile" />
               <h1 className="text-[#000] text-center text-[16px] not-italic font-semibold leading-[normal]">
                 Dafa Azriel
               </h1>
