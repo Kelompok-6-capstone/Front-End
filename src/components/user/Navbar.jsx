@@ -11,7 +11,7 @@ export default function Navbar() {
     return (
         <>
             <header className="fixed top-0 left-0 w-full z-50 bg-white text-sm py-3 shadow-md dark:bg-neutral-800">
-                <nav className="max-w-[85rem] w-full mx-auto px-4 sm:flex sm:items-center sm:justify-between">
+                <nav className="w-full mx-auto px-4 lg:px-24 sm:flex sm:items-center sm:justify-between">
                     <div className="flex items-center justify-between">
                         <a
                             className="flex-none text-base font-semibold dark:text-white focus:outline-none focus:opacity-80"
