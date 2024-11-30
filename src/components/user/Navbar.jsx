@@ -10,11 +10,11 @@ export default function Navbar() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 w-full z-50 bg-white text-sm py-3 shadow-md dark:bg-neutral-800">
+            <header className="fixed top-0 left-0 w-full z-50 bg-white text-sm py-3 shadow-md">
                 <nav className="w-full mx-auto px-4 lg:px-24 sm:flex sm:items-center sm:justify-between">
                     <div className="flex items-center justify-between">
                         <a
-                            className="flex-none text-base font-semibold dark:text-white focus:outline-none focus:opacity-80"
+                            className="flex-none text-base font-semibold focus:outline-none focus:opacity-80"
                             href="#"
                             aria-label="Brand"
                         >
@@ -27,7 +27,7 @@ export default function Navbar() {
                         <div className="sm:hidden">
                             <button
                                 type="button"
-                                className="relative size-7 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50 dark:bg-transparent dark:border-neutral-700 dark:text-white dark:hover:bg-white/10"
+                                className="relative size-7 flex justify-center items-center gap-x-2 rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 focus:outline-none focus:bg-gray-50"
                                 onClick={toggleMenu}
                                 aria-expanded={isMenuOpen}
                                 aria-controls="navbar-menu"
