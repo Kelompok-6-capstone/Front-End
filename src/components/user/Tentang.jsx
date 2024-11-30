@@ -2,7 +2,7 @@ import React from 'react';
 
 const Tentang = () => (
     <section id="tentang" className="py-10 lg:py-32 bg-white">
-        <div className="container mx-auto px-6 lg:px-24 flex flex-col md:flex-row items-start gap-6">
+        <div className="mx-auto px-6 lg:px-24 flex flex-col md:flex-row items-start gap-6">
             <div className="flex-1 flex flex-col gap-4">
                 <div className="text-cyan-950 text-sm font-semibold">- Tentang Kami</div>
                 <h2 className="text-cyan-950 text-2xl md:text-[32px] font-bold">

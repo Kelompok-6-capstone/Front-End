@@ -34,7 +34,7 @@ export default function Artikel() {
 
     return (
         <section id="artikel" className="bg-white pb-16 lg:pt-16">
-            <div className="container mx-auto px-6 lg:px-24 mt-12">
+            <div className="mx-auto px-6 lg:px-24 mt-12">
                 <h2 className="text-cyan-950 text-2xl lg:text-4xl font-bold mb-10 text-center">Jelajahi Informasi Terkini</h2>
                 <Swiper
                     modules={[Navigation]}

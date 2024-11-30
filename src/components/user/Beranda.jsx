@@ -3,7 +3,7 @@ import React from 'react';
 const Beranda = () => (
     <>
         <section id="beranda" className="bg-cyan-100">
-            <div className="container mx-auto px-6 lg:ps-24 lg:pt-14">
+            <div className="mx-auto px-6 lg:ps-24 lg:pt-14">
                 <div className="w-full h-auto flex flex-col lg:flex-row justify-between items-center lg:items-start gap-8 pt-16 lg:pt-32">
                     <div className="flex flex-col justify-start items-start gap-4 pb-8 pt-12">
                         <div className="text-cyan-950 text-sm font-semibold">WELCOME TO CALMIND</div>
