@@ -1,17 +1,21 @@
 import { useState } from "react";
 
-const PasswordInput = () => {
+const PasswordInput = ({ name, value, onChange }) => {
     const [showPassword, setShowPassword] = useState(false);
 
     return (
         <div className="mb-4">
-            <label className="text-cyan-900 text-sm font-semibold mb-2">
+            <label htmlFor={name} className="text-cyan-900 text-sm font-semibold mb-2">
                 Kata Sandi
             </label>
             <div className="max-w-sm space-y-3">
                 <div className="relative">
                     <input
+                        id={name}
                         type={showPassword ? "text" : "password"}
+                        name={name} // Agar formData dapat terupdate
+                        value={value} // Menerima nilai dari formData
+                        onChange={onChange} // Mengatur handler perubahan nilai
                         className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ps-10"
                         placeholder="Masukkan Kata Sandi"
                     />
@@ -24,9 +28,9 @@ const PasswordInput = () => {
                         onClick={() => setShowPassword(!showPassword)}
                     >
                         {showPassword ? (
-                            <img src="/images/auth/hide.svg" alt="" />
+                            <img src="/images/auth/hide.svg" alt="Sembunyikan kata sandi" />
                         ) : (
-                            <img src="/images/auth/unhide.svg" alt="" />
+                            <img src="/images/auth/unhide.svg" alt="Tampilkan kata sandi" />
                         )}
                     </button>
                 </div>
