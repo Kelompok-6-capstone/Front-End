@@ -1,11 +1,49 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import PasswordInput from '../../components/auth/PasswordInput';
 import { Link } from 'react-router-dom';
+import { registerUser } from "../../api";
+import Swal from 'sweetalert2';
 
 const RegisterPage = () => {
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        password: '',
+    });
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const navigate = useNavigate(); // Initialize useNavigate
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError('');
+        try {
+            await registerUser(formData);
+            Swal.fire({
+                icon: 'success',
+                title: 'Registrasi Berhasil',
+                text: 'Silakan verifikasi OTP untuk melanjutkan.',
+            }).then(() => {
+                navigate('/verify-otp'); // Redirect to /verify-otp
+            });
+        } catch (err) {
+            setError(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="flex min-h-full items-center justify-center bg-white">
-            {/* Kolom Kiri */}
             <div className="w-1/2 hidden md:block">
                 <img
                     src="/images/auth/screen-dekstop.png"
@@ -13,54 +51,56 @@ const RegisterPage = () => {
                     className="w-auto h-full object-cover"
                 />
             </div>
-            {/* Kolom Kanan */}
             <div className="w-full md:w-1/2 flex items-center justify-center lg:-mt-[150px]">
-                <form className="w-full max-w-md bg-white p-8">
+                <form className="w-full max-w-md bg-white p-8" onSubmit={handleSubmit}>
                     <div className="text-center text-cyan-900 text-2xl font-semibold mb-2">Selamat Datang Di Calmind</div>
-                    <div className="text-center text-cyan-900 text-sm font-normal mb-6">Daftar sekarang dan mulai perjalanan Anda menuju ketenangan dan kesejahteraan</div>
+                    <div className="text-center text-cyan-900 text-sm font-normal mb-6">
+                        Daftar sekarang dan mulai perjalanan Anda menuju ketenangan dan kesejahteraan
+                    </div>
+                    {error && <p className="text-red-500 text-center mb-4">{error}</p>}
                     <div className="mb-3">
-                        <div className="text-cyan-900 text-sm font-semibold mb-2">Nama Pengguna</div>
-                        <div className="max-w-sm space-y-3">
-                            <div className="relative">
-                                <input
-                                    type="text"
-                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ps-10"
-                                    placeholder="Masukkan Nama Kamu"
-                                />
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <img src="/images/auth/user.svg" alt="logo user" />
-                                </div>
-                            </div>
-                        </div>
+                        <label className="text-cyan-900 text-sm font-semibold mb-2">Nama Pengguna</label>
+                        <input
+                            type="text"
+                            name="username"
+                            value={formData.username}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Masukkan Nama Kamu"
+                        />
                     </div>
                     <div className="mb-3">
                         <label className="text-cyan-900 text-sm font-semibold mb-2">Email</label>
-                        <div className="max-w-sm space-y-3">
-                            <div className="relative">
-                                <input
-                                    type="email"
-                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ps-10"
-                                    placeholder="Masukkan Email Kamu"
-                                />
-                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                    <img src="/images/auth/email.svg" alt="logo email" />
-                                </div>
-                            </div>
-                        </div>
+                        <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Masukkan Email Kamu"
+                        />
                     </div>
-                    <PasswordInput />
-                    <button className="w-full h-[54px] px-4 py-1 bg-teal-900 rounded-md justify-center items-center gap-[17.06px] inline-flex mt-[30px]">
-                        <div className="text-center text-neutral-100 text-base font-bold">Daftar</div>
+                    <PasswordInput
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                    />
+                    <button
+                        type="submit"
+                        className="w-full h-[54px] bg-teal-900 rounded-md text-white font-bold mt-4"
+                        disabled={loading}
+                    >
+                        {loading ? 'Sedang Mendaftar...' : 'Daftar'}
                     </button>
-                    <div className="text-cyan-900 text-sm text-center my-3">Atau Daftar Dengan?</div>
-                    <a href="">
-                        <div className="w-full h-[54px] px-4 py-1 bg-white rounded-md shadow border border-neutral-300 justify-center items-center gap-[17.06px] inline-flex">
+                    <div className="text-cyan-900 text-sm text-center mt-8 mb-5">Atau Daftar Dengan?</div>
+                    <a href="https://accounts.google.com/">
+                        <div className="w-full h-[54px] px-4 py-2 bg-white rounded-md shadow border border-neutral-300 justify-center items-center gap-[17.06px] inline-flex mb-10">
                             <img src="/images/auth/google.svg" alt="logo google" />
-                            <div className="text-center text-teal-900 text-base font-bold">Daftar Dengan Google</div>
+                            <div className="text-center text-teal-900 text-base font-bold">Masuk Dengan Google</div>
                         </div>
                     </a>
-                    <p className="text-center mt-8">
-                        Sudah punya Akun?{' '}
+                    <p className="text-center mt-4">
+                        Sudah punya Akun?{" "}
                         <Link to="/login" className="text-blue-500 hover:underline">
                             Login Disini
                         </Link>
