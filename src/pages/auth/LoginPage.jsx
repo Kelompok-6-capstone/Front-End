@@ -6,7 +6,7 @@ const LoginPage = () => {
     return (
         <div className="flex min-h-full items-center justify-center bg-white">
             {/* Kolom Kiri */}
-            <div className="w-1/2 hidden md:block -mt-12">
+            <div className="w-1/2 hidden md:block">
                 <img
                     src="/images/auth/screen-dekstop.png"
                     alt="gambar screen dekstop"
@@ -14,7 +14,7 @@ const LoginPage = () => {
                 />
             </div>
             {/* Kolom Kanan */}
-            <div className="w-full md:w-1/2 flex items-center justify-center lg:-mt-48">
+            <div className="w-full md:w-1/2 flex items-center justify-center lg:-mt-[150px]">
                 <form className="w-full max-w-md bg-white p-8">
                     <div className="text-center text-cyan-900 text-2xl font-semibold mb-2">Masuk</div>
                     <div className="text-center text-cyan-900 text-sm font-normal mb-10">
@@ -52,7 +52,7 @@ const LoginPage = () => {
                     <p className="text-center mt-4">
                         Belum punya Akun?{' '}
                         <Link to="/register" className="text-blue-500 hover:underline">
-                            Register
+                            Daftar Sekarang
                         </Link>
                     </p>
                 </form>
