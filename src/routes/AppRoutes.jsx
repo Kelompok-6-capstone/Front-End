@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LoginPage from '../pages/auth/LoginPage';
 import RegisterPage from '../pages/auth/RegisterPage';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage';
-import VerifyOTPPage from '../pages/auth/VerifyOTPPage';
+import VerifyOtpPage from "../pages/auth/VerifyOTPPage";
 import LandingPage from '../pages/user/LandingPage';
 import Dashboard from '../pages/admin/Dashboard';
 import { UsersPage } from '../pages/admin/Users';
@@ -14,10 +14,10 @@ const AppRoutes = () => (
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/verify-otp" element={<VerifyOTPPage />} />
+        <Route path="/verify-otp" element={<VerifyOtpPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/users" element={<UsersPage />} />
-
     </Routes>
 );
 
