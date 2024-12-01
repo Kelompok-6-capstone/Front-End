@@ -28,10 +28,26 @@ export default function Kontak() {
                         <div className="text-cyan-950 text-base font-semibold mb-2">Bagian</div>
                         <div className="w-[70px] h-[1px] bg-cyan-950 mb-4"></div>
                         <ul className="space-y-2">
-                            <li className="text-cyan-950 text-sm font-normal">Beranda</li>
-                            <li className="text-cyan-950 text-sm font-normal">Tentang Calmind</li>
-                            <li className="text-cyan-950 text-sm font-normal">Artikel</li>
-                            <li className="text-cyan-950 text-sm font-normal">Testimoni</li>
+                            <li >
+                                <a href="#beranda" className="text-cyan-950 text-sm font-normal">
+                                    Beranda
+                                </a>
+                            </li>
+                            <li >
+                                <a href="#tentang" className="text-cyan-950 text-sm font-normal">
+                                    Tentang
+                                </a>
+                            </li>
+                            <li >
+                                <a href="#artikel" className="text-cyan-950 text-sm font-normal">
+                                    Artikel
+                                </a>
+                            </li>
+                            <li >
+                                <a href="#testimoni" className="text-cyan-950 text-sm font-normal">
+                                    Testimoni
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

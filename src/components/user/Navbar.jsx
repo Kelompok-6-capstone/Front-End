@@ -76,11 +76,11 @@ export default function Navbar() {
                             } overflow-hidden transition-all duration-300 basis-full grow sm:block`}
                     >
                         <div className="flex flex-col gap-5 mt-5 sm:flex-row sm:items-center sm:justify-end sm:mt-0 sm:ps-5">
-                            <a href="#beranda" className="text-center text-cyan-950 text-base font-semibold font-['Poppins']">Beranda</a>
-                            <a href="#tentang" className="text-center text-cyan-950 text-base font-semibold font-['Poppins']">Tentang</a>
-                            <a href="#artikel" className="text-center text-cyan-950 text-base font-semibold font-['Poppins']">Artikel</a>
-                            <a href="#testimoni" className="text-center text-cyan-950 text-base font-semibold font-['Poppins']">Testimoni</a>
-                            <a href="#kontak" className="text-center text-cyan-950 text-base font-semibold font-['Poppins']">Kontak</a>
+                            <a href="#beranda" className="text-center text-cyan-950 text-base font-semibold">Beranda</a>
+                            <a href="#tentang" className="text-center text-cyan-950 text-base font-semibold">Tentang</a>
+                            <a href="#artikel" className="text-center text-cyan-950 text-base font-semibold">Artikel</a>
+                            <a href="#testimoni" className="text-center text-cyan-950 text-base font-semibold">Testimoni</a>
+                            <a href="#kontak" className="text-center text-cyan-950 text-base font-semibold">Kontak</a>
                             {/* Tombol login untuk desktop */}
                             <div className="hidden sm:inline-flex w-[120px] h-[33px] px-3 py-1.5 bg-teal-900 rounded justify-center items-center gap-[15.44px]">
                                 <Link
