@@ -30,7 +30,7 @@ const LoginPage = () => {
                 text: "Selamat datang kembali!",
             }).then(() => {
                 // Redirect user setelah SweetAlert ditutup
-                window.location.href = "/dashboard";
+                window.location.href = "/user/dashboard";
             });
         } catch (error) {
             console.error("Login error:", error);
