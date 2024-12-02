@@ -2,7 +2,7 @@ import React from 'react'
 import Navbar from '../../../components/user/beranda/Navbar'
 import Sidebar from '../../../components/user/beranda/Sidebar'
 
-export default function Artikel() {
+export default function ArtikelBeranda() {
     return (
         <>
             <Navbar />
