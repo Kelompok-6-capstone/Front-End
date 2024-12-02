@@ -3,6 +3,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
+import { Link } from 'react-router-dom';
 
 export default function Artikel() {
     const articles = [
@@ -73,9 +74,11 @@ export default function Artikel() {
                     ))}
                 </Swiper>
                 <div className='flex justify-center'>
-                    <button type="button" className="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700  focus:outline-none focus:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
-                        Lihat Semua Artikel
-                    </button>
+                    <Link to="" className="w-[194px] h-[37.40px] px-4 py-2 bg-teal-900 rounded-md justify-center items-center gap-[17.06px] inline-flex transition duration-300 ease-in-out hover:bg-teal-700 hover:shadow-lg hover:scale-105">
+                        <div className="text-center text-neutral-100 text-base font-bold">
+                            Lihat Semua Artikel
+                        </div>
+                    </Link>
                 </div>
             </div>
         </section>
