@@ -7,6 +7,8 @@ import VerifyOtpPage from "../pages/auth/VerifyOTPPage";
 import LandingPage from '../pages/user/LandingPage';
 import Dashboard from '../pages/admin/Dashboard';
 import { UsersPage } from '../pages/admin/Users';
+import DashboardUser from '../pages/user/DashboardUser';
+import ArtikelBeranda from '../pages/user/dashboard/ArtikelBeranda';
 
 const AppRoutes = () => (
     <Routes>
@@ -18,6 +20,10 @@ const AppRoutes = () => (
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/users" element={<UsersPage />} />
+
+        {/* user */}
+        <Route path="/user/dashboard" element={<DashboardUser />} />
+        <Route path="/user/artikel" element={<ArtikelBeranda />} />
     </Routes>
 );
 
