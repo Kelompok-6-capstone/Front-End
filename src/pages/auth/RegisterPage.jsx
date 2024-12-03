@@ -92,13 +92,6 @@ const RegisterPage = () => {
                     >
                         {loading ? 'Sedang Mendaftar...' : 'Daftar'}
                     </button>
-                    <div className="text-cyan-900 text-sm text-center mt-8 mb-5">Atau Daftar Dengan?</div>
-                    <a href="https://accounts.google.com/">
-                        <div className="w-full h-[54px] px-4 py-2 bg-white rounded-md shadow border border-neutral-300 justify-center items-center gap-[17.06px] inline-flex mb-10">
-                            <img src="/images/auth/google.svg" alt="logo google" />
-                            <div className="text-center text-teal-900 text-base font-bold">Masuk Dengan Google</div>
-                        </div>
-                    </a>
                     <p className="text-center mt-4">
                         Sudah punya Akun?{" "}
                         <Link to="/login" className="text-blue-500 hover:underline">
