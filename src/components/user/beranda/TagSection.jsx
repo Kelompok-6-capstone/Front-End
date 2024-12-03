@@ -8,47 +8,47 @@ export default function TagSection() {
                 <img
                     src="/images/user/beranda/tags/stress.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/depresi.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/trauma.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/adiksi.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/gangguan-kecemasan.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/pengembangan-diri.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/gangguan-mood.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/pengasuhan.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
                 <img
                     src="/images/user/beranda/tags/lihat-lainnya.svg"
                     alt="gambar tags"
-                    className="w-[80px] h-[80px] md:w-[116px] md:h-[116px] object-contain"
+                    className="w-[80px] h-[80px] md:w-[114px] md:h-[114px] object-contain"
                 />
             </div>
         </>
