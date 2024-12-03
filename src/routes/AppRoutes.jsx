@@ -8,6 +8,10 @@ import LandingPage from '../pages/user/LandingPage';
 import Dashboard from '../pages/admin/Dashboard';
 import { UsersPage } from '../pages/admin/Users';
 import TransactionPage from '../pages/admin/Transactions';
+import DashboardUser from '../pages/user/DashboardUser';
+import ArtikelPage from '../pages/user/dashboard/ArtikelPage';
+import DetailArtikelPage from '../pages/user/dashboard/DetailArtikelPage';
+
 
 const AppRoutes = () => (
     <Routes>
@@ -20,6 +24,11 @@ const AppRoutes = () => (
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/users" element={<UsersPage />} />
         <Route path="/admin/transaction" element={<TransactionPage />} />
+
+        {/* user */}
+        <Route path="/user/dashboard" element={<DashboardUser />} />
+        <Route path="/user/artikel" element={<ArtikelPage />} />
+        <Route path="/artikel/:id" element={<DetailArtikelPage />} />
     </Routes>
 );
 
