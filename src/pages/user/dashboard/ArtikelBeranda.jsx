@@ -8,7 +8,7 @@ export default function ArtikelBeranda() {
             <Navbar />
             <Sidebar />
             <div className="w-full lg:mx-2 lg:ps-[270px]">
-                <h1>Artikel</h1>
+                <h1>Ini Artikel ketika klik sidebar</h1>
             </div>
         </>
     )

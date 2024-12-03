@@ -26,10 +26,10 @@ export default function JadwalSection() {
                                 <div className="text-white text-sm mt-1">Terapi Kecemasan</div>
                                 <div className="flex items-center gap-4 mt-2">
                                     <div className="bg-white text-cyan-700 px-2 py-2 rounded-md text-sm font-medium flex items-center gap-1">
-                                        <img src="/images/user/calendar.svg" alt="" className="w-4 h-4" />
+                                        <img src="/images/user/calendar.svg" alt="calender" className="w-4 h-4" />
                                         <span>Rabu, 29 November</span>
                                     </div>
-                                    <div className="bg-white text-cyan-700 px-2 py-2 rounded-md text-sm font-medium flex items-center gap-2">
+                                    <div className="bg-white text-cyan-700 px-2 py-2 rounded-md text-sm font-medium flex items-center gap-1">
                                         <img src="/images/user/clock.svg" alt="" className="w-4 h-4" />
                                         <span>14:00</span>
                                     </div>
