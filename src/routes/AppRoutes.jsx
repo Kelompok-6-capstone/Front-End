@@ -8,7 +8,8 @@ import LandingPage from '../pages/user/LandingPage';
 import Dashboard from '../pages/admin/Dashboard';
 import { UsersPage } from '../pages/admin/Users';
 import DashboardUser from '../pages/user/DashboardUser';
-import ArtikelBeranda from '../pages/user/dashboard/ArtikelBeranda';
+import ArtikelPage from '../pages/user/dashboard/ArtikelPage';
+import DetailArtikelPage from '../pages/user/dashboard/DetailArtikelPage';
 
 const AppRoutes = () => (
     <Routes>
@@ -23,7 +24,8 @@ const AppRoutes = () => (
 
         {/* user */}
         <Route path="/user/dashboard" element={<DashboardUser />} />
-        <Route path="/user/artikel" element={<ArtikelBeranda />} />
+        <Route path="/user/artikel" element={<ArtikelPage />} />
+        <Route path="/artikel/:id" element={<DetailArtikelPage />} />
     </Routes>
 );
 

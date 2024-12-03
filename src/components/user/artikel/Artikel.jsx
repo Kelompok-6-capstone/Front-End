@@ -1,34 +1,9 @@
 import React from 'react';
 import ArtikelList from './ArtikelList';
 import { Link } from 'react-router-dom';
+import articles from '../../../data/user/artikelData';
 
 const Artikel = () => {
-    const articles = [
-        {
-            title: 'Mengatasi Stres Sehari-hari',
-            date: '20-11-2024',
-            description: 'Cara-cara sederhana namun efektif untuk mengurangi stres.',
-            image: '/images/user/artikel/artikel1.png',
-        },
-        {
-            title: 'Meditasi untuk Kesehatan Mental',
-            date: '19-10-2024',
-            description: 'Manfaat kesehatan mental dari praktik meditasi yang handal.',
-            image: '/images/user/artikel/artikel2.png',
-        },
-        {
-            title: 'Cara Efektif untuk Merefleksikan Diri',
-            date: '11-10-2024',
-            description: 'Dengan mencatat perasaan Anda setiap hari, dapat membantu mengurangi stres.',
-            image: '/images/user/artikel/artikel3.png',
-        },
-        {
-            title: 'Meditasi untuk Kesehatan Mental',
-            date: '19-10-2024',
-            description: 'Manfaat kesehatan mental dari praktik meditasi yang handal.',
-            image: '/images/user/artikel/artikel2.png',
-        },
-    ];
 
     return (
         <section id="artikel" className="bg-white pb-16 lg:pt-16">

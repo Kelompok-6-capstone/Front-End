@@ -3,6 +3,7 @@ import React from 'react'
 import HeroSection from '../../../components/user/beranda/HeroSection'
 import TagSection from '../../../components/user/beranda/TagSection'
 import JadwalSection from '../../../components/user/beranda/JadwalSection'
+import ArtikelBeranda from '../../../components/user/artikel/ArtikelBeranda'
 
 export default function Beranda() {
     return (
@@ -12,6 +13,7 @@ export default function Beranda() {
                     <HeroSection />
                     <TagSection />
                     <JadwalSection />
+                    <ArtikelBeranda />
                 </div>
             </div>
         </>
