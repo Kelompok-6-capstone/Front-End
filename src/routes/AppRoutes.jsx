@@ -11,6 +11,9 @@ import TransactionPage from '../pages/admin/Transactions';
 import DashboardUser from '../pages/user/DashboardUser';
 import ArtikelPage from '../pages/user/dashboard/ArtikelPage';
 import DetailArtikelPage from '../pages/user/dashboard/DetailArtikelPage';
+import DaftarPassien from '../pages/dokter/DaftarPassien';
+import DetailPasien from '../pages/dokter/DetailPassien';
+import ProfileDokter from '../pages/dokter/ProfleDokter';
 
 
 const AppRoutes = () => (
@@ -29,6 +32,11 @@ const AppRoutes = () => (
         <Route path="/user/dashboard" element={<DashboardUser />} />
         <Route path="/user/artikel" element={<ArtikelPage />} />
         <Route path="/artikel/:id" element={<DetailArtikelPage />} />
+
+        {/* dokter */}
+        <Route path='/dokter/daftar-passien' element={<DaftarPassien />} />
+        <Route path='/dokter/detail-passien' element={<DetailPasien />} />
+        <Route path='/dokter/profile-dokter' element={<ProfileDokter />} />
     </Routes>
 );
 
