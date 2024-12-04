@@ -1,5 +1,4 @@
 import React from 'react'
-
 import HeroSection from '../../../components/user/beranda/HeroSection'
 import TagSection from '../../../components/user/beranda/TagSection'
 import JadwalSection from '../../../components/user/beranda/JadwalSection'
