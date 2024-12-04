@@ -3,7 +3,7 @@ import React from 'react'
 export default function JadwalSection() {
     return (
         <>
-            <div className="px-4 py-6">
+            <div className="mb-8 mt-8 p-5 md:p-0">
                 <div className="relative max-w-full mx-auto">
                     {/* Jadwal Mendatang Header */}
                     <div className="flex items-center gap-2 mb-4">

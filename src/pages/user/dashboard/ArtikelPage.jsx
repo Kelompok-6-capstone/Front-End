@@ -1,6 +1,7 @@
 import React from 'react'
 import Navbar from '../../../components/user/beranda/Navbar'
 import Sidebar from '../../../components/user/beranda/Sidebar'
+import DaftarSemuaArtikel from '../../../components/user/artikel/DaftarSemuaArtikel'
 
 export default function ArtikelBeranda() {
     return (
@@ -8,7 +9,9 @@ export default function ArtikelBeranda() {
             <Navbar />
             <Sidebar />
             <div className="w-full lg:mx-2 lg:ps-[270px]">
-                <h1>Ini Artikel ketika klik sidebar</h1>
+                <div className="lg:p-5 lg:me-5 ">
+                    <DaftarSemuaArtikel />
+                </div>
             </div>
         </>
     )
