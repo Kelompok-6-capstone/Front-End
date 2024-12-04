@@ -27,7 +27,7 @@ const articles = [
         image: '/images/user/artikel/artikel3.png',
     },
     {
-        id: 0,
+        id: 3,
         title: 'Mengatasi Stres Sehari-hari',
         date: '20-11-2024',
         description:
@@ -36,7 +36,7 @@ const articles = [
         image: '/images/user/artikel/artikel1.png',
     },
     {
-        id: 1,
+        id: 4,
         title: 'Meditasi untuk Kesehatan Mental',
         date: '19-10-2024',
         description:
@@ -45,7 +45,7 @@ const articles = [
         image: '/images/user/artikel/artikel2.png',
     },
     {
-        id: 2,
+        id: 5,
         title: 'Cara Efektif Merefleksikan Diri',
         date: '11-10-2024',
         description:
