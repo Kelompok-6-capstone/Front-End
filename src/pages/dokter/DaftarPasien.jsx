@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/dokter/Navbar";
+// import Navbar from "../../components/dokter/Navbar";
 import Sidebar from "../../components/dokter/sidebar";
 
 const DaftarPassien = () => {
@@ -56,7 +56,7 @@ const DaftarPassien = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Sidebar />
       <div className="w-full lg:ps-72">
         <div className="p-4 sm:p-6 space-y-6">

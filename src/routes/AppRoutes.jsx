@@ -11,9 +11,9 @@ import TransactionPage from '../pages/admin/Transactions';
 import DashboardUser from '../pages/user/DashboardUser';
 import ArtikelPage from '../pages/user/dashboard/ArtikelPage';
 import DetailArtikelPage from '../pages/user/dashboard/DetailArtikelPage';
-import DaftarPassien from '../pages/dokter/DaftarPassien';
-import DetailPasien from '../pages/dokter/DetailPassien';
-import ProfileDokter from '../pages/dokter/ProfleDokter';
+import DaftarPasien from '../pages/dokter/DaftarPasien';
+// import DetailPasien from '../pages/dokter/DetailPasien';
+import ProfileDokter from '../pages/dokter/ProfileDokter';
 
 
 const AppRoutes = () => (
@@ -23,6 +23,8 @@ const AppRoutes = () => (
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/verify-otp" element={<VerifyOtpPage />} />
+
+        {/* admin */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/users" element={<UsersPage />} />
@@ -34,8 +36,8 @@ const AppRoutes = () => (
         <Route path="/artikel/:id" element={<DetailArtikelPage />} />
 
         {/* dokter */}
-        <Route path='/dokter/daftar-passien' element={<DaftarPassien />} />
-        <Route path='/dokter/detail-passien' element={<DetailPasien />} />
+        <Route path='/dokter/daftar-passien' element={<DaftarPasien />} />
+        {/* <Route path='/dokter/detail-passien' element={<DetailPasien />} /> */}
         <Route path='/dokter/profile-dokter' element={<ProfileDokter />} />
     </Routes>
 );

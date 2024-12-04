@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/dokter/Navbar";
+// import Navbar from "../../components/dokter/Navbar";
 import Sidebar from "../../components/dokter/sidebar";
 
 const ProfileDokter = () => {
@@ -15,7 +15,7 @@ const ProfileDokter = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Sidebar />
       {/* Container Utama */}
       <div className="flex min-h-screen bg-gray-50 dark:bg-neutral-900">
