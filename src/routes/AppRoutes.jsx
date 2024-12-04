@@ -18,12 +18,14 @@ import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 
 const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<LandingPage />} />
-    <Route path="/login" element={<LoginPage />} />
-    <Route path="/register" element={<RegisterPage />} />
-    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-    <Route path="/verify-otp" element={<VerifyOtpPage />} />
+
+    <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login/user" element={<LoginPage />} />
+        <Route path="/register/user" element={<RegisterPage />} />
+        <Route path="/forgot-password/user" element={<ForgotPasswordPage />} />
+        <Route path="/verify-otp/user" element={<VerifyOtpPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
 
     {/* admin */}
     <Route path="/admin/login" element={<AdminLoginPage />} />
