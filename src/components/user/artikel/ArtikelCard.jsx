@@ -7,7 +7,7 @@ const ArtikelCard = ({ id, title, date, description, image }) => {
         : description;
 
     return (
-        <div className="bg-white shadow-md rounded-2xl overflow-hidden">
+        <div className="bg-white shadow-md rounded-2xl overflow-hidden mb-10">
             <img
                 className="w-full h-48 object-cover rounded-t-2xl"
                 src={image}
