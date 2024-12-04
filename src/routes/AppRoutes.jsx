@@ -13,10 +13,10 @@ import ArtikelBeranda from '../pages/user/dashboard/ArtikelBeranda';
 const AppRoutes = () => (
     <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/verify-otp" element={<VerifyOtpPage />} />
+        <Route path="/login/user" element={<LoginPage />} />
+        <Route path="/register/user" element={<RegisterPage />} />
+        <Route path="/forgot-password/user" element={<ForgotPasswordPage />} />
+        <Route path="/verify-otp/user" element={<VerifyOtpPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin/dashboard" element={<Dashboard />} />
         <Route path="/admin/users" element={<UsersPage />} />
