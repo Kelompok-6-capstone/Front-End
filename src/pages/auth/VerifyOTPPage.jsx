@@ -54,7 +54,7 @@ const VerifyOtpPage = () => {
                 text: "Verifikasi berhasil! Anda dapat masuk sekarang.",
                 confirmButtonText: "OK",
             }).then(() => {
-                navigate("/login");
+                navigate("/login/user");
             });
         } catch (error) {
             Swal.fire({

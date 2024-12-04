@@ -41,7 +41,7 @@ const LoginPage = () => {
                     title: "Akun Belum Diverifikasi",
                     text: "Anda akan diarahkan ke halaman verifikasi OTP.",
                 }).then(() => {
-                    window.location.href = "/verify-otp"; // Redirect ke halaman verifikasi OTP
+                    window.location.href = "/verify-otp/user"; // Redirect ke halaman verifikasi OTP
                 });
             } else {
                 const errorMessage =
@@ -115,7 +115,7 @@ const LoginPage = () => {
                     </button>
                     <p className="text-center mt-4">
                         Belum punya Akun?{" "}
-                        <Link to="/register" className="text-blue-500 hover:underline">
+                        <Link to="/register/user" className="text-blue-500 hover:underline">
                             Daftar Sekarang
                         </Link>
                     </p>
