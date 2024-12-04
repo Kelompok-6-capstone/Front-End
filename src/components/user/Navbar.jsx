@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import DropdownLogin from './DropdownLogin';
 
 export default function Navbar() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,38 +33,9 @@ export default function Navbar() {
                                 aria-controls="navbar-menu"
                             >
                                 {isMenuOpen ? (
-                                    <svg
-                                        className="size-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width={24}
-                                        height={24}
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <path d="M18 6 6 18" />
-                                        <path d="m6 6 12 12" />
-                                    </svg>
+                                    <img src="/images/user/cross_icon.svg" alt="" srcset="" />
                                 ) : (
-                                    <svg
-                                        className="size-4"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        width={24}
-                                        height={24}
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth={2}
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                    >
-                                        <line x1={3} x2={21} y1={6} y2={6} />
-                                        <line x1={3} x2={21} y1={12} y2={12} />
-                                        <line x1={3} x2={21} y1={18} y2={18} />
-                                    </svg>
+                                    <img src="/images/user/menu_icon.svg" alt="" srcset="" />
                                 )}
                                 <span className="sr-only">Toggle navigation</span>
                             </button>
@@ -82,25 +53,7 @@ export default function Navbar() {
                             <a href="#testimoni" className="text-center text-cyan-950 text-base font-semibold">Testimoni</a>
                             <a href="#kontak" className="text-center text-cyan-950 text-base font-semibold">Kontak</a>
                             {/* Tombol login untuk desktop */}
-                            <div className="hidden sm:inline-flex w-[120px] h-[33px] px-3 py-1.5 bg-teal-900 rounded justify-center items-center gap-[15.44px]">
-                                <Link
-                                    to="/login"
-                                    className="text-center text-white text-sm font-semibold hover:cursor-pointer"
-                                >
-                                    Login
-                                </Link>
-                            </div>
-                            {/* Tombol login untuk mobile */}
-                            <div className="flex sm:hidden w-full justify-center mt-4">
-                                <div className="w-[120px] h-[33px] px-3 py-1.5 bg-teal-900 rounded justify-center items-center gap-[15.44px] text-center">
-                                    <Link
-                                        to="/login"
-                                        className="text-white text-sm font-semibold hover:cursor-pointer"
-                                    >
-                                        Login
-                                    </Link>
-                                </div>
-                            </div>
+                            <DropdownLogin />
                         </div>
                     </div>
                 </nav>
