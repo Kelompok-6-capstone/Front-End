@@ -1,6 +1,6 @@
 import React from "react";
 // import Navbar from "../../components/dokter/Navbar";
-import Sidebar from "../../components/dokter/sidebar";
+import Sidebar from "../../components/dokter/Sidebar";
 
 const ProfileDokter = () => {
   const profileDetails = [
