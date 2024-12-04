@@ -1,8 +1,8 @@
 import { useState } from "react";
 import PatientTable from "../../components/admin/PatientTable";
 import DoctorTable from "../../components/admin/DoctorTable";
-import { patientData } from "../../data/admin/patientdata";
-import { doctorData } from "../../data/admin/DoctorData";
+import { patientData } from "../../data/admin/patientData";
+import { doctorData } from "../../data/admin/doctorData";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 
