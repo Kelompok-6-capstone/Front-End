@@ -27,43 +27,43 @@ const AppRoutes = () => (
         <Route path="/verify-otp/user" element={<VerifyOtpPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
 
-    {/* admin */}
-    <Route path="/admin/login" element={<AdminLoginPage />} />
-    <Route
-      path="/admin/dashboard"
-      element={
-        <AdminProtectedRoute>
-          <Dashboard />
-        </AdminProtectedRoute>
-      }
-    />
-    <Route
-      path="/admin/users"
-      element={
-        <AdminProtectedRoute>
-          <UsersPage />
-        </AdminProtectedRoute>
-      }
-    />
-    <Route
-      path="/admin/transaction"
-      element={
-        <AdminProtectedRoute>
-          <TransactionPage />
-        </AdminProtectedRoute>
-      }
-    />
+        {/* admin */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route
+            path="/admin/dashboard"
+            element={
+                <AdminProtectedRoute>
+                    <Dashboard />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="/admin/users"
+            element={
+                <AdminProtectedRoute>
+                    <UsersPage />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="/admin/transaction"
+            element={
+                <AdminProtectedRoute>
+                    <TransactionPage />
+                </AdminProtectedRoute>
+            }
+        />
 
-    {/* user */}
-    <Route path="/user/dashboard" element={<DashboardUser />} />
-    <Route path="/user/artikel" element={<ArtikelPage />} />
-    <Route path="/artikel/:id" element={<DetailArtikelPage />} />
+        {/* user */}
+        <Route path="/user/dashboard" element={<DashboardUser />} />
+        <Route path="/user/artikel" element={<ArtikelPage />} />
+        <Route path="/artikel/:id" element={<DetailArtikelPage />} />
 
-    {/* dokter */}
-    <Route path="/dokter/daftar-passien" element={<DaftarPasien />} />
-    {/* <Route path='/dokter/detail-passien' element={<DetailPasien />} /> */}
-    <Route path="/dokter/profile-dokter" element={<ProfileDokter />} />
-  </Routes>
+        {/* dokter */}
+        <Route path="/dokter/daftar-passien" element={<DaftarPasien />} />
+        {/* <Route path='/dokter/detail-passien' element={<DetailPasien />} /> */}
+        <Route path="/dokter/profile-dokter" element={<ProfileDokter />} />
+    </Routes>
 );
 
 export default AppRoutes;
