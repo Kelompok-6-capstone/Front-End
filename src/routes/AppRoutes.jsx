@@ -17,6 +17,7 @@ import ProfileDokter from "../pages/dokter/ProfileDokter";
 import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import DaftarDokterPage from "../pages/user/DaftarDokterPage";
+import DetailDokterPage from "../pages/user/DetailDokterPage";
 
 const AppRoutes = () => (
 
@@ -60,6 +61,7 @@ const AppRoutes = () => (
         <Route path="/user/artikel" element={<ArtikelPage />} />
         <Route path="/artikel/:id" element={<DetailArtikelPage />} />
         <Route path="/user/dokter" element={<DaftarDokterPage />} />
+        <Route path="/user/dokter/detail-dokter" element={<DetailDokterPage />} />
 
         {/* dokter */}
         <Route path="/dokter/daftar-passien" element={<DaftarPasien />} />
