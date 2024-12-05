@@ -18,6 +18,7 @@ import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import DaftarDokterPage from "../pages/user/DaftarDokterPage";
 import DetailDokterPage from "../pages/user/DetailDokterPage";
+import JadwalPage from "../pages/user/JadwalPage";
 
 const AppRoutes = () => (
 
@@ -62,6 +63,7 @@ const AppRoutes = () => (
         <Route path="/artikel/:id" element={<DetailArtikelPage />} />
         <Route path="/user/dokter" element={<DaftarDokterPage />} />
         <Route path="/user/dokter/detail-dokter" element={<DetailDokterPage />} />
+        <Route path="/user/dokter/jadwal" element={<JadwalPage />} />
 
         {/* dokter */}
         <Route path="/dokter/daftar-passien" element={<DaftarPasien />} />

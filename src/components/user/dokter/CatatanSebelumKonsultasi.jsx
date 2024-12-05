@@ -33,7 +33,9 @@ export default function CatatanSebelumKonsultasi() {
                     </ol>
                 </div>
                 <button className="w-full py-2 bg-teal-900 rounded-md text-center text-white text-sm font-semibold hover:bg-teal-700">
-                    Buat Janji
+                    <a href="/user/dokter/jadwal">
+                        Buat Janji
+                    </a>
                 </button>
             </div>
         </>
