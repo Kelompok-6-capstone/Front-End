@@ -87,60 +87,82 @@ const VerifyOtpPage = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md bg-white p-8 shadow-lg rounded-lg">
-                <h1 className="text-2xl font-semibold text-center text-cyan-900">Verifikasi OTP</h1>
-                <p className="text-center text-gray-500 mt-2 mb-6">
-                    Masukkan kode OTP yang telah dikirim ke email Anda.
-                </p>
-                <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium text-cyan-900">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleEmailChange}
-                            className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="Masukkan email Anda"
-                            required
-                        />
+        <>
+            <div className="flex flex-col md:flex-row min-h-screen  items-center justify-center bg-white">
+                {/* Kolom Kiri */}
+                <div className="hidden md:block md:w-1/2">
+                    <img
+                        src="/images/auth/screen-dekstop.png"
+                        alt="gambar screen desktop"
+                        className="w-auto h-screen object-cover"
+                    />
+                </div>
+
+                {/* Kolom Kanan */}
+                <div className="w-full md:w-1/2 px-6 sm:px-12 flex items-center justify-center">
+                    <div className="w-full max-w-md bg-white p-8 shadow-md rounded-md">
+                        <h1 className="text-2xl font-semibold text-center text-cyan-900">Verifikasi OTP</h1>
+                        <p className="text-center text-gray-500 mt-2 mb-6">
+                            Masukan 4 Digit Kode yang kami kirimkan Ke email Anda
+                        </p>
+                        <form onSubmit={handleSubmit}>
+                            {/* Input Email */}
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium text-cyan-900">Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleEmailChange}
+                                    className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Masukkan email Anda"
+                                    required
+                                />
+                            </div>
+
+                            {/* Input OTP */}
+                            <div className="mb-4 flex justify-between gap-2">
+                                {[...Array(4)].map((_, index) => (
+                                    <input
+                                        key={index}
+                                        ref={(el) => (otpRefs.current[index] = el)}
+                                        type="text"
+                                        maxLength="1"
+                                        value={formData.code[index] || ""}
+                                        onChange={(e) => handleCodeChange(e, index)}
+                                        onKeyDown={(e) => handleCodeKeyDown(e, index)}
+                                        className="w-full h-16 text-center text-xl border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        placeholder="0"
+                                        required
+                                    />
+                                ))}
+                            </div>
+
+                            <p className=" text-sm text-gray-500 mt-4">
+                                {" "}
+                                <span
+                                    onClick={handleResendOtp}
+                                    className={` text-cyan-900 text-sm font-bold cursor-pointer hover:underline ${isResending ? "opacity-50 cursor-not-allowed" : ""}`}
+                                >
+                                    {isResending ? "Mengirim..." : "Kirim ulang kode?"}
+                                </span>
+                            </p>
+                            {/* Tombol Verifikasi */}
+                            <button
+                                type="submit"
+                                className="w-full mt-20 py-2 bg-teal-900 text-white font-semibold rounded-md hover:bg-teal-700 focus:outline-none"
+                            >
+                                Kirim
+                            </button>
+                        </form>
+
+                        {/* Kirim Ulang OTP */}
+
                     </div>
-                    <div className="mb-4 flex justify-between">
-                        {[...Array(4)].map((_, index) => (
-                            <input
-                                key={index}
-                                ref={(el) => (otpRefs.current[index] = el)}
-                                type="text"
-                                maxLength="1"
-                                value={formData.code[index] || ""}
-                                onChange={(e) => handleCodeChange(e, index)}
-                                onKeyDown={(e) => handleCodeKeyDown(e, index)}
-                                className="w-12 h-12 text-center text-xl border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                placeholder="0"
-                                required
-                            />
-                        ))}
-                    </div>
-                    <button
-                        type="submit"
-                        className="w-full py-2 bg-teal-900 text-white font-semibold rounded-md hover:bg-teal-700 focus:outline-none"
-                    >
-                        Verifikasi
-                    </button>
-                </form>
-                <p className="text-center text-sm text-gray-500 mt-4">
-                    Belum menerima kode OTP?{" "}
-                    <span
-                        onClick={handleResendOtp}
-                        className={`text-blue-500 cursor-pointer hover:underline ${isResending ? "opacity-50 cursor-not-allowed" : ""
-                            }`}
-                    >
-                        {isResending ? "Mengirim..." : "Kirim ulang"}
-                    </span>
-                </p>
+                </div>
             </div>
-        </div>
+
+        </>
     );
 };
 
