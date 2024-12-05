@@ -5,10 +5,10 @@ import articles from '../../../data/user/artikelData';
 const ArtikelBeranda = () => {
 
     return (
-        <section id="artikel" className="bg-white p-5 md:p-0">
+        <section id="artikel" className="bg-white p-5 md:p-0 mt-12">
             <div className="">
                 <div className="flex justify-between items-center mb-6">
-                    <div className="text-cyan-900 text-base font-semibold">Artikel Terpopuler</div>
+                    <div className="text-cyan-900 text-base font-semibold">Artikel Terkini</div>
                     <a href='/user/artikel'>
                         <div className="text-cyan-900 text-base font-semibold hover:underline">
                             Lihat Semua

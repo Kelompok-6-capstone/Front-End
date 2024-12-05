@@ -8,14 +8,16 @@ import LandingPage from "../pages/user/LandingPage";
 import Dashboard from "../pages/admin/Dashboard";
 import { UsersPage } from "../pages/admin/Users";
 import TransactionPage from "../pages/admin/Transactions";
-import DashboardUser from "../pages/user/DashboardUser";
-import ArtikelPage from "../pages/user/dashboard/ArtikelPage";
-import DetailArtikelPage from "../pages/user/dashboard/DetailArtikelPage";
+import BerandaUserPage from "../pages/user/BerandaUserPage";
+import ArtikelPage from "../pages/user/ArtikelPage";
+import DetailArtikelPage from "../pages/user/DetailArtikelPage";
 import DaftarPasien from "../pages/dokter/DaftarPasien";
 // import DetailPasien from '../pages/dokter/DetailPasien';
 import ProfileDokter from "../pages/dokter/ProfileDokter";
 import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+import DaftarDokterPage from "../pages/user/DaftarDokterPage";
+import DetailDokterPage from "../pages/user/DetailDokterPage";
 
 const AppRoutes = () => (
 
@@ -55,9 +57,11 @@ const AppRoutes = () => (
         />
 
         {/* user */}
-        <Route path="/user/dashboard" element={<DashboardUser />} />
+        <Route path="/user/beranda" element={<BerandaUserPage />} />
         <Route path="/user/artikel" element={<ArtikelPage />} />
         <Route path="/artikel/:id" element={<DetailArtikelPage />} />
+        <Route path="/user/dokter" element={<DaftarDokterPage />} />
+        <Route path="/user/dokter/detail-dokter" element={<DetailDokterPage />} />
 
         {/* dokter */}
         <Route path="/dokter/daftar-passien" element={<DaftarPasien />} />
