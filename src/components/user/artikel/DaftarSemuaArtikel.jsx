@@ -5,11 +5,9 @@ import articles from '../../../data/user/artikelData';
 const DaftarSemuaArtikel = () => {
     return (
         <section id="artikel" className="bg-white p-5 md:p-10">
-            <h2 className="text-cyan-900 text-2xl font-semibold text-center mb-6">
-                Daftar Semua Artikel
-            </h2>
+            <div className="text-black text-2xl font-medium mb-4">Artikel Terbaru</div>
             <div
-                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+                className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
                 aria-label="Daftar artikel"
             >
                 {articles.map((article) => (
