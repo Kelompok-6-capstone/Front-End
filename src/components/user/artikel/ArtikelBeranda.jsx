@@ -1,11 +1,12 @@
 import React from 'react';
 import ArtikelList from './ArtikelList';
 import useFetchArticles from '../../../hooks/useFetchArticles';
+import Loading from '../Loading';
 
 const ArtikelBeranda = () => {
     const { articles, loading, error } = useFetchArticles('https://api.calmind.site/user/artikel');
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <Loading />;
     if (error) return <div>Error: {error}</div>;
 
     return (
