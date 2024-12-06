@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
-import { confirmLogout } from '../../../api/auth/logout';
+import UserProfileDropdown from './UserProfileDropdown';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -49,19 +48,12 @@ export default function Navbar() {
             >
               Aktivitas Saya
             </a>
-            <button
-              onClick={confirmLogout} // Panggil fungsi konfirmasi logout
-              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
-            >
-              Logout
-            </button>
           </div>
         </div>
 
         <div className="flex items-center gap-5">
-          <Link to="/user/profile">
+          {/* <Link to="/user/profile">
             <div className="flex items-center gap-3">
-
               <img
                 className="w-10 h-10 rounded-full object-cover"
                 src="/images/user/avatar.png"
@@ -71,7 +63,8 @@ export default function Navbar() {
                 Aisha Anggini
               </span>
             </div>
-          </Link>
+          </Link> */}
+          <UserProfileDropdown />
           <button className="relative">
             <img
               className="w-6 h-6"
