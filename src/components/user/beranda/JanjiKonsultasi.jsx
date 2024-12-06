@@ -7,7 +7,7 @@ export default function JadwalSection() {
             <div className="mb-8 mt-12 p-5 md:p-0">
                 <div className="relative max-w-full mx-auto">
                     <div className='flex justify-between items-center'>
-                        <div className="text-cyan-900 text-lg font-semibold mb-5 text-center md:text-left">
+                        <div className="text-cyan-900 text-lg font-semibold mb-5">
                             Jelajahi Dokter Kesehatan Mental
                         </div>
                         <a href='/user/artikel'>
