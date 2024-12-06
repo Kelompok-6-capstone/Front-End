@@ -23,10 +23,10 @@ const ArtikelList = ({ articles }) => {
                     <SwiperSlide key={article.id}>
                         <ArtikelCard
                             id={article.id}
-                            title={article.title}
-                            date={article.date}
-                            description={article.description}
-                            image={article.image}
+                            title={article.judul}
+                            date={article.created_at}
+                            description={article.isi}
+                            image={article.gambar}
                         />
                     </SwiperSlide>
                 ))}
