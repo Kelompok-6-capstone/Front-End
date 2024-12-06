@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'
+import { confirmLogout } from '../../../api/auth/logout';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -48,6 +49,12 @@ export default function Navbar() {
             >
               Aktivitas Saya
             </a>
+            <button
+              onClick={confirmLogout} // Panggil fungsi konfirmasi logout
+              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
+            >
+              Logout
+            </button>
           </div>
         </div>
 
