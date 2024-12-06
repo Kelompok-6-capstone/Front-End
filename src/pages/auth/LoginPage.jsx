@@ -25,8 +25,9 @@ const LoginPage = () => {
         setErrorMessage("");
         try {
             const response = await loginUser(formData);
+            // Simpan token ke localStorage
+            localStorage.setItem("token_user", response.data.token);
             console.log("Login response:", response);
-
             Swal.fire({
                 icon: "success",
                 title: "Login Berhasil",
