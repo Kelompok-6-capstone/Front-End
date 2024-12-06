@@ -7,7 +7,7 @@ export default function DetailArtikelPage() {
     return (
         <>
             <Navbar />
-            <div className="lg:mt-16 max-w-4xl lg:ps-52 bg-white p-5 md:p-10">
+            <div className="lg:mt-16 max-w-4xl lg:ps-52 bg-white p-5 md:p-10 mt-20">
                 <BreadcrumbDetailArtikel />
                 <DetailArtikel />
             </div>
