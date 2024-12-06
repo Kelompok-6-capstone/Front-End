@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,16 +52,19 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-5">
-          <div className="flex items-center gap-3">
-            <img
-              className="w-10 h-10 rounded-full object-cover"
-              src="/images/user/avatar.png"
-              alt="Avatar User"
-            />
-            <span className="hidden sm:block text-black text-base font-semibold">
-              Hi, Aisha!
-            </span>
-          </div>
+          <Link to="/user/profile">
+            <div className="flex items-center gap-3">
+
+              <img
+                className="w-10 h-10 rounded-full object-cover"
+                src="/images/user/avatar.png"
+                alt="Avatar User"
+              />
+              <span className="hidden sm:block text-black text-base font-semibold">
+                Aisha Anggini
+              </span>
+            </div>
+          </Link>
           <button className="relative">
             <img
               className="w-6 h-6"

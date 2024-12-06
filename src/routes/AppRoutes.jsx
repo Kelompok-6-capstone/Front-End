@@ -19,6 +19,8 @@ import AdminProtectedRoute from "./AdminProtectedRoute";
 import DaftarDokterPage from "../pages/user/DaftarDokterPage";
 import DetailDokterPage from "../pages/user/DetailDokterPage";
 import JadwalPage from "../pages/user/JadwalPage";
+import ProfilePenggunaPage from "../pages/user/profile/ProfilePenggunaPage";
+import ProfilePengguna from "../components/user/profile/ProfilPengguna";
 import ArticlesPage from "../pages/admin/ArticlesPage";
 
 const AppRoutes = () => (
@@ -73,6 +75,8 @@ const AppRoutes = () => (
         <Route path="/user/dokter" element={<DaftarDokterPage />} />
         <Route path="/user/dokter/detail-dokter" element={<DetailDokterPage />} />
         <Route path="/user/dokter/jadwal" element={<JadwalPage />} />
+        <Route path="/user/profile" element={<ProfilePenggunaPage />} />
+        <Route path="/user/profile/idpengguna" element={<ProfilePengguna />} />
 
         {/* dokter */}
         <Route path="/dokter/daftar-passien" element={<DaftarPasien />} />
