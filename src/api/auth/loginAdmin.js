@@ -4,9 +4,9 @@ import Cookies from "js-cookie";
 export const loginAdmin = async (data) => {
   try {
     const response = await axiosInstance.post("/admin/login", data);
-    if (response.data.data.Token) {
+    if (response.data.data.token) {
       // Simpan token di cookie
-      Cookies.set("token_admin", response.data.data.Token, { path: "/", expires: 7 }); // Berlaku 7 hari
+      Cookies.set("token_admin", response.data.data.token, { path: "/", expires: 3 });
     }
     return response.data; // Return data yang bisa dipakai di komponen
   } catch (error) {
