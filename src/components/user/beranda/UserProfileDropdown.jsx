@@ -1,8 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { confirmLogout } from '../../../api/auth/logout';
 
 const UserProfileDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [userName, setUserName] = useState('');
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        // Mengambil profil pengguna dari API
+        const fetchUserProfile = async () => {
+            try {
+                const response = await axios.get('https://api.calmind.site/user/profile', {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token_user')}`,
+                    },
+                });
+                if (response.data.success) {
+                    setUserName(response.data.data.username);  // Memperbarui state dengan nama pengguna
+                } else {
+                    setError('Failed to fetch user profile');
+                }
+            } catch (err) {
+                setError('Error fetching user profile');
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUserProfile();
+    }, []);  // Hanya dijalankan sekali saat komponen pertama kali dimuat
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);
@@ -10,7 +39,6 @@ const UserProfileDropdown = () => {
 
     return (
         <div className="relative inline-block text-left">
-            {/* Trigger Dropdown */}
             <div
                 className="flex items-center gap-3 p-2 cursor-pointer rounded-md hover:bg-gray-100"
                 onClick={toggleDropdown}
@@ -21,7 +49,7 @@ const UserProfileDropdown = () => {
                     alt="Avatar User"
                 />
                 <span className="hidden sm:block text-black text-base font-semibold">
-                    Aisha Anggini
+                    {loading ? 'Loading...' : userName || 'User'}
                 </span>
             </div>
 
@@ -44,6 +72,9 @@ const UserProfileDropdown = () => {
                     </div>
                 </div>
             )}
+
+            {/* Menampilkan pesan error jika gagal mengambil data */}
+            {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
         </div>
     );
 };

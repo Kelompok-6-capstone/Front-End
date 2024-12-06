@@ -52,18 +52,6 @@ export default function Navbar() {
         </div>
 
         <div className="flex items-center gap-5">
-          {/* <Link to="/user/profile">
-            <div className="flex items-center gap-3">
-              <img
-                className="w-10 h-10 rounded-full object-cover"
-                src="/images/user/avatar.png"
-                alt="Avatar User"
-              />
-              <span className="hidden sm:block text-black text-base font-semibold">
-                Aisha Anggini
-              </span>
-            </div>
-          </Link> */}
           <UserProfileDropdown />
           <button className="relative">
             <img
