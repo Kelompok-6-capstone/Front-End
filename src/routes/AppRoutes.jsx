@@ -21,6 +21,7 @@ import DetailDokterPage from "../pages/user/DetailDokterPage";
 import JadwalPage from "../pages/user/JadwalPage";
 import ProfilePenggunaPage from "../pages/user/profile/ProfilePenggunaPage";
 import ProfilePengguna from "../components/user/profile/ProfilPengguna";
+import ArticlesPage from "../pages/admin/ArticlesPage";
 
 const AppRoutes = () => (
 
@@ -55,6 +56,14 @@ const AppRoutes = () => (
             element={
                 <AdminProtectedRoute>
                     <TransactionPage />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="/admin/article"
+            element={
+                <AdminProtectedRoute>
+                    <ArticlesPage />
                 </AdminProtectedRoute>
             }
         />
