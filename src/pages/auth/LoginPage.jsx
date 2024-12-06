@@ -24,6 +24,7 @@ const LoginPage = () => {
         setErrorMessage(""); // Bersihkan error sebelumnya
         try {
             const response = await loginUser(formData); // Panggil service loginUser
+            console.log("Login response:", response);
             Swal.fire({
                 icon: "success",
                 title: "Login Berhasil",
