@@ -1,47 +1,71 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState, useEffect } from 'react';
 
-const useFetchArticles = (articleId = null) => {
-    const [data, setData] = useState(null);
+// Utility function to handle API requests with Authorization token
+const fetchAPI = async (url) => {
+    // Retrieve the token from localStorage
+    const token = localStorage.getItem('token_user');
+
+    // Set the Authorization header if the token exists
+    const headers = {
+        'Content-Type': 'application/json',
+        ...(token && { 'Authorization': `Bearer ${token}` }), // Include token if available
+    };
+
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+        throw new Error('Failed to fetch data');
+    }
+    return response.json();
+};
+
+// Custom hook for fetching all articles
+export const useFetchArticles = () => {
+    const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchArticles = async () => {
+        const getArticles = async () => {
             try {
-                setLoading(true);
-                setError(null);
-
-                const token = document.cookie
-                    .split("; ")
-                    .find((row) => row.startsWith("token_user="))
-                    ?.split("=")[1];
-
-                if (!token) {
-                    throw new Error("User token not found. Please login first.");
-                }
-
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const url = articleId
-                    ? `https://api.calmind.site/user/artikel/${articleId}`
-                    : `https://api.calmind.site/user/artikel`;
-
-                const response = await axios.get(url, { headers });
-                setData(response.data);
+                const data = await fetchAPI('https://api.calmind.site/user/artikel');
+                setArticles(data.data); // Assuming the response has a "data" field with articles
             } catch (err) {
-                setError(err.message || "Something went wrong");
+                setError(err.message);
             } finally {
                 setLoading(false);
             }
         };
 
-        fetchArticles();
-    }, [articleId]);
+        getArticles();
+    }, []);
 
-    return { data, loading, error };
+    return { articles, loading, error };
+};
+
+// Custom hook for fetching article by ID
+export const useFetchArticleById = (id) => {
+    const [article, setArticle] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const getArticle = async () => {
+            try {
+                const data = await fetchAPI(`https://api.calmind.site/user/artikel/${id}`);
+                setArticle(data.data); // Assuming the response has a "data" field with a single article
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            getArticle();
+        }
+    }, [id]);
+
+    return { article, loading, error };
 };
 
 export default useFetchArticles;
