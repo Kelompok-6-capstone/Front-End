@@ -1,42 +1,28 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import Cookies from 'js-cookie';
+import { useState } from "react";
 import PatientTable from "../../components/admin/PatientTable";
 import DoctorTable from "../../components/admin/DoctorTable";
 import { doctorData } from "../../data/admin/doctorData";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
+import { useFetchPatients } from "../../hooks/admin/useFetchPatients";
+import { useFetchDoctors } from "../../hooks/admin/useFetchDocters";
 
 export function UsersPage() {
   const [activeTab, setActiveTab] = useState("all");
-  const [patientData, setPatientData] = useState([]);
+  const {
+    patientData,
+    loading: loadingPatients,
+    error: errorPatients,
+  } = useFetchPatients();
+  const {
+    doctorData,
+    loading: loadingDoctors,
+    error: errorDoctors,
+  } = useFetchDoctors();
 
-  useEffect(() => {
-    const fetchPatientData = async () => {
-      try {
-        const token = Cookies.get('token_admin');
-        console.log(`tokenadmin: ${token}`)
-        if (!token) {
-          console.error("No admin token found");
-          // Handle no token scenario (e.g., redirect to login)
-          return;
-        }
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/allusers`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        if (response.data.success) {
-          setPatientData(response.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching patient data:", error.response?.data || error.message);
-        // Handle error (e.g., show error message to user)
-      }
-    };
-
-    fetchPatientData();
-  }, []);
+  if (loadingPatients || loadingDoctors) return <p>Loading...</p>;
+  if (errorPatients || errorDoctors)
+    return <p>Error: {errorPatients || errorDoctors}</p>;
 
   return (
     <>
@@ -84,4 +70,3 @@ export function UsersPage() {
     </>
   );
 }
-
