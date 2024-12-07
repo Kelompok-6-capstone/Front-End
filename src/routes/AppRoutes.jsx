@@ -12,7 +12,6 @@ import DashboardUser from "../pages/user/DashboardUser";
 import ArtikelPage from "../pages/user/dashboard/ArtikelPage";
 import DetailArtikelPage from "../pages/user/dashboard/DetailArtikelPage";
 import DaftarPasien from "../pages/dokter/Dashboard/DaftarPasien";
-// import DetailPasien from '../pages/dokter/DetailPasien';
 import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import ProfileDokter from "../pages/dokter/Dashboard/ProfileDokter";
