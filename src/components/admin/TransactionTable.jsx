@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import useSortData from "../../hooks/useSortData";
+import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 
 const TransactionTable = ({ data }) => {

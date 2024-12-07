@@ -1,89 +1,125 @@
-import React from "react";
+import React, { useState } from 'react';
+import UserProfileDropdown from './UserProfileDropdown';
 
-const Navbar = () => {
+export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <>
-      <header className="sticky top-0 inset-x-0 flex flex-wrap md:justify-start md:flex-nowrap z-[48] w-full bg-cyan-50 text-sm py-2.5 lg:ps-[260px]">
-        <nav className="px-4 sm:px-6 flex basis-full items-center w-full mx-auto">
-          <div className="me-5 lg:me-0 lg:hidden">
-            {/* Logo */}
+    <header className="fixed top-0 left-0 w-full z-50 bg-white text-sm py-3 shadow-md">
+      <nav className="w-full mx-auto px-4 lg:px-24 flex items-center justify-between">
+        <div className="flex items-center gap-8">
+          <a
+            className="flex-none text-base font-semibold"
+            href="/user/beranda"
+            aria-label="Brand"
+          >
+            <img
+              className="w-[100px] sm:w-[160px] h-auto"
+              src="/images/logo.png"
+              alt="Logo"
+            />
+          </a>
+          <div className="hidden sm:flex gap-8">
             <a
-              className="flex-none rounded-md text-xl inline-block font-semibold focus:outline-none focus:opacity-80"
-              href="#"
-              aria-label="Preline"
+              href="/user/beranda"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
             >
-              <img src="/images/Calmind.svg" alt="calmind" />
+              Beranda
             </a>
-            {/* End Logo */}
+            <a
+              href="/user/dokter"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Cari Dokter
+            </a>
+            <a
+              href="/user/artikel"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Artikel
+            </a>
+            <a
+              href="#"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Aktivitas Saya
+            </a>
           </div>
-          <div className="w-full flex items-center justify-end ms-auto gap-x-1 md:gap-x-3">
-            <div className="hidden md:block">
-              {/* Search Input */}
-              <div className="relative">
-                <div className="absolute inset-y-0 start-0 flex items-center pointer-events-none z-20 ps-3.5">
-                </div>
-                <input
-                  type="text"
-                  className="py-2 ps-4 pe-16 block w-full bg-white border-gray-200 rounded-lg text-[15px] not-italic font-medium leading-[normal] tracking-[0.075px] focus:outline-gray-400 focus:border-black focus:ring-black disabled:opacity-50 disabled:pointer-events-none"
-                  placeholder="Search"
-                />
-                <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-1">
-                    <img src="/images/search.svg" alt="search" />
-                </div>
-                <div className="absolute inset-y-0 end-0 flex items-center pointer-events-none z-20 pe-3 text-gray-400">
-                </div>
-              </div>
-              {/* End Search Input */}
-            </div>
-            <div className="flex flex-row items-center gap-x-4 justify-end">
-              <button
-                type="button"
-                className="md:hidden size-[38px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                <svg
-                  className="shrink-0 size-4"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width={24}
-                  height={24}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx={11} cy={11} r={8} />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-                <span className="sr-only">Search</span>
-              </button>
-              <button
-                type="button"
-                className="size-[24px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                <img src="/images/Message.svg" alt="" />
-                <span className="sr-only">Notifications</span>
-              </button>
-              <button
-                type="button"
-                className="size-[24px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                <img src="/images/Bell.svg" alt="" />
-                <span className="sr-only">Bell</span>
-              </button>
-              <button
-                type="button"
-                className="size-[24px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
-              >
-                <img src="/images/gear.svg" alt="" />
-                <span className="sr-only">Setting</span>
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
-    </>
-  );
-};
+        </div>
 
-export default Navbar;
+        <div className="flex items-center gap-5">
+          <UserProfileDropdown />
+          <button className="relative">
+            <img
+              className="w-6 h-6"
+              src="/images/user/chat.svg"
+              alt="Chat Icon"
+            />
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+              3
+            </span>
+          </button>
+          <button className="relative">
+            <img
+              className="w-6 h-6"
+              src="/images/user/notif.svg"
+              alt="Notification Icon"
+            />
+            <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+              5
+            </span>
+          </button>
+          <div className="sm:hidden">
+            <button
+              type="button"
+              className="flex items-center gap-x-2 rounded-lg border bg-white text-gray-800 shadow-sm hover:bg-gray-50"
+              onClick={toggleMenu}
+            >
+              {isMenuOpen ? (
+                <img src="/images/user/cross_icon.svg" alt="Close" />
+              ) : (
+                <img src="/images/user/menu_icon.svg" alt="Menu" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        <div
+          className={`${isMenuOpen ? 'block' : 'hidden'} sm:hidden absolute top-full left-0 w-full bg-white shadow-lg z-10`}
+        >
+          <div className="flex flex-col gap-5 p-5">
+            <a
+              href="/user/beranda"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Beranda
+            </a>
+            <a
+              href="/user/dokter"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Cari Dokter
+            </a>
+            <a
+              href="/user/artikel"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Artikel
+            </a>
+            <a
+              href="#"
+              className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
+            >
+              Aktivitas Saya
+            </a>
+          </div>
+        </div>
+      </nav>
+    </header>
+  );
+}
