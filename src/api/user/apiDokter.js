@@ -1,4 +1,4 @@
-// src/api/user/apiDokter.js
+import Cookies from 'js-cookie';
 
 const BASE_URL = 'https://api.calmind.site';
 
@@ -8,7 +8,7 @@ const BASE_URL = 'https://api.calmind.site';
  */
 export const fetchDoctors = async () => {
     try {
-        const token = localStorage.getItem('token_user'); // Ambil token dari localStorage
+        const token = Cookies.get('token_user'); // Ambil token dari cookies
 
         if (!token) {
             throw new Error("Token tidak tersedia. Pastikan Anda sudah login.");

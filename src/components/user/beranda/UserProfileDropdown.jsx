@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { confirmLogout } from '../../../api/auth/logout';
+import Cookies from 'js-cookie'; // Import pustaka untuk mengelola cookies
+import { confirmLogout } from '../../../api/auth/logoutUser';
 
 const UserProfileDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -12,13 +13,21 @@ const UserProfileDropdown = () => {
         // Mengambil profil pengguna dari API
         const fetchUserProfile = async () => {
             try {
+                const token = Cookies.get('token_user'); // Ambil token dari cookies
+                if (!token) {
+                    setError('User not authenticated');
+                    setLoading(false);
+                    return;
+                }
+
                 const response = await axios.get('https://api.calmind.site/user/profile', {
                     headers: {
-                        Authorization: `Bearer ${localStorage.getItem('token_user')}`,
+                        Authorization: `Bearer ${token}`,
                     },
                 });
+
                 if (response.data.success) {
-                    setUserName(response.data.data.username);  // Memperbarui state dengan nama pengguna
+                    setUserName(response.data.data.username); // Memperbarui state dengan nama pengguna
                 } else {
                     setError('Failed to fetch user profile');
                 }
@@ -31,7 +40,7 @@ const UserProfileDropdown = () => {
         };
 
         fetchUserProfile();
-    }, []);  // Hanya dijalankan sekali saat komponen pertama kali dimuat
+    }, []); // Hanya dijalankan sekali saat komponen pertama kali dimuat
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen);

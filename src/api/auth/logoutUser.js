@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import axiosInstance from "../../utils/axiosInstance";
+import Cookies from "js-cookie"; // Import js-cookie untuk pengelolaan cookies
 
 /**
  * Fungsi untuk logout pengguna.
@@ -9,8 +10,8 @@ export const logoutUser = async () => {
         // Panggil API logout untuk menghapus session atau cookie di server
         await axiosInstance.get("/user/logout");
 
-        // Hapus data dari Local Storage
-        localStorage.clear();
+        // Hapus token dari cookies
+        Cookies.remove("token_user");
 
         // Tampilkan pesan sukses
         Swal.fire({
