@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { confirmLogout } from '../../../api/auth/logout';
+import { confirmLogout } from '../../../api/auth/logoutUser';
 
 const UserProfileDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);

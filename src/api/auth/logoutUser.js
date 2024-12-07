@@ -8,10 +8,8 @@ export const logoutUser = async () => {
     try {
         // Panggil API logout untuk menghapus session atau cookie di server
         await axiosInstance.get("/user/logout");
-
         // Hapus data dari Local Storage
         localStorage.clear();
-
         // Tampilkan pesan sukses
         Swal.fire({
             icon: "success",
@@ -23,7 +21,6 @@ export const logoutUser = async () => {
         });
     } catch (error) {
         console.error("Error during logout:", error);
-
         // Tampilkan pesan kesalahan jika logout gagal
         Swal.fire({
             icon: "error",
