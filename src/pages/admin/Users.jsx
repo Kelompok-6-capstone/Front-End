@@ -7,7 +7,7 @@ import Sidebar from "../../components/admin/Sidebar";
 import { useFetchPatients } from "../../hooks/admin/useFetchPatients";
 import { useFetchDoctors } from "../../hooks/admin/useFetchDocters";
 
-export function UsersPage() {
+export default function UsersPage() {
   const [activeTab, setActiveTab] = useState("all");
   const {
     patientData,
