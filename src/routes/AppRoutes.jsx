@@ -11,7 +11,7 @@ import TransactionPage from "../pages/admin/Transactions";
 import BerandaUserPage from "../pages/user/BerandaUserPage";
 import ArtikelPage from "../pages/user/ArtikelPage";
 import DetailArtikelPage from "../pages/user/DetailArtikelPage";
-import DaftarPasien from "../pages/dokter/DaftarPasien";
+import DaftarPasien from "../pages/dokter/Dashboard/DaftarPasien";
 import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
 import ProfileDokter from "../pages/dokter/Dashboard/ProfileDokter";
