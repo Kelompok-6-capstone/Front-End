@@ -2,6 +2,7 @@ import { useState } from "react";
 import { loginUser } from "../../api";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const useAuth = () => {
     const [errorMessage, setErrorMessage] = useState("");
@@ -11,8 +12,7 @@ const useAuth = () => {
         setErrorMessage("");
         try {
             const response = await loginUser(formData);
-            // Simpan token ke localStorage
-            localStorage.setItem("token_user", response.data.token);
+            Cookies.set("token_user", response.data.token);
             console.log("Login response:", response);
             Swal.fire({
                 icon: "success",

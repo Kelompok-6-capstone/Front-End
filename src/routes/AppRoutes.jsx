@@ -34,6 +34,7 @@ import JadwalPage from "../pages/user/JadwalPage";
 import ProfilePenggunaPage from "../pages/user/profile/ProfilePenggunaPage";
 import ProfilePengguna from "../components/user/profile/ProfilPengguna";
 import ArticlesPage from "../pages/admin/ArticlesPage";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => (
   <Routes>
@@ -70,59 +71,89 @@ const AppRoutes = () => (
         </AdminProtectedRoute>
       }
     />
+    <Route
+      path="/admin/article"
+      element={
+        <AdminProtectedRoute>
+          <ArticlesPage />
+        </AdminProtectedRoute>
+      }
+    />
 
-        {/* admin */}
-        <Route path="/admin/login" element={<AdminLoginPage />} />
-        <Route
-            path="/admin/dashboard"
-            element={
-                <AdminProtectedRoute>
-                    <Dashboard />
-                </AdminProtectedRoute>
-            }
-        />
-        <Route
-            path="/admin/users"
-            element={
-                <AdminProtectedRoute>
-                    <UsersPage />
-                </AdminProtectedRoute>
-            }
-        />
-        <Route
-            path="/admin/transaction"
-            element={
-                <AdminProtectedRoute>
-                    <TransactionPage />
-                </AdminProtectedRoute>
-            }
-        />
-        <Route
-            path="/admin/article"
-            element={
-                <AdminProtectedRoute>
-                    <ArticlesPage />
-                </AdminProtectedRoute>
-            }
-        />
+    {/* user */}
+    <Route
+      path="/user/beranda"
+      element={
+        <ProtectedRoute>
+          <BerandaUserPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user/artikel"
+      element={
+        <ProtectedRoute>
+          <ArtikelPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/artikel/:id"
+      element={
+        <ProtectedRoute>
+          <DetailArtikelPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user/dokter"
+      element={
+        <ProtectedRoute>
+          <DaftarDokterPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user/dokter/detail-dokter"
+      element={
+        <ProtectedRoute>
+          <DetailDokterPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user/dokter/jadwal"
+      element={
+        <ProtectedRoute>
+          <JadwalPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user/profile"
+      element={
+        <ProtectedRoute>
+          <ProfilePenggunaPage />
+        </ProtectedRoute>
+      }
+    />
+    <Route
+      path="/user/profile/idpengguna"
+      element={
+        <ProtectedRoute>
+          <ProfilePengguna />
+        </ProtectedRoute>
+      }
+    />
+    {/* user */}
 
-        {/* user */}
-        <Route path="/user/beranda" element={<BerandaUserPage />} />
-        <Route path="/user/artikel" element={<ArtikelPage />} />
-        <Route path="/artikel/:id" element={<DetailArtikelPage />} />
-        <Route path="/user/dokter" element={<DaftarDokterPage />} />
-        <Route path="/user/dokter/detail-dokter" element={<DetailDokterPage />} />
-        <Route path="/user/dokter/jadwal" element={<JadwalPage />} />
-        <Route path="/user/profile" element={<ProfilePenggunaPage />} />
-        <Route path="/user/profile/idpengguna" element={<ProfilePengguna />} />
-
-        {/* dokter */}
-        {/* register */}
-        <Route path="/dokter/register" element={<RegisterDoctorPage />} />
-        {/* otp */}
-        <Route path="dokter/verify-otp" element={<VerifyOtpDoctorPage />} />
-        {/* login */}
-        <Route path="/dokter/login" element={<LoginDoctorPage />} />
+    {/* dokter */}
+    {/* register */}
+    <Route path="/dokter/register" element={<RegisterDoctorPage />} />
+    {/* otp */}
+    <Route path="dokter/verify-otp" element={<VerifyOtpDoctorPage />} />
+    {/* login */}
+    <Route path="/dokter/login" element={<LoginDoctorPage />} />
 
     <Route
       path="/dokter/dashboard"
