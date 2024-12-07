@@ -1,9 +1,23 @@
 import React from "react";
+import { useState } from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
+import { useDeletePatient } from "../../hooks/admin/useDeletePatients";
 
 const PatientTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
+  const { deletePatient, deletedPatientId, loading, error } =
+    useDeletePatient();
+  const [patients, setPatients] = useState(data);
+
+   const handleDelete = async (id) => {
+    const success = await deletePatient(id);
+    if (success) {
+      // Filter pasien yang tersisa setelah penghapusan
+      const updatedPatients = patients.filter((patient) => patient.id !== id);
+      setPatients(updatedPatients); // Perbarui state pasien
+    }
+  };
 
   return (
     <div className="text-center">
@@ -35,7 +49,6 @@ const PatientTable = ({ data }) => {
             </tr>
           </thead>
           <tbody className="bg-cyan-50">
-            
             {sortedData.map((patient) => (
               <tr key={patient.id}>
                 <td className="px-6 py-4 border-r border-l border-opacity-15 border-[#000]">
@@ -55,8 +68,15 @@ const PatientTable = ({ data }) => {
                     <button>
                       <img src="/images/admin/edit-button.svg" alt="edit" />
                     </button>
-                    <button>
-                      <img src="/images/admin/trash-button.svg" alt="trash" />
+                    <button
+                      onClick={() => handleDelete(patient.id)}
+                      disabled={loading && deletedPatientId === patient.id}
+                    >
+                      {loading && deletedPatientId === patient.id ? (
+                        "Menghapus..."
+                      ) : (
+                        <img src="/images/admin/trash-button.svg" alt="trash" />
+                      )}
                     </button>
                   </div>
                 </td>
@@ -64,10 +84,10 @@ const PatientTable = ({ data }) => {
             ))}
           </tbody>
         </table>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
     </div>
   );
 };
 
 export default PatientTable;
-
