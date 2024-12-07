@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { useFetchArticleById } from '../../../hooks/useFetchArticles';
+import { useFetchArticleById } from '../../../hooks/user/useFetchArticles';
 import Loading from '../Loading';
 
 const DetailArtikel = () => {

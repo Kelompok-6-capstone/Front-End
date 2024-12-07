@@ -1,90 +1,72 @@
 import React from 'react';
+import { useFetchDataDokter } from '../../../hooks/user/useFetchDataDokter';
 import JanjiKosultasiButton from '../beranda/JanjiKonsultasiButton';
+import Loading from '../Loading';
 
 export default function DaftarDokter() {
-    const specializations = [
-        'Semua',
-        'Psikiatri Anak dan Remaja',
-        'Psikiatri Umum',
-        'Psikiatri Geriatri',
-        'Psikoterapi',
-        'Konsultasi Keluarga',
-        'Neuropsikiatri',
-        'Psikiatri Komunitas',
-        'Psikologi Klinis',
-        'Rehabilitasi Psikiatri',
-        'Psikologi Pendidikan',
-    ];
+    const { doctors, loading, error } = useFetchDataDokter();
+    if (loading) {
+        return <Loading />;
+    }
+    if (error) {
+        return <div className="text-red-500 text-center">{error}</div>;
+    }
 
     return (
-        <div className="flex flex-col lg:flex-row gap-6 mt-10">
-            {/* Pilih Spesialisasi */}
-            <div className="w-full lg:w-1/3 max-w-md p-4 bg-white rounded-lg border border-neutral-200">
-                <div className="py-2 border-b border-neutral-200">
-                    <h2 className="text-gray-800 text-lg font-medium">Pilih Spesialisasi</h2>
-                </div>
-                <div className="mt-4 space-y-3">
-                    {specializations.map((specialization, index) => (
-                        <label
-                            key={index}
-                            className="flex items-center gap-3 p-2 cursor-pointer hover:bg-gray-100 rounded-lg"
-                        >
-                            <input
-                                type="radio"
-                                name="specialization"
-                                value={specialization}
-                                className="w-4 h-4 text-cyan-600 bg-gray-100 border-gray-300 focus:ring-cyan-500"
-                            />
-                            <span className="text-gray-800 text-base font-medium leading-normal">
-                                {specialization}
-                            </span>
-                        </label>
-                    ))}
-                </div>
-            </div>
-
-            {/* Hasil Pencarian */}
-            <div className="flex-grow">
-                <div className="text-cyan-700 text-xl font-medium mb-4">
-                    Hasil Pencarian Untuk spesialis Psikiatri Anak dan Remaja
-                </div>
-                <div className="bg-white rounded-md p-6 shadow-md flex flex-col md:flex-row items-start gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-10 mb-8 px-4">
+            {doctors.map((doctor) => (
+                <div
+                    key={doctor.id}
+                    className="bg-white rounded-md p-6 shadow-md flex flex-col md:flex-row items-start gap-4"
+                >
                     <img
-                        src="/images/user/dokter.png"
-                        alt="Placeholder"
-                        className="w-full h-48 rounded-md object-cover md:w-48"
+                        src={doctor.avatar || '/images/user/dokter.png'}
+                        alt={doctor.username}
+                        className="w-40 h-40 rounded-md mx-auto md:mx-0"
                     />
-                    <div className="flex-grow">
-                        <div className="flex justify-between">
-                            <div className="text-cyan-900 text-base font-semibold">
-                                Dr. Sarah Wijaya, S.Psi
+                    <div className="flex-grow flex flex-col gap-2 mx-auto">
+                        <div>
+                            <div className='flex justify-between'>
+                                <div className="text-cyan-900 text-sm sm:text-base font-semibold">
+                                    {doctor.username}
+                                </div>
+                                <div className="text-cyan-900 text-base sm:text-lg font-normal hidden lg:block">
+                                    Rp {doctor.price.toLocaleString()}
+                                </div>
                             </div>
-                            <div className="text-cyan-900 text-lg font-normal">
-                                Rp 100.000
+                            <div className="text-neutral-400 text-sm sm:text-base font-normal">
+                                {doctor.title}
+                            </div>
+                            <div className="text-neutral-400 text-xs sm:text-sm">
+                                {doctor.experience} tahun pengalaman
                             </div>
                         </div>
-                        <div className="text-neutral-400 text-base font-normal mb-1">
-                            Psikolog
-                        </div>
-                        <div className="text-neutral-400 text-sm">Terapi Kecemasan</div>
-                        <div className="flex flex-wrap gap-2 mt-2 mb-2">
-                            <div className="bg-teal-600 text-white px-2 py-1 rounded-md text-[10px] font-medium flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
+                            <div className="bg-teal-600 text-white px-2 py-1 rounded-md text-[10px] sm:text-xs font-medium flex items-center gap-2">
                                 <img
                                     src="/images/user/clock-10.svg"
-                                    alt=""
+                                    alt="Clock"
                                     className="w-4 h-4"
                                 />
-                                <span className="text-teal-50 text-sm font-medium tracking-tight">
+                                <span className="text-teal-50 font-medium tracking-tight">
                                     Tersedia hari ini
                                 </span>
                             </div>
+                            <div className="ml-auto hidden lg:block">
+                                <JanjiKosultasiButton />
+                            </div>
                         </div>
-                        <div className="mt-4 md:mt-0 md:float-right">
-                            <JanjiKosultasiButton />
+                        <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+                            <div className="text-cyan-900 text-base sm:text-lg font-normal lg:hidden">
+                                Rp {doctor.price.toLocaleString()}
+                            </div>
+                            <div className='lg:hidden'>
+                                <JanjiKosultasiButton />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            ))}
         </div>
     );
 }

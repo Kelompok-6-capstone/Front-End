@@ -1,6 +1,6 @@
 import React from 'react';
 import ArtikelCard from './ArtikelCard';
-import useFetchArticles from '../../../hooks/useFetchArticles';
+import useFetchArticles from '../../../hooks/user/useFetchArticles';
 import Loading from '../Loading';
 
 const DaftarSemuaArtikel = () => {
