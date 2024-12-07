@@ -1,13 +1,28 @@
 import { useState } from "react";
 import PatientTable from "../../components/admin/PatientTable";
 import DoctorTable from "../../components/admin/DoctorTable";
-import { patientData } from "../../data/admin/patientData";
 import { doctorData } from "../../data/admin/doctorData";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
+import { useFetchPatients } from "../../hooks/admin/useFetchPatients";
+import { useFetchDoctors } from "../../hooks/admin/useFetchDocters";
 
 export function UsersPage() {
   const [activeTab, setActiveTab] = useState("all");
+  const {
+    patientData,
+    loading: loadingPatients,
+    error: errorPatients,
+  } = useFetchPatients();
+  const {
+    doctorData,
+    loading: loadingDoctors,
+    error: errorDoctors,
+  } = useFetchDoctors();
+
+  if (loadingPatients || loadingDoctors) return <p>Loading...</p>;
+  if (errorPatients || errorDoctors)
+    return <p>Error: {errorPatients || errorDoctors}</p>;
 
   return (
     <>

@@ -1,5 +1,5 @@
 import React from "react";
-import useSortData from "../../hooks/useSortData";
+import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 
 const PatientTable = ({ data }) => {
@@ -19,33 +19,15 @@ const PatientTable = ({ data }) => {
               </th>
               <th
                 className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                onClick={() => requestSort("nama")}
+                onClick={() => requestSort("username")}
               >
-                Nama {getSortIcon(sortConfig, "nama")}
+                Nama {getSortIcon(sortConfig, "username")}
               </th>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Email
               </th>
-              <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                onClick={() => requestSort("usia")}
-              >
-                Usia {getSortIcon(sortConfig, "usia")}
-              </th>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 No Telp
-              </th>
-              <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                onClick={() => requestSort("pekerjaan")}
-              >
-                Pekerjaan {getSortIcon(sortConfig, "pekerjaan")}
-              </th>
-              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                Tanggal Lahir
-              </th>
-              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                Domisili
               </th>
               <th className="px-10 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Action
@@ -53,31 +35,20 @@ const PatientTable = ({ data }) => {
             </tr>
           </thead>
           <tbody className="bg-cyan-50">
+            
             {sortedData.map((patient) => (
               <tr key={patient.id}>
                 <td className="px-6 py-4 border-r border-l border-opacity-15 border-[#000]">
                   {patient.id}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {patient.nama}
+                  {patient.username}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {patient.email}
                 </td>
-                <td className="px-10 py-4 border-r border-opacity-15 border-[#000]">
-                  {patient.usia}
-                </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {patient.noTelp}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {patient.pekerjaan}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {patient.tanggalLahir}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {patient.domisili}
+                  {patient.no_hp}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   <div className="flex gap-3">
@@ -99,3 +70,4 @@ const PatientTable = ({ data }) => {
 };
 
 export default PatientTable;
+

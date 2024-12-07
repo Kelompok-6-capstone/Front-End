@@ -1,9 +1,14 @@
 import React from 'react';
 import ArtikelList from './ArtikelList';
 import { Link } from 'react-router-dom';
-import articles from '../../../data/user/artikelData';
+import useFetchArticles from '../../../hooks/useFetchArticles';
+import Loading from '../Loading';
 
 const Artikel = () => {
+    const { articles, loading, error } = useFetchArticles('https://api.calmind.site/user/artikel');
+
+    if (loading) return <Loading />;
+    if (error) return <div>Error: {error}</div>;
 
     return (
         <section id="artikel" className="bg-white pb-16 lg:pt-16">
@@ -14,7 +19,7 @@ const Artikel = () => {
                 <ArtikelList articles={articles} />
                 <div className="flex justify-center">
                     <Link
-                        to=""
+                        to="/user/artikel"
                         className="w-[194px] h-[37.40px] px-4 py-2 bg-teal-900 rounded-md justify-center items-center gap-[17.06px] inline-flex transition duration-300 ease-in-out hover:bg-teal-700 hover:shadow-lg hover:scale-105"
                     >
                         <div className="text-center text-neutral-100 text-base font-bold">

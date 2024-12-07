@@ -8,9 +8,9 @@ import LandingPage from "../pages/user/LandingPage";
 import Dashboard from "../pages/admin/Dashboard";
 import { UsersPage } from "../pages/admin/Users";
 import TransactionPage from "../pages/admin/Transactions";
-import DashboardUser from "../pages/user/DashboardUser";
-import ArtikelPage from "../pages/user/dashboard/ArtikelPage";
-import DetailArtikelPage from "../pages/user/dashboard/DetailArtikelPage";
+import BerandaUserPage from "../pages/user/BerandaUserPage";
+import ArtikelPage from "../pages/user/ArtikelPage";
+import DetailArtikelPage from "../pages/user/DetailArtikelPage";
 import DaftarPasien from "../pages/dokter/Dashboard/DaftarPasien";
 import AdminLoginPage from "../pages/admin/AdminLogin";
 import AdminProtectedRoute from "./AdminProtectedRoute";
@@ -28,6 +28,12 @@ import InformasiAPK from "../pages/dokter/Dashboard/InformasiAPK";
 import LengkapiProfile from "../pages/dokter/LengkapiProfile";
 import SettingsProfileDokter from "../pages/dokter/Settings/SettingsProfileDokter";
 import DoctorProtectedRoute from "./DoctorProtectedRoute";
+import DaftarDokterPage from "../pages/user/DaftarDokterPage";
+import DetailDokterPage from "../pages/user/DetailDokterPage";
+import JadwalPage from "../pages/user/JadwalPage";
+import ProfilePenggunaPage from "../pages/user/profile/ProfilePenggunaPage";
+import ProfilePengguna from "../components/user/profile/ProfilPengguna";
+import ArticlesPage from "../pages/admin/ArticlesPage";
 
 const AppRoutes = () => (
   <Routes>
@@ -65,18 +71,58 @@ const AppRoutes = () => (
       }
     />
 
-    {/* user */}
-    <Route path="/user/dashboard" element={<DashboardUser />} />
-    <Route path="/user/artikel" element={<ArtikelPage />} />
-    <Route path="/artikel/:id" element={<DetailArtikelPage />} />
+        {/* admin */}
+        <Route path="/admin/login" element={<AdminLoginPage />} />
+        <Route
+            path="/admin/dashboard"
+            element={
+                <AdminProtectedRoute>
+                    <Dashboard />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="/admin/users"
+            element={
+                <AdminProtectedRoute>
+                    <UsersPage />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="/admin/transaction"
+            element={
+                <AdminProtectedRoute>
+                    <TransactionPage />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="/admin/article"
+            element={
+                <AdminProtectedRoute>
+                    <ArticlesPage />
+                </AdminProtectedRoute>
+            }
+        />
 
-    {/* dokter */}
-    {/* register */}
-    <Route path="/dokter/register" element={<RegisterDoctorPage />} />
-    {/* otp */}
-    <Route path="dokter/verify-otp" element={<VerifyOtpDoctorPage />} />
-    {/* login */}
-    <Route path="/dokter/login" element={<LoginDoctorPage />} />
+        {/* user */}
+        <Route path="/user/beranda" element={<BerandaUserPage />} />
+        <Route path="/user/artikel" element={<ArtikelPage />} />
+        <Route path="/artikel/:id" element={<DetailArtikelPage />} />
+        <Route path="/user/dokter" element={<DaftarDokterPage />} />
+        <Route path="/user/dokter/detail-dokter" element={<DetailDokterPage />} />
+        <Route path="/user/dokter/jadwal" element={<JadwalPage />} />
+        <Route path="/user/profile" element={<ProfilePenggunaPage />} />
+        <Route path="/user/profile/idpengguna" element={<ProfilePengguna />} />
+
+        {/* dokter */}
+        {/* register */}
+        <Route path="/dokter/register" element={<RegisterDoctorPage />} />
+        {/* otp */}
+        <Route path="dokter/verify-otp" element={<VerifyOtpDoctorPage />} />
+        {/* login */}
+        <Route path="/dokter/login" element={<LoginDoctorPage />} />
 
     <Route
       path="/dokter/dashboard"
