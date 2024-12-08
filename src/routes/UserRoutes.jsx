@@ -28,7 +28,7 @@ const UserRoutes = () => (
             }
         />
         <Route
-            path="artikel/:id"
+            path="/artikel/:id"
             element={
                 <ProtectedRoute>
                     <DetailArtikelPage />
