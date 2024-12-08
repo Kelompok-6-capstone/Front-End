@@ -132,7 +132,7 @@ const VerifyOtpPage = () => {
                                         onChange={(e) => handleCodeChange(e, index)}
                                         onKeyDown={(e) => handleCodeKeyDown(e, index)}
                                         className="w-full h-16 text-center text-xl border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        placeholder="0"
+                                        placeholder="X"
                                         required
                                     />
                                 ))}
@@ -155,13 +155,9 @@ const VerifyOtpPage = () => {
                                 Kirim
                             </button>
                         </form>
-
-                        {/* Kirim Ulang OTP */}
-
                     </div>
                 </div>
             </div>
-
         </>
     );
 };
