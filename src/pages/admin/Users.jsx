@@ -1,7 +1,6 @@
 import { useState } from "react";
 import PatientTable from "../../components/admin/PatientTable";
 import DoctorTable from "../../components/admin/DoctorTable";
-import { doctorData } from "../../data/admin/doctorData";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import { useFetchPatients } from "../../hooks/admin/useFetchPatients";
@@ -19,10 +18,6 @@ export default function UsersPage() {
     loading: loadingDoctors,
     error: errorDoctors,
   } = useFetchDoctors();
-
-  if (loadingPatients || loadingDoctors) return <p>Loading...</p>;
-  if (errorPatients || errorDoctors)
-    return <p>Error: {errorPatients || errorDoctors}</p>;
 
   return (
     <>
@@ -56,6 +51,23 @@ export default function UsersPage() {
                 </button>
               ))}
             </nav>
+          </div>
+
+          {/* Konten Loading atau Data */}
+          {loadingPatients || loadingDoctors ? (
+            <div className="flex justify-center items-center h-[60vh]">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+                <p className="mt-4 text-gray-600 font-medium">
+                  Memuat data pengguna...
+                </p>
+              </div>
+            </div>
+          ) : errorPatients || errorDoctors ? (
+            <p className="text-red-500 font-medium">
+              Error: {errorPatients || errorDoctors}
+            </p>
+          ) : (
             <div className="space-y-8">
               {(activeTab === "all" || activeTab === "patient") && (
                 <PatientTable data={patientData} />
@@ -64,7 +76,7 @@ export default function UsersPage() {
                 <DoctorTable data={doctorData} />
               )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>
