@@ -2,12 +2,16 @@ import React from 'react'
 import Navbar from '../../components/user/beranda/Navbar'
 import DaftarSemuaArtikel from '../../components/user/artikel/DaftarSemuaArtikel'
 import Footer from '../../components/user/Footer'
+import BreadcrumbDaftarSemuaArtikel from '../../components/user/artikel/BreadcrumbDaftarSemuaArtikel'
+import CariArtikel from '../../components/user/artikel/CariArtikel'
 
 export default function ArtikelBeranda() {
     return (
         <>
             <Navbar />
-            <div className="lg:px-[100px] lg:me-5 mt-16">
+            <div className="lg:px-[100px] lg:me-5">
+                <BreadcrumbDaftarSemuaArtikel />
+                <CariArtikel />
                 <DaftarSemuaArtikel />
             </div>
             <Footer />
