@@ -1,47 +1,47 @@
-import React, { useState, useEffect } from "react"
-import { useFetchArticles } from "../../hooks/admin/useFetchArticles"
-import CreateArticleDrawer from "./CreateArticleDrawer"
+import React, { useState, useEffect } from "react";
+import { useFetchArticles } from "../../hooks/admin/useFetchArticles";
+import CreateArticleDrawer from "./CreateArticleDrawer";
 
 export default function ArticleList() {
-  const [articles, setArticles] = useState([])
-  const [selectedArticle, setSelectedArticle] = useState(null)
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const [articles, setArticles] = useState([]);
+  const [selectedArticle, setSelectedArticle] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const {
     articleData,
     loading: loadingArticles,
     error: errorArticles,
-  } = useFetchArticles()
+  } = useFetchArticles();
 
   useEffect(() => {
     if (articleData) {
-      setArticles(articleData)
+      setArticles(articleData);
     }
-  }, [articleData])
+  }, [articleData]);
 
   useEffect(() => {
-    console.log('Current articles:', articles)
-  }, [articles])
+    console.log("Current articles:", articles);
+  }, [articles]);
 
-  if (loadingArticles) return <p>Loading...</p>
-  if (errorArticles) return <p>Error: {errorArticles}</p>
+  if (loadingArticles) return <p>Loading...</p>;
+  if (errorArticles) return <p>Error: {errorArticles}</p>;
 
   const handleSelectArticle = (article) => {
-    setSelectedArticle(article)
-  }
+    setSelectedArticle(article);
+  };
 
   const handleArticleCreated = async () => {
     try {
-      const { articleData, error } = await useFetchArticles()
+      const { articleData, error } = await useFetchArticles();
       if (error) {
-        console.error('Error fetching articles:', error)
+        console.error("Error fetching articles:", error);
       } else {
-        setArticles(articleData)
+        setArticles(articleData);
       }
     } catch (error) {
-      console.error('Error in handleArticleCreated:', error)
+      console.error("Error in handleArticleCreated:", error);
     }
-  }
+  };
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50 p-4 lg:p-8 gap-8">
@@ -94,10 +94,18 @@ export default function ArticleList() {
             <>
               <div className="flex justify-end gap-3 p-4">
                 <button className="hover:text-cyan-500 transition-colors">
-                  <img src="/images/admin/pencil.svg" className="h-5 w-5" alt="Edit" />
+                  <img
+                    src="/images/admin/pencil.svg"
+                    className="h-5 w-5"
+                    alt="Edit"
+                  />
                 </button>
                 <button className="hover:text-red-500 transition-colors">
-                  <img src="/images/admin/trash.svg" className="h-5 w-5" alt="Delete" />
+                  <img
+                    src="/images/admin/trash.svg"
+                    className="h-5 w-5"
+                    alt="Delete"
+                  />
                 </button>
               </div>
 
@@ -135,5 +143,5 @@ export default function ArticleList() {
         onArticleCreated={handleArticleCreated}
       />
     </div>
-  )
+  );
 }
