@@ -1,23 +1,27 @@
-import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFetchArticles } from "../../hooks/admin/useFetchArticles";
+import CreateArticleDrawer from "./CreateArticleDrawer";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
-  // Ambil data artikel dari custom hook
   const {
     articleData,
     loading: loadingArticles,
     error: errorArticles,
   } = useFetchArticles();
 
-  // Update state `articles` setelah data dari hook tersedia
   useEffect(() => {
     if (articleData) {
       setArticles(articleData);
     }
   }, [articleData]);
+
+  useEffect(() => {
+    console.log("Current articles:", articles);
+  }, [articles]);
 
   if (loadingArticles) return <p>Loading...</p>;
   if (errorArticles) return <p>Error: {errorArticles}</p>;
@@ -26,8 +30,17 @@ export default function ArticleList() {
     setSelectedArticle(article);
   };
 
-  const handleAddArticle = () => {
-    console.log("Navigasi ke halaman buat artikel baru.");
+  const handleArticleCreated = async () => {
+    try {
+      const { articleData, error } = await useFetchArticles();
+      if (error) {
+        console.error("Error fetching articles:", error);
+      } else {
+        setArticles(articleData);
+      }
+    } catch (error) {
+      console.error("Error in handleArticleCreated:", error);
+    }
   };
 
   return (
@@ -37,7 +50,7 @@ export default function ArticleList() {
         <div className="flex items-center justify-center">
           <button
             className="flex items-center gap-2 rounded-full px-4 py-2 text-cyan-400 hover:bg-cyan-50 transition-colors"
-            onClick={handleAddArticle}
+            onClick={() => setIsDrawerOpen(true)}
           >
             <img
               src="/images/admin/add_ring.svg"
@@ -74,17 +87,25 @@ export default function ArticleList() {
         </div>
       </div>
 
-      {/* Konten Utama */}
+      {/* Main Content */}
       <div className="flex-1 border-[1px] rounded-lg bg-white overflow-hidden">
         <div className="max-w-3xl mx-auto">
           {selectedArticle ? (
             <>
               <div className="flex justify-end gap-3 p-4">
                 <button className="hover:text-cyan-500 transition-colors">
-                  <img src="/images/admin/pencil.svg" className="h-5 w-5" />
+                  <img
+                    src="/images/admin/pencil.svg"
+                    className="h-5 w-5"
+                    alt="Edit"
+                  />
                 </button>
                 <button className="hover:text-red-500 transition-colors">
-                  <img src="/images/admin/trash.svg" className="h-5 w-5" />
+                  <img
+                    src="/images/admin/trash.svg"
+                    className="h-5 w-5"
+                    alt="Delete"
+                  />
                 </button>
               </div>
 
@@ -100,8 +121,6 @@ export default function ArticleList() {
                 <img
                   src={selectedArticle.gambar}
                   alt={selectedArticle.judul}
-                  width={800}
-                  height={400}
                   className="mt-8 aspect-video w-full rounded-lg object-cover"
                 />
 
@@ -117,6 +136,12 @@ export default function ArticleList() {
           )}
         </div>
       </div>
+
+      <CreateArticleDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        onArticleCreated={handleArticleCreated}
+      />
     </div>
   );
 }
