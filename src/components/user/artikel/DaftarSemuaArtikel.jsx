@@ -10,7 +10,7 @@ const DaftarSemuaArtikel = () => {
     if (error) return <div className='mt-36'>Error: {error}</div>;
 
     return (
-        <section id="artikel" className="bg-white p-5 md:p-10">
+        <section id="artikel" className="bg-white px-3 lg:px-0 lg:mt-7">
             <div className="text-black text-2xl font-medium mb-4 mt-5 lg:mt-0">Artikel Terbaru</div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6" aria-label="Daftar artikel">
                 {articles.map((article) => (
