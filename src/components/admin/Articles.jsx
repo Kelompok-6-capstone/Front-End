@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useFetchArticles } from "../../hooks/admin/useFetchArticles";
 import CreateArticleDrawer from "./CreateArticleDrawer";
+import axiosInstance from "../../utils/axiosInstance";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 export default function ArticleList() {
   const [articles, setArticles] = useState([]);
@@ -18,10 +21,6 @@ export default function ArticleList() {
       setArticles(articleData);
     }
   }, [articleData]);
-
-  useEffect(() => {
-    console.log("Current articles:", articles);
-  }, [articles]);
 
   if (loadingArticles) return <p>Loading...</p>;
   if (errorArticles) return <p>Error: {errorArticles}</p>;
@@ -41,6 +40,60 @@ export default function ArticleList() {
     } catch (error) {
       console.error("Error in handleArticleCreated:", error);
     }
+  };
+  const handleDeleteArticle = async (id) => {
+    const token = Cookies.get("token_admin");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: "Token admin tidak ditemukan.",
+      });
+      return;
+    }
+
+    Swal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Artikel ini akan dihapus secara permanen.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, Hapus!",
+      cancelButtonText: "Batal",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axiosInstance.delete(`/admin/artikel/${id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (response.data?.success) {
+            Swal.fire({
+              icon: "success",
+              title: "Berhasil!",
+              text: "Artikel berhasil dihapus.",
+            });
+            setArticles((prevArticles) =>
+              prevArticles.filter((article) => article.id !== id)
+            );
+          } else {
+            throw new Error(
+              response.data?.message || "Gagal menghapus artikel."
+            );
+          }
+        } catch (error) {
+          console.error("Error deleting article:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Gagal!",
+            text: error.message || "Terjadi kesalahan saat menghapus artikel.",
+          });
+        }
+      }
+    });
   };
 
   return (
@@ -100,7 +153,10 @@ export default function ArticleList() {
                     alt="Edit"
                   />
                 </button>
-                <button className="hover:text-red-500 transition-colors">
+                <button
+                  className="hover:text-red-500 transition-colors"
+                  onClick={() => handleDeleteArticle(selectedArticle.id)}
+                >
                   <img
                     src="/images/admin/trash.svg"
                     className="h-5 w-5"
