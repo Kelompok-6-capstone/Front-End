@@ -5,9 +5,10 @@ import ArtikelPage from "../pages/user/ArtikelPage";
 import DetailArtikelPage from "../pages/user/DetailArtikelPage";
 import DaftarDokterPage from "../pages/user/DaftarDokterPage";
 import DetailDokterPage from "../pages/user/DetailDokterPage";
-import JadwalPage from "../pages/user/JadwalPage";
 import ProfilePenggunaPage from "../pages/user/profile/ProfilePenggunaPage";
 import ProtectedRoute from "./ProtectedRoute";
+import FormKeluhanPage from "../pages/user/FormKeluhanPage";
+import DetailPembayaranPage from "../pages/user/DetailPembayaranPage";
 
 const UserRoutes = () => (
     <Routes>
@@ -52,10 +53,18 @@ const UserRoutes = () => (
             }
         />
         <Route
-            path=""
+            path="/form-keluhan"
             element={
                 <ProtectedRoute>
-                    <JadwalPage />
+                    <FormKeluhanPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/detail-pembayaran"
+            element={
+                <ProtectedRoute>
+                    <DetailPembayaranPage />
                 </ProtectedRoute>
             }
         />

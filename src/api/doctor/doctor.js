@@ -4,7 +4,7 @@ import axiosInstanceDoctor from "../../utils/axiosInstanceDoctor";
 export const loginDoctor = async (data) => {
   try {
     const response = await axiosInstanceDoctor.post("/doctor/login", data);
-    console.log("Login response:", response); // Log respons server
+    // console.log("Login response:", response);
 
     // Periksa apakah token ada di response.data.data.token
     const token = response.data?.data?.token;

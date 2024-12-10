@@ -13,7 +13,7 @@ const useAuth = () => {
         try {
             const response = await loginUser(formData);
             Cookies.set("token_user", response.data.token);
-            console.log("Login response:", response);
+            // console.log("Login response:", response);
             Swal.fire({
                 icon: "success",
                 title: "Login Berhasil",
