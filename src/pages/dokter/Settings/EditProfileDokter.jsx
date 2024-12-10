@@ -1,163 +1,215 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../../components/dokter/Navbar";
-import Sidebar from "../../../components/dokter/Sidebar";
 import {
   getProfileDoctor,
   updateProfileDoctor,
 } from "../../../api/doctor/doctor";
+import axiosInstanceDoctor from "../../../utils/axiosInstanceDoctor";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
+import Navbar from "../../../components/dokter/Navbar";
+import Sidebar from "../../../components/dokter/Sidebar";
 
 const EditProfileDokter = () => {
-  const [formData, setFormData] = useState(null);
-  const [avatar, setAvatar] = useState(null); // Untuk menyimpan file avatar
-  const [preview, setPreview] = useState(""); // Untuk pratinjau avatar
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
+  const [titles, setTitles] = useState([]);
+  const [formData, setFormData] = useState({
+    username: "",
+    no_hp: "",
+    email: "",
+    date_of_birth: "",
+    address: "",
+    price: "",
+    experience: "",
+    str_number: "",
+    about: "",
+    jenis_kelamin: "",
+    title: "",
+    avatar: "",
+  });
+
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [selectedTitle, setSelectedTitle] = useState(null);
+  const navigate = useNavigate(); // Untuk navigasi ke halaman lain
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await getProfileDoctor();
-        setFormData(response.data);
-        setPreview(response.data.avatar); // Set avatar yang sudah ada sebagai preview
-      } catch {
-        setError("Gagal memuat data profil");
-      } finally {
-        setLoading(false);
+        const profileData = await getProfileDoctor();
+        setFormData({
+          username: profileData.data.username,
+          no_hp: profileData.data.no_hp,
+          email: profileData.data.email,
+          date_of_birth: profileData.data.date_of_birth,
+          address: profileData.data.address,
+          price: profileData.data.price,
+          experience: profileData.data.experience,
+          str_number: profileData.data.str_number,
+          about: profileData.data.about,
+          jenis_kelamin: profileData.data.jenis_kelamin,
+          title: profileData.data.title?.id.toString() || "",
+          avatar: profileData.data.avatar,
+        });
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
       }
     };
 
+    const fetchTitles = async () => {
+      try {
+        const response = await axiosInstanceDoctor.get("/doctor/titles", {
+          headers: { Authorization: `Bearer ${Cookies.get("token_doctor")}` },
+        });
+        console.log("Fetched titles:", response.data.data);
+        setTitles(response.data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch titles:", error);
+      }
+    };
+
+    fetchTitles();
     fetchProfile();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  };
 
-  const handleAvatarChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setAvatar(file);
-      setPreview(URL.createObjectURL(file)); // Set preview untuk avatar baru
+    if (name === "title") {
+      const selectedId = parseInt(value, 10);
+      const foundTitle = titles.find((title) => title.id === selectedId);
+      setSelectedTitle(foundTitle);
+
+      // Update formData.title dengan ID yang dipilih
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        title: value, // ID title
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value, // Update field lain (username, email, dll.)
+      }));
     }
   };
 
-  const handleAvatarDelete = () => {
-    setAvatar(null);
-    setPreview("");
-    setFormData((prevData) => ({
-      ...prevData,
-      avatar: "", // Kosongkan avatar di data profil
-    }));
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files[0];
+    setAvatarFile(file);
+  
+    // Jika file ada, upload ke server atau penyimpanan cloud
+    const formData = new FormData();
+    formData.append("avatar", file);
+  
+    try {
+      const response = await axiosInstanceDoctor.post("/upload-avatar", formData, {
+        headers: {
+          Authorization: `Bearer ${Cookies.get("token_doctor")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+  
+      // Ambil URL dari server dan simpan di formData
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        avatar: response.data.url,  // URL dari server/cloud storage
+      }));
+    } catch (error) {
+      console.error("Error uploading avatar", error);
+    }
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
 
-    const data = new FormData();
-    if (avatar) data.append("avatar", avatar); // Tambahkan file avatar jika ada
-    Object.keys(formData).forEach((key) => {
-      data.append(key, formData[key]);
-    });
+    const updatedData = {
+      ...formData,
+      title: selectedTitle?.name, // Kirim name, bukan id
+    };
 
-    try {
-      const response = await updateProfileDoctor(data);
-      if (response.status === 200) {
-        setSuccessMessage("Profil berhasil diperbarui!");
-        setTimeout(() => navigate("/dokter/settings-profile"), 2000);
+    console.log("Payload sent to backend:", updatedData);
+
+    if (avatarFile) {
+      const avatarFormData = new FormData();
+      avatarFormData.append("avatar", avatarFile);
+
+      try {
+        const avatarResponse = await axiosInstanceDoctor.put(
+          "/doctor/profile",
+          avatarFormData,
+          {
+            headers: {
+              Authorization: `Bearer ${Cookies.get("token_doctor")}`,
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+
+        console.log("Respons server untuk avatar:", avatarResponse.data);
+
+        // Perbarui formData.avatar dengan URL avatar dari respons server
+        setFormData((prevFormData) => ({
+          ...prevFormData,
+          avatar: avatarResponse.data.avatar, // Gunakan avatar dari server
+        }));
+      } catch (error) {
+        console.error("Gagal mengunggah avatar:", error);
       }
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Terjadi kesalahan saat memperbarui profil."
-      );
-    } finally {
-      setLoading(false);
+    }
+    try {
+      const response = await updateProfileDoctor(updatedData);
+      console.log("Response from backend:", response.data);
+
+      // Redirect ke dashboard setelah submit berhasil
+      navigate("/dokter/profile-dokter");
+    } catch (error) {
+      console.error("Failed to update profile:", error);
     }
   };
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>Loading...</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-500">Error: {error}</p>
-      </div>
-    );
-  }
 
   return (
     <>
       <Navbar />
       <Sidebar />
-      <div className="flex min-h-screen bg-gray-50 dark:bg-neutral-900">
+      <div className="flex min-h-screen bg-white">
         <div className="hidden lg:block lg:w-72"></div>
         <div className="flex-grow flex flex-col items-center px-4 py-8">
-          <h1 className="text-2xl font-semibold text-gray-800 dark:text-neutral-200 mb-6">
+          <h1 className="text-2xl font-semibold text-gray-800 mb-8">
             Edit Profil Saya
           </h1>
-
-          {successMessage && (
-            <p className="text-green-600 mb-4">{successMessage}</p>
-          )}
-          {error && <p className="text-red-600 mb-4">{error}</p>}
-
           <form onSubmit={handleSubmit} className="w-full max-w-xl space-y-4">
-            {/* Avatar Upload Section */}
-            <div>
-              {preview ? (
-                <div className="w-32 h-32 relative mx-auto mb-4">
-                  <div className="absolute inset-0 flex items-center justify-center bg-teal-900 dark:bg-neutral-800 rounded-full">
-                    <img
-                      src={preview}
-                      alt="Avatar Preview"
-                      className="w-full h-full object-cover rounded-full border border-teal-900 dark:border-neutral-200"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-full mx-auto mb-4 flex items-center justify-center text-gray-500">
-                  Unggah Foto
-                </div>
-              )}
-              <div className="flex justify-center space-x-4">
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                  className="hidden"
-                  id="avatarInput"
+            {/* Foto Profil */}
+            <div className="flex flex-col items-center">
+              <div className="relative w-32 h-32 mb-4">
+                <img
+                  src={formData.avatar || "https://via.placeholder.com/150"}
+                  alt="Avatar"
+                  className="w-full h-full rounded-full border object-cover"
                 />
-                <label
-                  htmlFor="avatarInput"
-                  className="px-4 py-2 bg-teal-900 text-white rounded-lg cursor-pointer"
-                >
-                  Unggah Foto
+              </div>
+              <div className="flex gap-4">
+                <label className="cursor-pointer bg-teal-900 text-white px-4 py-2 rounded-lg hover:bg-teal-800">
+                  Unggah
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleAvatarChange}
+                    className="hidden"
+                  />
                 </label>
                 <button
                   type="button"
-                  onClick={handleAvatarDelete}
-                  className="px-4 py-2 bg-red-600 text-white rounded-lg"
+                  onClick={() =>
+                    setFormData((prevFormData) => ({
+                      ...prevFormData,
+                      avatar: null,
+                    }))
+                  }
+                  className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500"
                 >
-                  Hapus Foto
+                  Hapus
                 </button>
               </div>
             </div>
 
-            {/* Form Input */}
             <div>
               <label>Nama Lengkap</label>
               <input
@@ -165,7 +217,7 @@ const EditProfileDokter = () => {
                 name="username"
                 value={formData.username || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               />
             </div>
 
@@ -174,23 +226,39 @@ const EditProfileDokter = () => {
               <input
                 type="email"
                 name="email"
-                value={formData.email || ""}
+                value={formData.email}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                disabled
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg cursor-not-allowed"
               />
             </div>
 
             <div>
               <label>Jenis Kelamin</label>
-              <select
-                name="gender"
-                value={formData.gender || ""}
-                onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
-              >
-                <option value="Perempuan">Perempuan</option>
-                <option value="Laki-Laki">Laki-Laki</option>
-              </select>
+              <div className="flex gap-6">
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="jenis_kelamin"
+                    value="Laki-laki"
+                    checked={formData.jenis_kelamin === "Laki-laki"}
+                    onChange={handleChange}
+                    className="focus:ring-blue-500 focus:ring-2"
+                  />
+                  <span className="ml-2">Laki-laki</span>
+                </label>
+                <label className="inline-flex items-center">
+                  <input
+                    type="radio"
+                    name="jenis_kelamin"
+                    value="Perempuan"
+                    checked={formData.jenis_kelamin === "Perempuan"}
+                    onChange={handleChange}
+                    className="focus:ring-blue-500 focus:ring-2"
+                  />
+                  <span className="ml-2">Perempuan</span>
+                </label>
+              </div>
             </div>
 
             <div>
@@ -200,7 +268,7 @@ const EditProfileDokter = () => {
                 name="date_of_birth"
                 value={formData.date_of_birth || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               />
             </div>
 
@@ -211,7 +279,7 @@ const EditProfileDokter = () => {
                 name="no_hp"
                 value={formData.no_hp || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               />
             </div>
 
@@ -222,31 +290,41 @@ const EditProfileDokter = () => {
                 name="address"
                 value={formData.address || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               />
             </div>
 
-            {/* <div>
-              <label>Gelar</label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title || ""}
-                onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
-              />
-            </div> */}
-            {/* 
             <div>
-              <label>Pengalaman (tahun)</label>
+              <label className="block text-sm font-medium text-gray-700">
+                Bidang
+              </label>
+              <select
+                name="title"
+                onChange={handleChange}
+                value={formData.title || ""}
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
+              >
+                <option value="" disabled>
+                  Pilih Title
+                </option>
+                {titles.map((title) => (
+                  <option key={title.id} value={title.id}>
+                    {title.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label>Pengalaman</label>
               <input
                 type="number"
                 name="experience"
-                value={formData.experience || ""}
+                value={formData.experience}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               />
-            </div> */}
+            </div>
 
             <div>
               <label>Nomor STR</label>
@@ -255,43 +333,31 @@ const EditProfileDokter = () => {
                 name="str_number"
                 value={formData.str_number || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               />
             </div>
+
             <div>
-              <label>Jadwal Praktik</label>
+              <label>Biaya</label>
               <input
-                type="text"
-                name="schedule"
-                value={formData.schedule || ""}
+                type="number"
+                name="price"
+                value={formData.price}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                disabled
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg cursor-not-allowed"
               />
             </div>
+
             <div>
               <label>Tentang</label>
               <textarea
                 name="about"
                 value={formData.about || ""}
                 onChange={handleChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
+                className="mt-1 block w-full px-4 py-2 border border-teal-900 rounded-lg"
               ></textarea>
             </div>
-
-            {/* <div>
-              <label>Spesialisasi</label>
-              <select
-                name="specialties"
-                multiple
-                value={formData.specialties || []}
-                onChange={handleSpecialtiesChange}
-                className="mt-1 block w-full px-4 py-2 border rounded-lg"
-              >
-                <option value="1">Kardiologi</option>
-                <option value="2">Psikologi Klinis</option>
-                <option value="3">Pediatri</option>
-              </select>
-            </div> */}
 
             <button
               type="submit"
