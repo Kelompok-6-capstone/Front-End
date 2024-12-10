@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useFetchArticles } from "../../hooks/admin/useFetchArticles";
 import CreateArticleDrawer from "./CreateArticleDrawer";
 import axiosInstance from "../../utils/axiosInstance";
@@ -9,6 +9,7 @@ export default function ArticleList() {
   const [articles, setArticles] = useState([]);
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [loadingSelectedArticle, setLoadingSelectedArticle] = useState(false);
 
   const {
     articleData,
@@ -19,17 +20,43 @@ export default function ArticleList() {
   useEffect(() => {
     if (articleData) {
       setArticles(articleData);
+      setSelectedArticle(null); // Clear selected article when articleData changes
     }
   }, [articleData]);
 
-  if (loadingArticles) return <p>Loading...</p>;
-  if (errorArticles) return <p>Error: {errorArticles}</p>;
+  const handleSelectArticle = useCallback(async (article) => {
+    setLoadingSelectedArticle(true);
+    try {
+      const token = Cookies.get("token_admin");
+      if (!token) {
+        throw new Error("Token admin tidak ditemukan.");
+      }
+      const response = await axiosInstance.get(`/admin/artikel/${article.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data?.success) {
+        setSelectedArticle(response.data.data);
+      } else {
+        throw new Error(
+          response.data?.message || "Gagal mengambil detail artikel."
+        );
+      }
+    } catch (error) {
+      console.error("Error fetching article details:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text:
+          error.message || "Terjadi kesalahan saat mengambil detail artikel.",
+      });
+    } finally {
+      setLoadingSelectedArticle(false);
+    }
+  }, []);
 
-  const handleSelectArticle = (article) => {
-    setSelectedArticle(article);
-  };
-
-  const handleArticleCreated = async () => {
+  const handleArticleCreated = useCallback(async () => {
     try {
       const { articleData, error } = await useFetchArticles();
       if (error) {
@@ -40,8 +67,9 @@ export default function ArticleList() {
     } catch (error) {
       console.error("Error in handleArticleCreated:", error);
     }
-  };
-  const handleDeleteArticle = async (id) => {
+  }, []);
+
+  const handleDeleteArticle = useCallback(async (id) => {
     const token = Cookies.get("token_admin");
     if (!token) {
       Swal.fire({
@@ -79,6 +107,7 @@ export default function ArticleList() {
             setArticles((prevArticles) =>
               prevArticles.filter((article) => article.id !== id)
             );
+            setSelectedArticle(null);
           } else {
             throw new Error(
               response.data?.message || "Gagal menghapus artikel."
@@ -94,7 +123,10 @@ export default function ArticleList() {
         }
       }
     });
-  };
+  }, []);
+
+  if (loadingArticles) return <p>Loading...</p>;
+  if (errorArticles) return <p>Error: {errorArticles}</p>;
 
   return (
     <div className="flex flex-col lg:flex-row min-h-screen bg-gray-50 p-4 lg:p-8 gap-8">
@@ -143,7 +175,11 @@ export default function ArticleList() {
       {/* Main Content */}
       <div className="flex-1 border-[1px] rounded-lg bg-white overflow-hidden">
         <div className="max-w-3xl mx-auto">
-          {selectedArticle ? (
+          {loadingSelectedArticle ? (
+            <div className="p-6 text-center text-gray-500">
+              <p>Memuat detail artikel...</p>
+            </div>
+          ) : selectedArticle ? (
             <>
               <div className="flex justify-end gap-3 p-4">
                 <button className="hover:text-cyan-500 transition-colors">
