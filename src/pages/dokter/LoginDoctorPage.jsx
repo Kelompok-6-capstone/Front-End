@@ -22,27 +22,39 @@ const LoginDoctorPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage("");
+
     try {
       // Perform login
       await loginDoctor(formData);
 
       // Get doctor's profile
       const profileResponse = await getProfileDoctor();
-      console.log("Profile Response:", profileResponse.data); // Debug log
+      const profile = profileResponse?.data;
 
-      // Check profile completeness
-      if (
-        // !profileResponse.data.avatar ||
-        !profileResponse.data.no_hp ||
-        !profileResponse.data.address ||
-        !profileResponse.data.date_of_birth ||
-        !profileResponse.data.address ||
-        !profileResponse.data.schedule
-      ) {
-        console.log("Profil belum lengkap. Redirect ke lengkapi-profile.");
+      // Daftar field yang wajib ada
+      const requiredFields = [
+        "no_hp",
+        "address",
+        "date_of_birth",
+        "schedule",
+        "price",
+        "experience",
+        "str_number",
+        "about",
+        "jenis_kelamin",
+        "title",
+      ];
+
+      // Cek kelengkapan profil
+      const isProfileComplete = requiredFields.every(
+        (field) => profile?.[field]
+      );
+
+      if (!isProfileComplete) {
+        // Redirect ke halaman lengkapi profil
         navigate("/dokter/lengkapi-profile");
       } else {
-        console.log("Profil lengkap. Redirect ke dashboard.");
+        // Redirect ke dashboard
         Swal.fire({
           icon: "success",
           title: "Login Berhasil",
@@ -54,11 +66,11 @@ const LoginDoctorPage = () => {
         });
       }
     } catch (error) {
-      setErrorMessage(error);
+      setErrorMessage(error.message);
       Swal.fire({
         icon: "error",
         title: "Login Gagal",
-        text: error,
+        text: error.message,
       });
     }
   };
