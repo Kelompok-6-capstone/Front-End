@@ -6,12 +6,24 @@ import Swal from "sweetalert2";
 export const loginDoctor = async (data) => {
   try {
     const response = await axiosInstanceDoctor.post("/doctor/login", data);
+    // console.log("Login response:", response);
+    
+    // Periksa apakah token ada di response.data.data.token
+    const token = response.data?.data?.token;
+    if (token) {
+      // Simpan token di localStorage
+      localStorage.setItem("token_doctor", token);
+      console.log("Token berhasil disimpan di localStorage:", token);
+    } else {
+      console.error("Token tidak ditemukan dalam respons login.");
+
     if (response.data.data.token) {
       // Simpan token di cookie
       Cookies.set("token_doctor", response.data.data.token, {
         path: "/",
         expires: 3,
       });
+
     }
     return response.data; // Return data yang bisa dipakai di komponen
   } catch (error) {
