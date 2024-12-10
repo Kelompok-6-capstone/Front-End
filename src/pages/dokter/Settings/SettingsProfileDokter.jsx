@@ -44,22 +44,30 @@ const SettingsProfileDokter = () => {
   const profileDetails = [
     { icon: "/images/Message.svg", title: profile.email },
     { icon: "/images/phone.svg", title: profile.no_hp },
-    { icon: "/images/user-square.svg", title: profile.gender },
+    { icon: "/images/user-square.svg", title: profile.jenis_kelamin },
     { icon: "/images/air.svg", title: profile.date_of_birth },
     { icon: "/images/maps.svg", title: profile.address },
     {
       icon: "/images/dokter/stetoskop.svg",
-      title: profile.specialization,
+      title: profile.title.name,
+    },
+    {
+      icon: "/images/file.svg",
+      title: profile.str_number,
     },
     { icon: "/images/Calendar.svg", title: profile.schedule },
   ];
+
+  const detailDokter = {
+    experience: profile.about,
+  };
 
   return (
     <>
       <Navbar />
       <Sidebar />
       {/* Container Utama */}
-      <div className="flex min-h-screen bg-gray-50 dark:bg-neutral-900">
+      <div className="flex min-h-screen bg-gray-50">
         {/* Sidebar Spacing */}
         <div className="hidden lg:block lg:w-72"></div>
         {/* Konten Utama */}
@@ -91,6 +99,14 @@ const SettingsProfileDokter = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="mt-6 w-full max-w-md space-y-4">
+            <div className="bg-white border border-cyan-950 shadow-sm rounded-xl p-6 w-[426px] max-w-lg">
+              <p className="text-gray-600 dark:text-neutral-300">
+                {detailDokter.experience}
+              </p>
+            </div>
           </div>
 
           {/* Tombol Edit */}
