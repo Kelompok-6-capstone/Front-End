@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { getProfileDoctor, logoutDoctor } from "../../api/doctor/doctor";
 
 const Sidebar = () => {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [profile, setProfile] = useState(null); // Simpan profil dokter
   const sidebarRef = useRef(null);
-  const isActive = (path) => location.pathname === path;
+  const isActivePage = (path) => location.pathname === path;
 
   // untuk mendapatkan nama halaman berdasarkan pathname
   const getPageName = (pathname) => {
@@ -19,6 +22,15 @@ const Sidebar = () => {
     return pathMap[pathname] || "Halaman Tidak Dikenal";
   };
 
+  const handleLogout = async () => {
+    try {
+      await logoutDoctor(); // Memanggil fungsi logout dari API
+    } catch (error) {
+      console.error("Gagal logout:", error); // Tangani error jika ada
+      alert("Logout gagal. Silakan coba lagi.");
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -29,6 +41,19 @@ const Sidebar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  useEffect(() => {
+    const fetchDoctorProfile = async () => {
+      try {
+        const response = await getProfileDoctor();
+        setProfile(response.data); // Simpan data profil
+      } catch (error) {
+        console.error("Gagal memuat profil dokter:", error);
+      }
+    };
+
+    fetchDoctorProfile();
   }, []);
 
   return (
@@ -122,23 +147,22 @@ const Sidebar = () => {
             >
               <img src="/images/Calmind.svg" alt="logo" />
             </a>
+            {/* foto dokter */}
             <div className="flex flex-col justify-center items-center mb-[36px]">
               <img
-                src="/images/dokter/foto-dokter.png"
-                alt="dokter-profile"
-                className="w-[100px] h-[100px]"
+                src={profile?.avatar || "/images/dokter/foto-dokter.png"}
+                alt="Profile"
+                className="w-24 h-24 rounded-full"
               />
-              <h1 className="text-[#000] text-center text-[16px] not-italic font-semibold leading-[normal]">
-                Dr. Lisa Amelia
+              <h1 className="text-xl mt-4 font-semibold">
+                {profile?.username}
               </h1>
-              <p className="text-[#000] text-center text-[12px] not-italic font-normal leading-[normal]">
-                Dokter
-              </p>
+              <p className="stext-center text-sm">Dokter</p>
             </div>
           </div>
 
           {/* Content */}
-          <div className="h-full overflow-y-auto text-[#000] text-center text-[14px] not-italic font-semibold leading-[normal] [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+          <div className="h-full overflow-y-auto  text-center text-[14px] font-semibold [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
             <nav
               className="hs-accordion-group p-3 w-full flex flex-col flex-wrap"
               data-hs-accordion-always-open=""
@@ -147,7 +171,7 @@ const Sidebar = () => {
                 <li>
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/admin/dashboard") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/dashboard") ? "bg-[#22D3EE]" : ""
                     }`}
                     to="/dokter/dashboard"
                   >
@@ -158,7 +182,9 @@ const Sidebar = () => {
                 <li className="hs-accordion" id="account-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/admin/statistics") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/profile-dokter")
+                        ? "bg-[#22D3EE]"
+                        : ""
                     }`}
                     to="/dokter/profile-dokter"
                   >
@@ -169,7 +195,9 @@ const Sidebar = () => {
                 <li className="hs-accordion" id="account-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/admin/statistics") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/daftar-passien")
+                        ? "bg-[#22D3EE]"
+                        : ""
                     }`}
                     to="/dokter/daftar-passien"
                   >
@@ -180,7 +208,7 @@ const Sidebar = () => {
                 <li className="hs-accordion" id="transaksi-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/admin/transaction") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/transaksi") ? "bg-[#22D3EE]" : ""
                     }`}
                     to="/dokter/transaksi"
                   >
@@ -188,21 +216,109 @@ const Sidebar = () => {
                     Transaksi
                   </Link>
                 </li>
-                <li>
-                  <Link
-                    className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/settings") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/dokter/settings"
+
+                {/* Dropdown Pengaturan */}
+                <li className="relative">
+                  <button
+                    className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg w-full hover:bg-[#22D3EE] focus:outline-none"
+                    onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                   >
-                    <img src="/images/gear.svg" alt="gear" />
+                    <img src="/images/gear.svg" alt="settings" />
                     Pengaturan
-                  </Link>
+                    <img
+                      src="/images/chevron-down.svg"
+                      alt="settings"
+                      className={`ml-auto transform transition-all duration-200 ${
+                        isSettingsOpen ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                  </button>
+                  {isSettingsOpen && (
+                    <ul className="space-y-5 mt-3 ml-10">
+                      <li>
+                        <Link
+                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
+                          to="/dokter/settings/profile-dokter"
+                        >
+                          <img src="/images/Profil.svg" alt="Profile" />
+                          Profil
+                        </Link>
+                      </li>
+
+                      <li className="flex items-center justify-between gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]">
+                        <Link
+                          to="/dokter/settings/profil"
+                          className="flex items-center gap-x-3.5"
+                        >
+                          <img src="/images/eye.svg" alt="Profile" />
+                          Status
+                        </Link>
+                        <label className="inline-flex items-center cursor-pointer ml-8">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            onChange={(e) =>
+                              console.log("Status Toggle:", e.target.checked)
+                            }
+                          />
+                          <div className="w-8 h-4 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-500 transition-all relative">
+                            <div className="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-all peer-checked:translate-x-4"></div>
+                          </div>
+                        </label>
+                      </li>
+
+                      <li className="flex items-center justify-between gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]">
+                        <Link
+                          to="/dokter/settings/notifikasi"
+                          className="flex items-center gap-x-3.5"
+                        >
+                          <img src="/images/Bell.svg" alt="Notifikasi" />
+                          Notifikasi
+                        </Link>
+                        <label className="inline-flex items-center cursor-pointer ml-8">
+                          <input
+                            type="checkbox"
+                            className="sr-only peer"
+                            onChange={(e) =>
+                              console.log(
+                                "Notifikasi Toggle:",
+                                e.target.checked
+                              )
+                            }
+                          />
+                          <div className="w-8 h-4 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-500 transition-all relative">
+                            <div className="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-all peer-checked:translate-x-4"></div>
+                          </div>
+                        </label>
+                      </li>
+
+                      <li>
+                        <Link
+                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
+                          to="/dokter/settings/FAQ"
+                        >
+                          <img src="/images/Question.svg" alt="Bantuan" />
+                          Bantuan
+                        </Link>
+                      </li>
+                      <li>
+                        <Link
+                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
+                          to="/dokter/settings/tentang-APK"
+                        >
+                          <img src="/images/Info.svg" alt="Tentang" />
+                          Tentang
+                        </Link>
+                      </li>
+                    </ul>
+                  )}
                 </li>
+
                 <li>
                   <Link
                     className="w-full flex items-center gap-x-3.5 mt-[58px] py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    to="#"
+                    to="/"
+                    onClick={handleLogout}
                   >
                     <img src="/images/logout.svg" alt="logout" />
                     Log Out
@@ -211,7 +327,6 @@ const Sidebar = () => {
               </ul>
             </nav>
           </div>
-          {/* End Content */}
         </div>
       </div>
     </>
