@@ -53,7 +53,7 @@ function DropdownLogin() {
                         </li>
                         <li className="text-left">
                             <Link
-                                to="/login/dokter"
+                                to="/dokter/login"
                                 onClick={closeDropdown}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-900 rounded transition-all duration-200"
                             >
@@ -62,7 +62,7 @@ function DropdownLogin() {
                         </li>
                         <li className="text-left">
                             <Link
-                                to="/login/admin"
+                                to="/admin/login"
                                 onClick={closeDropdown}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-teal-50 hover:text-teal-900 rounded transition-all duration-200"
                             >

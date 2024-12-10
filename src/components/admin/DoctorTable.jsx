@@ -1,5 +1,5 @@
 import React from "react";
-import useSortData from "../../hooks/useSortData";
+import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 
 const DoctorTable = ({ data }) => {
@@ -20,7 +20,7 @@ const DoctorTable = ({ data }) => {
                 className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
                 onClick={() => requestSort("nama")}
               >
-                Nama {getSortIcon(sortConfig, "nama")}
+                Username {getSortIcon(sortConfig, "nama")}
               </th>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Email
@@ -70,7 +70,7 @@ const DoctorTable = ({ data }) => {
                   {doctor.id}
                 </td>
                 <td className="px-10 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.nama}
+                  {doctor.username}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.email}

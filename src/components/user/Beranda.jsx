@@ -14,7 +14,9 @@ const Beranda = () => (
                             Dapatkan perawatan yang Anda butuhkan, kapan saja, dengan dokter ahli yang peduli dan berpengalaman. Konsultasi mudah dan nyaman, langsung dari rumah Anda.
                         </div>
                         <div className="h-[37.49px] px-[13.49px] py-[6.75px] bg-teal-900 rounded-md justify-center items-center gap-[17.35px] inline-flex mt-10">
-                            <div className="text-center text-white text-sm font-bold">Konsultasi Sekarang</div>
+                            <a href="/user/dokter">
+                                <div className="text-center text-white text-sm font-bold">Konsultasi Sekarang</div>
+                            </a>
                         </div>
                     </div>
                     <img className="w-[300px] lg:w-[600px] h-auto lg:pt-14" src="/images/user/hero-image.png" alt="hero image" />

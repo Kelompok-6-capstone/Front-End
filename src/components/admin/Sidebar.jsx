@@ -1,10 +1,56 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    try {
+      const token = Cookies.get("token_admin");
+
+      if (!token) {
+        Swal.fire({
+          icon: "error",
+          title: "Logout Gagal",
+          text: "Token tidak ditemukan. Harap login ulang.",
+        });
+        return;
+      }
+
+      const response = await axiosInstance.get(
+        "/admin/logout",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("Logout response:", response); // Log respons dari server
+
+      Cookies.remove("token_admin");
+      Swal.fire({
+        icon: "success",
+        title: "Logout Berhasil",
+        text: "Anda telah keluar dari akun.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate("/admin/login");
+    } catch (error) {
+      console.error("Error during logout:", error.response || error);
+      Swal.fire({
+        icon: "error",
+        title: "Logout Gagal",
+        text: error.response?.data?.message || "Terjadi kesalahan.",
+      });
+    }
+  };
 
   return (
     <>
@@ -140,13 +186,13 @@ const Sidebar = () => {
                   </Link>
                 </li>
                 <li>
-                  <Link
+                  <button
                     className="w-full flex items-center gap-x-3.5 mt-[58px] py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    to="#"
+                    onClick={handleLogout}
                   >
                     <img src="/images/logout.svg" alt="logout" />
                     Log Out
-                  </Link>
+                  </button>
                 </li>
               </ul>
             </nav>
@@ -159,4 +205,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
