@@ -2,15 +2,17 @@ import { useState, useEffect } from "react";
 import {
   getProfileDoctor,
   updateProfileDoctor,
+  getTitles,
+  getTags,
 } from "../../../api/doctor/doctor";
-import axiosInstanceDoctor from "../../../utils/axiosInstanceDoctor";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/dokter/Navbar";
 import Sidebar from "../../../components/dokter/Sidebar";
+import Swal from "sweetalert2";
 
 const EditProfileDokter = () => {
   const [titles, setTitles] = useState([]);
+  const [tags, setTags] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
     no_hp: "",
@@ -24,11 +26,10 @@ const EditProfileDokter = () => {
     jenis_kelamin: "",
     title: "",
     avatar: "",
+    tags: [],
   });
-
-  const [avatarFile, setAvatarFile] = useState(null);
   const [selectedTitle, setSelectedTitle] = useState(null);
-  const navigate = useNavigate(); // Untuk navigasi ke halaman lain
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -47,25 +48,26 @@ const EditProfileDokter = () => {
           jenis_kelamin: profileData.data.jenis_kelamin,
           title: profileData.data.title?.id.toString() || "",
           avatar: profileData.data.avatar,
+          tags: profileData.data.specialists?.map((spec) => spec.id) || [],
         });
       } catch (error) {
         console.error("Failed to fetch profile:", error);
       }
     };
 
-    const fetchTitles = async () => {
+    const fetchTitlesAndTags = async () => {
       try {
-        const response = await axiosInstanceDoctor.get("/doctor/titles", {
-          headers: { Authorization: `Bearer ${Cookies.get("token_doctor")}` },
-        });
-        console.log("Fetched titles:", response.data.data);
-        setTitles(response.data.data || []);
+        const fetchedTitles = await getTitles();
+        setTitles(fetchedTitles);
+
+        const fetchedTags = await getTags();
+        setTags(fetchedTags);
       } catch (error) {
-        console.error("Failed to fetch titles:", error);
+        console.error("Failed to fetch titles or tags:", error);
       }
     };
 
-    fetchTitles();
+    fetchTitlesAndTags();
     fetchProfile();
   }, []);
 
@@ -77,91 +79,87 @@ const EditProfileDokter = () => {
       const foundTitle = titles.find((title) => title.id === selectedId);
       setSelectedTitle(foundTitle);
 
-      // Update formData.title dengan ID yang dipilih
       setFormData((prevFormData) => ({
         ...prevFormData,
-        title: value, // ID title
+        title: value,
+      }));
+    } else if (name === "tags") {
+      const updatedTags = [...formData.tags];
+      const selectedTagsId = parseInt(value, 10);
+
+      if (updatedTags.includes(selectedTagsId)) {
+        const index = updatedTags.indexOf(selectedTagsId);
+        updatedTags.splice(index, 1);
+      } else {
+        updatedTags.push(selectedTagsId);
+      }
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        tags: updatedTags,
       }));
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        [name]: value, // Update field lain (username, email, dll.)
+        [name]: value,
       }));
     }
   };
 
-  const handleAvatarChange = async (e) => {
+  const handleAvatarChange = (e) => {
     const file = e.target.files[0];
-    setAvatarFile(file);
-  
-    // Jika file ada, upload ke server atau penyimpanan cloud
-    const formData = new FormData();
-    formData.append("avatar", file);
-  
-    try {
-      const response = await axiosInstanceDoctor.post("/upload-avatar", formData, {
-        headers: {
-          Authorization: `Bearer ${Cookies.get("token_doctor")}`,
-          "Content-Type": "multipart/form-data",
-        },
-      });
-  
-      // Ambil URL dari server dan simpan di formData
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
-        avatar: response.data.url,  // URL dari server/cloud storage
+        avatar: reader.result, // Gambar dalam format Base64
       }));
-    } catch (error) {
-      console.error("Error uploading avatar", error);
-    }
+    };
+    reader.readAsDataURL(file);
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const updatedData = {
-      ...formData,
-      title: selectedTitle?.name, // Kirim name, bukan id
-    };
-
-    console.log("Payload sent to backend:", updatedData);
-
-    if (avatarFile) {
-      const avatarFormData = new FormData();
-      avatarFormData.append("avatar", avatarFile);
-
-      try {
-        const avatarResponse = await axiosInstanceDoctor.put(
-          "/doctor/profile",
-          avatarFormData,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("token_doctor")}`,
-              "Content-Type": "multipart/form-data",
-            },
-          }
-        );
-
-        console.log("Respons server untuk avatar:", avatarResponse.data);
-
-        // Perbarui formData.avatar dengan URL avatar dari respons server
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          avatar: avatarResponse.data.avatar, // Gunakan avatar dari server
-        }));
-      } catch (error) {
-        console.error("Gagal mengunggah avatar:", error);
-      }
-    }
     try {
-      const response = await updateProfileDoctor(updatedData);
-      console.log("Response from backend:", response.data);
+      // Fetch data untuk tags
+      const updatedTags = formData.tags
+        .map((tagId) => {
+          const tag = tags.find((t) => t.id === tagId);
+          return tag ? { id: tag.id, name: tag.name } : null;
+        })
+        .filter(Boolean);
 
-      // Redirect ke dashboard setelah submit berhasil
+      const updatedData = {
+        ...formData,
+        title: selectedTitle?.name,
+        tags: updatedTags,
+      };
+
+      console.log("Data yang akan dikirim:", updatedData); // Tambahkan console log untuk melihat perubahan data
+
+      await updateProfileDoctor(updatedData);
+
+      Swal.fire({
+        icon: "success",
+        title: "Profil Berhasil Diupdate",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
       navigate("/dokter/profile-dokter");
     } catch (error) {
       console.error("Failed to update profile:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text:
+          error.response?.data?.message ||
+          "Terjadi kesalahan saat memperbarui profil.",
+        showConfirmButton: true,
+      });
     }
   };
 

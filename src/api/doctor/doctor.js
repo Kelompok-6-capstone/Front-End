@@ -165,19 +165,24 @@ export const getTags = async () => {
   }
 };
 
-export const updateDoctorStatus = async (data) => {
+
+export const getDoctorStatus = async () => {
   try {
-    const response = await axiosInstanceDoctor.put("/doctor/profile", {
-      is_active: data.is_active,
-    });
-    console.log("Respons dari API:", response.data); // Log respons
-    return response.data;
+    const response = await axiosInstanceDoctor.get("/doctor/profile");
+    console.log("Respons API getDoctorStatus:", response.data); // Logging respons
+    return response;
   } catch (error) {
-    console.error("Error dari API:", error.response?.data || error.message);
+    console.error("Error pada getDoctorStatus:", error.response?.data || error.message);
     throw error;
   }
-  
 };
+
+
+export const updateDoctorStatus = async (isActive) => {
+  console.log("Mengirim data ke API:", { is_active: isActive });
+  return await axiosInstanceDoctor.put("/doctor/profile", { is_active: isActive });
+};
+
 
 // Fungsi untuk mengambil daftar konsultasi dokter
 export const getConsultations = async () => {
