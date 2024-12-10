@@ -43,6 +43,18 @@ const PatientTable = ({ data }) => {
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 No Telp
               </th>
+              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                Alamat
+              </th>
+              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                Tanggal Lahir
+              </th>
+              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                Jenis Kelamin
+              </th>
+              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                Pekerjaan
+              </th>
               <th className="px-10 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Action
               </th>
@@ -62,6 +74,18 @@ const PatientTable = ({ data }) => {
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {patient.no_hp}
+                </td>
+                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                  {patient.alamat}
+                </td>
+                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                  {patient.tgl_lahir}
+                </td>
+                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                  {patient.jenis_kelamin}
+                </td>
+                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                  {patient.pekerjaan}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   <div className="flex gap-3">
