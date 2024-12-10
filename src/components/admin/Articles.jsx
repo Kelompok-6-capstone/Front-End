@@ -10,6 +10,7 @@ export default function ArticleList() {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [loadingSelectedArticle, setLoadingSelectedArticle] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   const {
     articleData,
@@ -25,6 +26,7 @@ export default function ArticleList() {
   }, [articleData]);
 
   const handleSelectArticle = useCallback(async (article) => {
+    setIsEditing(false);
     setLoadingSelectedArticle(true);
     try {
       const token = Cookies.get("token_admin");
@@ -125,6 +127,11 @@ export default function ArticleList() {
     });
   }, []);
 
+  const handleEditClick = useCallback(() => {
+    setIsEditing(true);
+    setIsDrawerOpen(true);
+  }, []);
+
   if (loadingArticles) return <p>Loading...</p>;
   if (errorArticles) return <p>Error: {errorArticles}</p>;
 
@@ -182,7 +189,10 @@ export default function ArticleList() {
           ) : selectedArticle ? (
             <>
               <div className="flex justify-end gap-3 p-4">
-                <button className="hover:text-cyan-500 transition-colors">
+                <button
+                  className="hover:text-cyan-500 transition-colors"
+                  onClick={handleEditClick}
+                >
                   <img
                     src="/images/admin/pencil.svg"
                     className="h-5 w-5"
@@ -231,8 +241,12 @@ export default function ArticleList() {
 
       <CreateArticleDrawer
         isOpen={isDrawerOpen}
-        onClose={() => setIsDrawerOpen(false)}
+        onClose={() => {
+          setIsDrawerOpen(false);
+          setIsEditing(false);
+        }}
         onArticleCreated={handleArticleCreated}
+        articleToEdit={isEditing ? selectedArticle : null}
       />
     </div>
   );
