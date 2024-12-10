@@ -1,256 +1,376 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { updateProfileDoctor, getProfileDoctor } from "../../api/doctor/doctor";
+import {
+  getProfileDoctor,
+  updateProfileDoctor,
+  getTitles,
+  getTags,
+} from "../../api/doctor/doctor";
 
 const LengkapiProfile = () => {
+  const [titles, setTitles] = useState([]);
+  const [tags, setTags] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
     no_hp: "",
-    address: "",
-    date_of_birth: "",
     email: "",
-    schedule: "",
-    avatar: null,
-    title: "",
+    date_of_birth: "",
+    address: "",
+    price: "",
     experience: "",
     str_number: "",
     about: "",
-    specialties: [], // Array for selected specialties
+    jenis_kelamin: "",
+    title: "",
+    avatar: "",
+    tags: [],
   });
-
+  const [selectedTitle, setSelectedTitle] = useState(null);
   const navigate = useNavigate();
 
-  const fetchProfile = async () => {
-    try {
-      const response = await getProfileDoctor();
-      if (response?.success && response?.data) {
-        const profile = response.data;
-        setFormData({
-          username: profile.username || "",
-          no_hp: profile.no_hp || "",
-          address: profile.address || "",
-          date_of_birth: profile.date_of_birth || "",
-          email: profile.email || "",
-          schedule: profile.schedule || "",
-          avatar: profile.avatar || null,
-          title: profile.title || "",
-          experience: profile.experience || "",
-          str_number: profile.str_number || "",
-          about: profile.about || "",
-          specialties: profile.specialties?.map((spec) => spec.id) || [],
-        });
-      } else {
-        console.error("Data profil tidak ditemukan atau respons tidak valid.");
-      }
-    } catch (error) {
-      console.error("Error fetching profile:", error);
-    }
-  };
-
   useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profileData = await getProfileDoctor();
+        setFormData({
+          username: profileData.data.username,
+          no_hp: profileData.data.no_hp,
+          email: profileData.data.email,
+          date_of_birth: profileData.data.date_of_birth,
+          address: profileData.data.address,
+          price: profileData.data.price,
+          experience: profileData.data.experience,
+          str_number: profileData.data.str_number,
+          about: profileData.data.about,
+          jenis_kelamin: profileData.data.jenis_kelamin,
+          title: profileData.data.title?.id.toString() || "",
+          avatar: profileData.data.avatar,
+          tags: profileData.data.specialists?.map((spec) => spec.id) || [],
+        });
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+      }
+    };
+
+    const fetchTitlesAndTags = async () => {
+      try {
+        const fetchedTitles = await getTitles();
+        setTitles(fetchedTitles);
+
+        const fetchedTags = await getTags();
+        setTags(fetchedTags);
+      } catch (error) {
+        console.error("Failed to fetch titles or tags:", error);
+      }
+    };
+
+    fetchTitlesAndTags();
     fetchProfile();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+
+    if (name === "title") {
+      const selectedId = parseInt(value, 10);
+      const foundTitle = titles.find((title) => title.id === selectedId);
+      setSelectedTitle(foundTitle);
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        title: value,
+      }));
+    } else if (name === "tags") {
+      const updatedTags = [...formData.tags];
+      const selectedTagsId = parseInt(value, 10);
+
+      if (updatedTags.includes(selectedTagsId)) {
+        const index = updatedTags.indexOf(selectedTagsId);
+        updatedTags.splice(index, 1);
+      } else {
+        updatedTags.push(selectedTagsId);
+      }
+
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        tags: updatedTags,
+      }));
+    } else {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        [name]: value,
+      }));
+    }
   };
 
-  const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
-      avatar: e.target.files[0],
-    });
+  const handleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        avatar: reader.result, // Gambar dalam format Base64
+      }));
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
     try {
-      const data = new FormData();
-      data.append("username", formData.username);
-      data.append("no_hp", formData.no_hp);
-      data.append("address", formData.address);
-      data.append("date_of_birth", formData.date_of_birth);
-      data.append("schedule", formData.schedule);
-      data.append("title", formData.title);
-      data.append("experience", formData.experience);
-      data.append("str_number", formData.str_number);
-      data.append("about", formData.about);
-
-      if (formData.avatar instanceof File) {
-        data.append("avatar", formData.avatar);
-      }
-
-      formData.specialties.forEach((id) => {
-        data.append("specialties[]", id);
-      });
-
-      await updateProfileDoctor(data);
-
+      // Fetch data untuk tags
+      const updatedTags = formData.tags
+        .map((tagId) => {
+          const tag = tags.find((t) => t.id === tagId);
+          return tag ? { id: tag.id, name: tag.name } : null;
+        })
+        .filter(Boolean);
+  
+      const updatedData = {
+        ...formData,
+        title: selectedTitle?.name,
+        tags: updatedTags,
+      };
+  
+      console.log('Data yang akan dikirim:', updatedData); // Tambahkan console log untuk melihat perubahan data
+  
+      await updateProfileDoctor(updatedData);
+  
       Swal.fire({
         icon: "success",
-        title: "Profil Berhasil Diperbarui",
-        text: "Data profil Anda telah lengkap.",
-      }).then(() => {
-        navigate("/dokter/dashboard");
+        title: "Profil Berhasil Diupdate",
+        showConfirmButton: false,
+        timer: 1500,
       });
+  
+      navigate("/dokter/dashboard");
     } catch (error) {
+      console.error("Failed to update profile:", error);
       Swal.fire({
         icon: "error",
-        title: "Gagal Memperbarui Profil",
-        text: error.message || "Terjadi kesalahan saat memperbarui profil.",
+        title: "Gagal",
+        text:
+          error.response?.data?.message ||
+          "Terjadi kesalahan saat memperbarui profil.",
+        showConfirmButton: true,
       });
     }
   };
+  
 
   return (
-    <div className="max-w-md mx-auto mt-8">
-      <h1 className="text-xl font-bold text-center">Lengkapi Profil</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="mt-4 bg-white p-6 shadow rounded"
-      >
-        {/* Nama */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Nama</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            required
-          />
-        </div>
-        {/* No HP */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">No HP</label>
-          <input
-            type="text"
-            name="no_hp"
-            value={formData.no_hp}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            required
-          />
-        </div>
-        {/* Alamat */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Alamat</label>
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            required
-          ></textarea>
-        </div>
-        {/* Tanggal Lahir */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">
-            Tanggal Lahir
-          </label>
-          <input
-            type="date"
-            name="date_of_birth"
-            value={formData.date_of_birth}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-        </div>
-        {/* Email */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-            disabled
-          />
-        </div>
-        {/* Jadwal */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Jadwal</label>
-          <input
-            type="text"
-            name="schedule"
-            value={formData.schedule}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-        </div>
-        {/* Gelar */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Gelar</label>
-          <input
-            type="text"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-        </div>
-        {/* Pengalaman */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">
-            Pengalaman (tahun)
-          </label>
-          <input
-            type="number"
-            name="experience"
-            value={formData.experience}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-        </div>
-        {/* Nomor STR */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Nomor STR</label>
-          <input
-            type="text"
-            name="str_number"
-            value={formData.str_number}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          />
-        </div>
-        {/* Tentang */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">Tentang</label>
-          <textarea
-            name="about"
-            value={formData.about}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border rounded"
-          ></textarea>
+    <div className="max-w-4xl mx-auto mt-8 p-8 bg-gray-50 rounded-lg shadow-lg">
+      <h2 className="text-2xl font-bold text-gray-800 mb-8 text-center">
+        Lengkapi Profil
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-8">
+        {/* Seksi Data Pribadi */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            Data Pribadi
+          </h3>
+          {/* Nama */}
+          <div>
+            <label className="block text-m font-medium text-gray-700">
+              Nama
+            </label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="Masukkan nama lengkap Anda"
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* Email */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              disabled
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm bg-gray-200 cursor-not-allowed"
+            />
+          </div>
+
+          {/* Jenis Kelamin */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Jenis Kelamin
+            </label>
+            <div className="flex gap-4 mt-2">
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="jenis_kelamin"
+                  value="Laki-laki"
+                  checked={formData.jenis_kelamin === "Laki-laki"}
+                  onChange={handleChange}
+                  className="focus:ring-blue-500 focus:ring-2"
+                />
+                <span className="ml-2">Laki-laki</span>
+              </label>
+              <label className="inline-flex items-center">
+                <input
+                  type="radio"
+                  name="jenis_kelamin"
+                  value="Perempuan"
+                  checked={formData.jenis_kelamin === "Perempuan"}
+                  onChange={handleChange}
+                  className="focus:ring-blue-500 focus:ring-2"
+                />
+                <span className="ml-2">Perempuan</span>
+              </label>
+            </div>
+          </div>
         </div>
 
-        {/* Avatar */}
-        <div className="mb-4">
-          <label className="block text-gray-700 text-sm mb-2">
-            Foto Profil (Avatar)
-          </label>
-          <input
-            type="file"
-            name="avatar"
-            accept="image/*"
-            onChange={handleFileChange}
-            className="w-full px-4 py-2 border rounded"
-          />
+        {/* Seksi Informasi Profesional */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            Informasi Profesional
+          </h3>
+
+          {/* Bidang */}
+          <div>
+            <label className="block text-m font-medium text-gray-700">
+              Bidang
+            </label>
+            <select
+              name="title"
+              onChange={handleChange}
+              value={formData.title || ""}
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="" disabled>
+                Pilih Bidang
+              </option>
+              {titles.map((title) => (
+                <option key={title.id} value={title.id}>
+                  {title.name}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Spesialis */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Spesialis
+            </label>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {tags.map((tag) => (
+                <label key={tag.id} className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="tags"
+                    value={tag.id}
+                    checked={formData.tags.includes(tag.id)}
+                    onChange={handleChange}
+                    className="focus:ring-blue-500 focus:ring-2 mt-2"
+                  />
+
+                  <span className="ml-2">{tag.name}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* pengalaman */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Pengalaman
+            </label>
+            <input
+              type="number"
+              name="experience"
+              value={formData.experience}
+              onChange={handleChange}
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* No STR */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Nomor STR
+            </label>
+            <input
+              type="text"
+              name="str_number"
+              value={formData.str_number}
+              onChange={handleChange}
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* biaya */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Biaya
+            </label>
+            <input
+              type="number"
+              name="price"
+              value={formData.price}
+              onChange={handleChange}
+              disabled
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm bg-gray-200 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* tentang dokter */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Tentang
+            </label>
+            <textarea
+              name="about"
+              value={formData.about}
+              onChange={handleChange}
+              className="w-full mt-4 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
         </div>
-        {/* Submit */}
-        <button
-          type="submit"
-          className="w-full py-2 bg-teal-600 text-white rounded hover:bg-teal-700"
-        >
-          Simpan
-        </button>
+
+        {/* Seksi Foto Profil */}
+        <div className="border-b pb-6">
+          <h3 className="text-lg font-semibold text-gray-700 mb-4">
+            Foto Profil
+          </h3>
+          <div className="flex items-center space-x-4">
+            <img
+              src={formData.avatar}
+              alt="Avatar"
+              className="w-16 h-16 rounded-full border"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              className="text-sm"
+            />
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            Simpan Profil
+          </button>
+        </div>
       </form>
     </div>
   );

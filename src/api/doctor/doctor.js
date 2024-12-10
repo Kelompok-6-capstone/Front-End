@@ -1,44 +1,43 @@
 import axiosInstanceDoctor from "../../utils/axiosInstanceDoctor";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 // Fungsi untuk login dokter
 export const loginDoctor = async (data) => {
   try {
     const response = await axiosInstanceDoctor.post("/doctor/login", data);
-    console.log("Login response:", response); // Log respons server
-
-    // Periksa apakah token ada di response.data.data.token
-    const token = response.data?.data?.token;
-    if (token) {
-      // Simpan token di localStorage
-      localStorage.setItem("token_doctor", token);
-      console.log("Token berhasil disimpan di localStorage:", token);
-    } else {
-      console.error("Token tidak ditemukan dalam respons login.");
+    if (response.data.data.token) {
+      // Simpan token di cookie
+      Cookies.set("token_doctor", response.data.data.token, {
+        path: "/",
+        expires: 3,
+      });
     }
-
-    return response.data;
+    return response.data; // Return data yang bisa dipakai di komponen
   } catch (error) {
-    const errorMessage =
-      error.response?.data?.message ||
-      error.message ||
-      "Terjadi kesalahan saat login.";
-    throw errorMessage;
+    throw error.response?.data?.message || "Terjadi kesalahan saat login.";
   }
 };
 
 // Fungsi untuk mengambil profil dokter
 export const getProfileDoctor = async () => {
   try {
-    const response = await axiosInstanceDoctor.get("/doctor/profile");
-    console.log("Profile response:", response); // Log the entire response for better inspection
+    const token = Cookies.get("token_doctor");
+    if (!token) {
+      throw new Error("No admin token found");
+    }
+
+    const response = await axiosInstanceDoctor.get("/doctor/profile", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
     if (response.status === 200 && response.data && response.data.data) {
-      return response.data; // Valid structure, return the response
+      return response.data;
     } else {
       throw new Error("Data profile tidak ditemukan.");
     }
   } catch (error) {
-    console.error("Error fetching profile:", error); // Log error details
+    console.error("Error fetching profile:", error);
     throw (
       error.response?.data?.message ||
       error.message ||
@@ -50,11 +49,31 @@ export const getProfileDoctor = async () => {
 // Fungsi untuk memperbarui profil dokter
 export const updateProfileDoctor = async (data) => {
   try {
-    const response = await axiosInstanceDoctor.put("/doctor/profile", data);
-    return response.data; // Mengembalikan data respons jika berhasil
+    const token = Cookies.get("token_doctor");
+    if (!token) {
+      throw new Error("Token dokter tidak ditemukan.");
+    }
+
+    const response = await axiosInstanceDoctor.put("/doctor/profile", data, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (response.status === 200 && response.data) {
+      console.log("Profil berhasil diperbarui");
+      return response.data;
+    } else {
+      throw new Error(
+        "Data profil tidak ditemukan atau gagal memperbarui profil."
+      );
+    }
   } catch (error) {
+    console.error(
+      "Error updating profile:",
+      error.response ? error.response.data : error.message
+    );
     throw (
       error.response?.data?.message ||
+      error.message ||
       "Terjadi kesalahan saat memperbarui profil."
     );
   }
@@ -63,12 +82,29 @@ export const updateProfileDoctor = async (data) => {
 // Fungsi untuk logout dokter
 export const logoutDoctor = async () => {
   try {
-    const response = await axiosInstanceDoctor.get("/doctor/logout");
-    // Menghapus token setelah logout
-    localStorage.removeItem("token_doctor");
-    return response.data; // Kembalikan data respons
+    const token = Cookies.get("token_doctor");
+    await axiosInstanceDoctor.get("/doctor/logout", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    Cookies.remove("token_doctor");
+    // SweetAlert untuk menampilkan notifikasi logout berhasil
+    Swal.fire({
+      icon: "success",
+      title: "Berhasil",
+      text: "Anda telah berhasil logout!",
+      showConfirmButton: false,
+      timer: 1500,
+    });
   } catch (error) {
-    throw error.response?.data?.message || "Terjadi kesalahan saat logout.";
+    // Tangani error dan tampilkan pesan error
+    Swal.fire({
+      icon: "error",
+      title: "Gagal",
+      text: error.response?.data?.message || "Terjadi kesalahan saat logout.",
+      showConfirmButton: true,
+    });
   }
 };
 
@@ -76,7 +112,7 @@ export const logoutDoctor = async () => {
 export const registerDoctor = async (data) => {
   try {
     const response = await axiosInstanceDoctor.post("/doctor/register", data);
-    return response.data; // Kembalikan data respons
+    return response.data;
   } catch (error) {
     throw error.response?.data?.message || "Terjadi kesalahan saat mendaftar.";
   }
@@ -107,12 +143,49 @@ export const verifyDoctorOtp = async ({ email, code }) => {
   }
 };
 
+// Fungsi untuk mendapatkan data title (gelar)
+export const getTitles = async () => {
+  try {
+    const response = await axiosInstanceDoctor.get("/doctor/titles");
+    return response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching titles:", error);
+    throw "Terjadi kesalahan saat mengambil data gelar.";
+  }
+};
+
+// Fungsi untuk mendapatkan data tags (spesialis)
+export const getTags = async () => {
+  try {
+    const response = await axiosInstanceDoctor.get("/doctor/tags");
+    return response.data.data || [];
+  } catch (error) {
+    console.error("Error fetching tags:", error);
+    throw "Terjadi kesalahan saat mengambil data spesialis.";
+  }
+};
+
+export const updateDoctorStatus = async (data) => {
+  try {
+    const response = await axiosInstanceDoctor.put("/doctor/profile", {
+      is_active: data.is_active,
+    });
+    console.log("Respons dari API:", response.data); // Log respons
+    return response.data;
+  } catch (error) {
+    console.error("Error dari API:", error.response?.data || error.message);
+    throw error;
+  }
+  
+};
+
+// Fungsi untuk mengambil daftar konsultasi dokter
 export const getConsultations = async () => {
   try {
     const response = await axiosInstanceDoctor.get("/doctor/consultations");
-    return response.data; // Mengembalikan data dari response API
+    return response.data;
   } catch (error) {
-    console.error('Error fetching consultations:', error);
-    throw error; // Melempar error jika gagal mengambil data
+    console.error("Error fetching consultations:", error);
+    throw error;
   }
 };
