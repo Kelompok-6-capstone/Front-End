@@ -4,19 +4,19 @@ import Sidebar from "../../../components/dokter/Sidebar";
 import { getProfileDoctor } from "../../../api/doctor/doctor"; // API untuk mendapatkan profil dokter
 
 const ProfileDokter = () => {
-  const [profile, setProfile] = useState(null); // State untuk menyimpan data profil
-  const [loading, setLoading] = useState(true); // State untuk indikasi loading
-  const [error, setError] = useState(null); // State untuk error handling
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await getProfileDoctor(); // Panggil API untuk mendapatkan profil
-        setProfile(response.data); // Simpan data profil ke state
+        const response = await getProfileDoctor();
+        setProfile(response.data);
       } catch (error) {
         setError(error.message || "Gagal memuat data profil");
       } finally {
-        setLoading(false); // Set loading selesai
+        setLoading(false);
       }
     };
 
@@ -42,11 +42,10 @@ const ProfileDokter = () => {
   const profileDetails = [
     { icon: "/images/Message.svg", title: profile.email },
     { icon: "/images/phone.svg", title: profile.no_hp },
-    { icon: "/images/user-square.svg", title: profile.gender }, // Tambahkan gender jika tersedia
+    { icon: "/images/user-square.svg", title: profile.jenis_kelamin },
     { icon: "/images/air.svg", title: profile.date_of_birth },
     { icon: "/images/maps.svg", title: profile.address },
-    { icon: "/images/dokter/stetoskop.svg", title: profile.title }, // Tambahkan spesialisasi jika ada
-    { icon: "/images/Calendar.svg", title: profile.schedule },
+    { icon: "/images/dokter/stetoskop.svg", title: profile.title.name },
   ];
 
   const detailDokter = {

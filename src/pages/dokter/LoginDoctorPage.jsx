@@ -36,13 +36,14 @@ const LoginDoctorPage = () => {
         "no_hp",
         "address",
         "date_of_birth",
-        "schedule",
         "price",
         "experience",
         "str_number",
         "about",
         "jenis_kelamin",
         "title",
+        "tags",
+        "avatar",
       ];
 
       // Cek kelengkapan profil
