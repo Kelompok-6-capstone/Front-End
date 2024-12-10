@@ -1,15 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getProfileDoctor, logoutDoctor } from "../../api/doctor/doctor";
 
 const Sidebar = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [doctorName, setDoctorName] = useState("Loading..."); // State untuk dropdown
+  const [profile, setProfile] = useState(null); // Simpan profil dokter
   const sidebarRef = useRef(null);
-  const isActive = (path) => location.pathname === path;
+  const isActivePage = (path) => location.pathname === path;
 
   // untuk mendapatkan nama halaman berdasarkan pathname
   const getPageName = (pathname) => {
@@ -26,7 +25,6 @@ const Sidebar = () => {
   const handleLogout = async () => {
     try {
       await logoutDoctor(); // Memanggil fungsi logout dari API
-      navigate("/dokter/login"); // Arahkan ke halaman login
     } catch (error) {
       console.error("Gagal logout:", error); // Tangani error jika ada
       alert("Logout gagal. Silakan coba lagi.");
@@ -48,11 +46,10 @@ const Sidebar = () => {
   useEffect(() => {
     const fetchDoctorProfile = async () => {
       try {
-        const response = await getProfileDoctor(); // Panggil API untuk mendapatkan nama dokter
-        setDoctorName(response.data.username || "Dokter"); // Set nama dokter dari API
+        const response = await getProfileDoctor();
+        setProfile(response.data); // Simpan data profil
       } catch (error) {
         console.error("Gagal memuat profil dokter:", error);
-        setDoctorName("Dokter");
       }
     };
 
@@ -150,13 +147,16 @@ const Sidebar = () => {
             >
               <img src="/images/Calmind.svg" alt="logo" />
             </a>
+            {/* foto dokter */}
             <div className="flex flex-col justify-center items-center mb-[36px]">
               <img
-                src="/images/dokter/foto-dokter.png"
-                alt="dokter-profile"
-                className="w-[100px] h-[100px]"
+                src={profile?.avatar || "/images/dokter/foto-dokter.png"}
+                alt="Profile"
+                className="w-24 h-24 rounded-full"
               />
-              <h1 className="text-center font-semibold mt-4">{doctorName}</h1>
+              <h1 className="text-xl mt-4 font-semibold">
+                {profile?.username}
+              </h1>
               <p className="stext-center text-sm">Dokter</p>
             </div>
           </div>
@@ -171,7 +171,7 @@ const Sidebar = () => {
                 <li>
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/dokter/dashboard") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/dashboard") ? "bg-[#22D3EE]" : ""
                     }`}
                     to="/dokter/dashboard"
                   >
@@ -182,7 +182,9 @@ const Sidebar = () => {
                 <li className="hs-accordion" id="account-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/dokter/profile-dokter") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/profile-dokter")
+                        ? "bg-[#22D3EE]"
+                        : ""
                     }`}
                     to="/dokter/profile-dokter"
                   >
@@ -193,7 +195,9 @@ const Sidebar = () => {
                 <li className="hs-accordion" id="account-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/dokter/daftar-passien") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/daftar-passien")
+                        ? "bg-[#22D3EE]"
+                        : ""
                     }`}
                     to="/dokter/daftar-passien"
                   >
@@ -204,7 +208,7 @@ const Sidebar = () => {
                 <li className="hs-accordion" id="transaksi-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/dokter/transaksi") ? "bg-[#22D3EE]" : ""
+                      isActivePage("/dokter/transaksi") ? "bg-[#22D3EE]" : ""
                     }`}
                     to="/dokter/transaksi"
                   >
