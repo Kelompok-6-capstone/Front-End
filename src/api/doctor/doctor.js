@@ -2,29 +2,27 @@ import axiosInstanceDoctor from "../../utils/axiosInstanceDoctor";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
-// Fungsi untuk login dokter
 export const loginDoctor = async (data) => {
   try {
     const response = await axiosInstanceDoctor.post("/doctor/login", data);
-    // console.log("Login response:", response);
-    
-    // Periksa apakah token ada di response.data.data.token
+
+    // Ambil token dari response
     const token = response.data?.data?.token;
+
     if (token) {
       // Simpan token di localStorage
       localStorage.setItem("token_doctor", token);
-      console.log("Token berhasil disimpan di localStorage:", token);
+      // console.log("Token berhasil disimpan di localStorage:", token);
+
+      // Simpan token di cookie
+      Cookies.set("token_doctor", token, {
+        path: "/",
+        expires: 3, // Token akan kedaluwarsa dalam 3 hari
+      });
     } else {
       console.error("Token tidak ditemukan dalam respons login.");
-
-    if (response.data.data.token) {
-      // Simpan token di cookie
-      Cookies.set("token_doctor", response.data.data.token, {
-        path: "/",
-        expires: 3,
-      });
-
     }
+
     return response.data; // Return data yang bisa dipakai di komponen
   } catch (error) {
     throw error.response?.data?.message || "Terjadi kesalahan saat login.";
