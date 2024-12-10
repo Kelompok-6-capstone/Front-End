@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import axiosInstance from "../../utils/axiosInstance";
 import Cookies from "js-cookie";
@@ -8,12 +8,27 @@ export default function CreateArticleDrawer({
   isOpen,
   onClose,
   onArticleCreated,
+  articleToEdit,
 }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (articleToEdit) {
+      setTitle(articleToEdit.judul);
+      setDescription(articleToEdit.isi);
+      setImage(articleToEdit.gambar);
+      setImagePreview(articleToEdit.gambar);
+    } else {
+      setTitle("");
+      setDescription("");
+      setImage(null);
+      setImagePreview(null);
+    }
+  }, [articleToEdit]);
 
   const handleImageUpload = async (file) => {
     try {
@@ -34,9 +49,8 @@ export default function CreateArticleDrawer({
         }
       );
 
-      // Validasi response API
       if (response.data?.success && response.data?.data?.imageUrl) {
-        return response.data.data.imageUrl; // URL gambar dari response API
+        return response.data.data.imageUrl;
       } else {
         throw new Error(
           response.data?.data?.message || "Gagal mengupload gambar."
@@ -66,12 +80,11 @@ export default function CreateArticleDrawer({
       }
 
       try {
-        // Gunakan preview lokal untuk feedback cepat
         setImagePreview(URL.createObjectURL(file));
 
         const imageUrl = await handleImageUpload(file);
-        setImage(imageUrl); // Simpan URL gambar ke state
-        setImagePreview(imageUrl); // Tampilkan URL dari server
+        setImage(imageUrl);
+        setImagePreview(imageUrl);
       } catch (error) {
         setImage(null);
         setImagePreview(null);
@@ -87,43 +100,56 @@ export default function CreateArticleDrawer({
       const token = Cookies.get("token_admin");
       if (!token) throw new Error("Token admin tidak ditemukan.");
 
-      // Kirim data artikel dalam format JSON
       const payload = {
         judul: title,
         isi: description,
-        gambar: image, // Gunakan URL gambar yang telah diupload
+        gambar: image,
       };
 
-      const response = await axiosInstance.post("/admin/artikel", payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      let response;
+      if (articleToEdit) {
+        response = await axiosInstance.put(
+          `/admin/artikel/${articleToEdit.id}`,
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      } else {
+        response = await axiosInstance.post("/admin/artikel", payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+      }
 
       if (response.data?.success) {
         Swal.fire({
           icon: "success",
           title: "Berhasil!",
-          text: "Artikel berhasil ditambahkan.",
+          text: articleToEdit
+            ? "Artikel berhasil diperbarui."
+            : "Artikel berhasil ditambahkan.",
         });
         onArticleCreated();
         onClose();
-        setTitle("");
-        setDescription("");
-        setImage(null);
-        setImagePreview(null);
       } else {
         throw new Error(
           response.data?.message || "Terjadi kesalahan tidak diketahui."
         );
       }
     } catch (error) {
-      console.error("Error creating article:", error);
+      console.error("Error creating/updating article:", error);
       Swal.fire({
         icon: "error",
         title: "Gagal!",
-        text: error.message || "Terjadi kesalahan saat menambahkan artikel.",
+        text:
+          error.message ||
+          "Terjadi kesalahan saat menambahkan/memperbarui artikel.",
       });
     } finally {
       setIsSubmitting(false);
@@ -138,7 +164,9 @@ export default function CreateArticleDrawer({
     >
       <div className="h-full flex flex-col">
         <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold">Buat Artikel Baru</h2>
+          <h2 className="text-xl font-semibold">
+            {articleToEdit ? "Edit Artikel" : "Buat Artikel Baru"}
+          </h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -264,7 +292,11 @@ export default function CreateArticleDrawer({
             className="px-4 py-2 text-sm font-medium text-white bg-[#2DD4BF] rounded-lg hover:bg-[#1f9a89] disabled:opacity-50"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Menyimpan..." : "Simpan"}
+            {isSubmitting
+              ? "Menyimpan..."
+              : articleToEdit
+              ? "Perbarui"
+              : "Simpan"}
           </button>
         </div>
       </div>
