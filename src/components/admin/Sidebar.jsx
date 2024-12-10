@@ -1,8 +1,57 @@
 import React from "react";
-import Navbar2 from "./Navbar";
-import MainDashboard from "./MainDashboard";
+import { Link, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
+import Swal from "sweetalert2";
+import Cookies from "js-cookie";
 
 const Sidebar = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const isActive = (path) => location.pathname === path;
+
+  const handleLogout = async () => {
+    try {
+      const token = Cookies.get("token_admin");
+
+      if (!token) {
+        Swal.fire({
+          icon: "error",
+          title: "Logout Gagal",
+          text: "Token tidak ditemukan. Harap login ulang.",
+        });
+        return;
+      }
+
+      const response = await axiosInstance.get(
+        "/admin/logout",
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      console.log("Logout response:", response); // Log respons dari server
+
+      Cookies.remove("token_admin");
+      Swal.fire({
+        icon: "success",
+        title: "Logout Berhasil",
+        text: "Anda telah keluar dari akun.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate("/admin/login");
+    } catch (error) {
+      console.error("Error during logout:", error.response || error);
+      Swal.fire({
+        icon: "error",
+        title: "Logout Gagal",
+        text: error.response?.data?.message || "Terjadi kesalahan.",
+      });
+    }
+  };
+
   return (
     <>
       <div
@@ -46,94 +95,104 @@ const Sidebar = () => {
             >
               <ul className="flex flex-col space-y-1 gap-[15px] mx-[24px]">
                 <li>
-                  <a
-                    className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none focus:bg-[#22D3EE]"
-                    href="#"
+                  <Link
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
+                      isActive("/admin/dashboard") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/dashboard"
                   >
                     <img src="/images/dashboard.svg" alt="" />
                     Dashboard
-                  </a>
+                  </Link>
                 </li>
                 <li className="hs-accordion" id="transaksi-accordion">
-                  <button
-                    type="button"
-                    className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none focus:bg-[#22D3EE"
-                    aria-expanded="true"
-                    aria-controls="users-accordion-child"
+                  <Link
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
+                      isActive("/admin/transaction") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/transaction"
                   >
                     <img src="/images/Money.svg" alt="money" />
                     Transaksi
-                  </button>
+                  </Link>
                 </li>
                 <li className="hs-accordion" id="account-accordion">
-                  <button
-                    type="button"
-                    className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none focus:bg-[#22D3EE"
-                    aria-expanded="true"
-                    aria-controls="account-accordion-child"
+                  <Link
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
+                      isActive("/admin/statistics") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/statistics"
                   >
                     <img src="/images/Chart.svg" alt="chart" />
                     Statistik Bulanan
-                  </button>
+                  </Link>
                 </li>
                 <li className="hs-accordion" id="projects-accordion">
-                  <button
-                    type="button"
-                    className="hs-accordion-toggle w-full text-start flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none focus:bg-[#22D3EE"
-                    aria-expanded="true"
-                    aria-controls="projects-accordion-child"
+                  <Link
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
+                      isActive("/admin/users") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/users"
                   >
                     <img src="/images/User.svg" alt="user" />
                     Pengguna
-                  </button>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    href="#"
+                  <Link
+                    className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
+                      isActive("/admin/article") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/article"
                   >
                     <img src="/images/News.svg" alt="news" />
                     Artikel
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="w-full flex gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    href="#"
+                  <Link
+                    className={`w-full flex gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
+                      isActive("/admin/announcement") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/announcement"
                   >
                     <img
                       src="/images/annotation-information.svg"
                       alt="information"
                     />
                     Pengumuman
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    href="#"
+                  <Link
+                    className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
+                      isActive("/admin/report") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/report"
                   >
                     <img src="/images/Message.svg" alt="message" />
                     Laporan Pengguna
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
-                    className="w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    href="#"
+                  <Link
+                    className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
+                      isActive("/admin/settings") ? "bg-[#22D3EE]" : ""
+                    }`}
+                    to="/admin/settings"
                   >
                     <img src="/images/gear.svg" alt="gear" />
                     Pengaturan
-                  </a>
+                  </Link>
                 </li>
                 <li>
-                  <a
+                  <button
                     className="w-full flex items-center gap-x-3.5 mt-[58px] py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
-                    href="#"
+                    onClick={handleLogout}
                   >
                     <img src="/images/logout.svg" alt="logout" />
                     Log Out
-                  </a>
+                  </button>
                 </li>
               </ul>
             </nav>
