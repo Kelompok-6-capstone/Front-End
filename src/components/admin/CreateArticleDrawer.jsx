@@ -15,11 +15,48 @@ export default function CreateArticleDrawer({
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleImageChange = (e) => {
+  const handleImageUpload = async (file) => {
+    try {
+      const token = Cookies.get("token_admin");
+      if (!token) throw new Error("Token admin tidak ditemukan.");
+
+      const formData = new FormData();
+      formData.append("gambar", file);
+
+      const response = await axiosInstance.post(
+        "/admin/artikel/upload-image",
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      // Validasi response API
+      if (response.data?.success && response.data?.data?.imageUrl) {
+        return response.data.data.imageUrl; // URL gambar dari response API
+      } else {
+        throw new Error(
+          response.data?.data?.message || "Gagal mengupload gambar."
+        );
+      }
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal!",
+        text: error.message || "Terjadi kesalahan saat mengupload gambar.",
+      });
+      throw error;
+    }
+  };
+
+  const handleImageChange = async (e) => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 50 * 1024 * 1024) {
-        // Maksimal 50MB
         Swal.fire({
           icon: "error",
           title: "Gagal!",
@@ -27,12 +64,18 @@ export default function CreateArticleDrawer({
         });
         return;
       }
-      setImage(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result);
-      };
-      reader.readAsDataURL(file);
+
+      try {
+        // Gunakan preview lokal untuk feedback cepat
+        setImagePreview(URL.createObjectURL(file));
+
+        const imageUrl = await handleImageUpload(file);
+        setImage(imageUrl); // Simpan URL gambar ke state
+        setImagePreview(imageUrl); // Tampilkan URL dari server
+      } catch (error) {
+        setImage(null);
+        setImagePreview(null);
+      }
     }
   };
 
@@ -44,17 +87,17 @@ export default function CreateArticleDrawer({
       const token = Cookies.get("token_admin");
       if (!token) throw new Error("Token admin tidak ditemukan.");
 
-      const formData = new FormData();
-      formData.append("judul", title);
-      formData.append("isi", description);
-      if (image) {
-        formData.append("gambar", image);
-      }
+      // Kirim data artikel dalam format JSON
+      const payload = {
+        judul: title,
+        isi: description,
+        gambar: image, // Gunakan URL gambar yang telah diupload
+      };
 
-      const response = await axiosInstance.post("/admin/artikel", formData, {
+      const response = await axiosInstance.post("/admin/artikel", payload, {
         headers: {
           Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+          "Content-Type": "application/json",
         },
       });
 
