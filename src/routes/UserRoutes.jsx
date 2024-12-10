@@ -44,7 +44,7 @@ const UserRoutes = () => (
             }
         />
         <Route
-            path="dokter/detail-dokter"
+            path="/dokter/:id"
             element={
                 <ProtectedRoute>
                     <DetailDokterPage />
@@ -52,7 +52,7 @@ const UserRoutes = () => (
             }
         />
         <Route
-            path="dokter/jadwal"
+            path=""
             element={
                 <ProtectedRoute>
                     <JadwalPage />

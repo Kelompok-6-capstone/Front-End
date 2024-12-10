@@ -38,7 +38,7 @@ export default function DoctorCard({ doctor }) {
                         </span>
                     </div>
                     <div className="ml-auto hidden lg:block">
-                        <JanjiKonsultasiButton />
+                        <JanjiKonsultasiButton dokter={doctor} />
                     </div>
                 </div>
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center gap-2">
@@ -46,7 +46,7 @@ export default function DoctorCard({ doctor }) {
                         Rp {doctor.price.toLocaleString()}
                     </div>
                     <div className='lg:hidden'>
-                        <JanjiKonsultasiButton />
+                        <JanjiKonsultasiButton dokter={doctor} />
                     </div>
                 </div>
             </div>
