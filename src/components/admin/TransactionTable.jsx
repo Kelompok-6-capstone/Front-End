@@ -68,11 +68,6 @@ const TransactionTable = () => {
           return;
         }
 
-        console.log(
-          `Mengirim permintaan ke: /admin/consultations/${id}/approve`
-        );
-        console.log("Payload permintaan:", { status: "paid" });
-
         const response = await axiosInstance.put(
           `/admin/consultations/${id}/approve`,
           { status: "paid" },
@@ -84,10 +79,7 @@ const TransactionTable = () => {
           }
         );
 
-        console.log("Respon:", response);
-
         if (response.data.success) {
-          // Perbarui state lokal untuk mencerminkan perubahan
           setData((prevData) =>
             prevData.map((item) =>
               item.id === id ? { ...item, status: "approved" } : item
@@ -100,7 +92,6 @@ const TransactionTable = () => {
         }
       }
     } catch (err) {
-      console.error("Detail Kesalahan:", err);
       setError(err.response?.data || err.message);
       Swal.fire(
         "Kesalahan!",
