@@ -70,7 +70,9 @@ export default function ChatbotUser() {
             </div>
             {/* Modal Chatbot */}
             {isChatOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-40">
+                // <div className="fixed inset-y-0 right-0 flex items-center justify-center bg-black bg-opacity-50 z-40">
+                // <div className="fixed inset-y-0 right-0 flex items-center justify-center z-40 me-5">
+                <div className={`fixed inset-y-0 right-0 flex items-center justify-center z-40 ${window.innerWidth < 768 ? 'bg-black bg-opacity-50' : 'me-5'}`}>
                     <div className="w-full max-w-md h-[70%] md:h-[60%] relative bg-white rounded-2xl border border-cyan-900 mx-5">
                         {/* Header */}
                         <div className="w-full p-3 bg-cyan-50 flex justify-between items-center border-b border-cyan-900">
