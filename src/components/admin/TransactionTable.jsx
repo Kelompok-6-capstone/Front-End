@@ -87,6 +87,9 @@ const TransactionTable = ({ data }) => {
                   Status Konsultasi{" "}
                   {getSortIcon(sortConfig, "statusKonsultasi")}
                 </th>
+                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                  Action
+                </th>
               </tr>
             </thead>
             <tbody className="bg-cyan-50">
@@ -107,6 +110,7 @@ const TransactionTable = ({ data }) => {
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                     {transaction.keluhan}
                   </td>
+
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                     <span
                       className={`px-3 py-1 rounded-full text-sm ${
@@ -117,6 +121,11 @@ const TransactionTable = ({ data }) => {
                     >
                       {transaction.statusKonsultasi}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                    <button>
+                      <img src="/images/admin/action.svg" alt="action" />
+                    </button>
                   </td>
                 </tr>
               ))}
