@@ -31,12 +31,14 @@ export default function DetailProfileChat() {
 
                 <div className="mt-8">
                     <h4 className="text-neutral-950 text-base font-semibold">Catatan Keluhan Pasien</h4>
-                    <div className="mt-3 p-4 bg-white rounded-lg border border-neutral-300">
+                    <div className="mt-3 p-4 bg-white rounded-lg border border-neutral-300 max-h-52 overflow-y-auto">
                         <p className="text-black text-sm">
                             Dokter, saya merasa sangat cemas dan terbebani oleh tekanan akademis
                             akhir-akhir ini. Setiap malam, saat saya mencoba untuk tidur, pikiran
                             saya tidak bisa berhenti memikirkan segala tugas, ujian, dan proyek yang
                             harus diselesaikan. Ini membuat saya merasa sangat gelisah dan sulit
+                            untuk memulai tidur, meskipun saya merasa sangat lelah.
+                            untuk memulai tidur, meskipun saya merasa sangat lelah.
                             untuk memulai tidur, meskipun saya merasa sangat lelah.
                         </p>
                     </div>
