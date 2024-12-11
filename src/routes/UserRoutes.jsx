@@ -9,6 +9,7 @@ import ProfilePenggunaPage from "../pages/user/profile/ProfilePenggunaPage";
 import ProtectedRoute from "./ProtectedRoute";
 import FormKeluhanPage from "../pages/user/FormKeluhanPage";
 import DetailPembayaranPage from "../pages/user/DetailPembayaranPage";
+import ChatDokterPage from "../pages/user/ChatDokterPage";
 
 const UserRoutes = () => (
     <Routes>
@@ -73,6 +74,14 @@ const UserRoutes = () => (
             element={
                 <ProtectedRoute>
                     <ProfilePenggunaPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/chat-dokter"
+            element={
+                <ProtectedRoute>
+                    <ChatDokterPage />
                 </ProtectedRoute>
             }
         />

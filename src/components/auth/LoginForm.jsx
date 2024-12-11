@@ -43,7 +43,7 @@ const LoginForm = ({ formData, handleChange, handleSubmit, errorMessage }) => {
                 onChange={handleChange}
             />
             <div className="text-right text-sm text-blue-500 hover:underline mb-6">
-                <Link to="/forgot-password">Lupa kata sandi?</Link>
+                {/* <Link to="/forgot-password">Lupa kata sandi?</Link> */}
             </div>
             <button
                 type="submit"
