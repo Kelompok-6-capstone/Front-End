@@ -72,10 +72,10 @@ const DaftarPassien = () => {
                   {/* Informasi Pasien */}
                   <div className="flex flex-col justify-center flex-grow p-4">
                     <h3 className="group-hover:text-blue-600 font-semibold text-gray-800 dark:group-hover:text-neutral-400 dark:text-neutral-200">
-                      {patient.user.name}
+                      ayuni
                     </h3>
                     <p className="text-sm text-gray-500 dark:text-neutral-500">
-                      {patient.user.age} Tahun | {patient.user.job}
+                      21 Tahun | mahasiswa
                     </p>
                   </div>
                   {/* Ikon Panah */}
