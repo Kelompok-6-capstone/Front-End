@@ -55,11 +55,10 @@ const SettingsProfileDokter = () => {
       icon: "/images/file.svg",
       title: profile.str_number,
     },
-    { icon: "/images/Calendar.svg", title: profile.schedule },
   ];
 
   const detailDokter = {
-    experience: profile.about,
+    tentangDokter: profile.about,
   };
 
   return (
@@ -104,7 +103,7 @@ const SettingsProfileDokter = () => {
           <div className="mt-6 w-full max-w-md space-y-4">
             <div className="bg-white border border-cyan-950 shadow-sm rounded-xl p-6 w-[426px] max-w-lg">
               <p className="text-gray-600 dark:text-neutral-300">
-                {detailDokter.experience}
+                {detailDokter.tentangDokter}
               </p>
             </div>
           </div>

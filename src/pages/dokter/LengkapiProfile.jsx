@@ -6,6 +6,7 @@ import {
   updateProfileDoctor,
   getTitles,
   getTags,
+  uploadAvatarDoctor,
 } from "../../api/doctor/doctor";
 
 const LengkapiProfile = () => {
@@ -25,6 +26,7 @@ const LengkapiProfile = () => {
     title: "",
     avatar: "",
     tags: [],
+    schedule: "",
   });
   const [selectedTitle, setSelectedTitle] = useState(null);
   const navigate = useNavigate();
@@ -42,6 +44,7 @@ const LengkapiProfile = () => {
           price: profileData.data.price,
           experience: profileData.data.experience,
           str_number: profileData.data.str_number,
+          schedule: profileData.data.schedule,
           about: profileData.data.about,
           jenis_kelamin: profileData.data.jenis_kelamin,
           title: profileData.data.title?.id.toString() || "",
@@ -80,6 +83,7 @@ const LengkapiProfile = () => {
       setFormData((prevFormData) => ({
         ...prevFormData,
         title: value,
+        [name]: name === "experience" ? parseInt(value, 10) : value,
       }));
     } else if (name === "tags") {
       const updatedTags = [...formData.tags];
@@ -104,49 +108,48 @@ const LengkapiProfile = () => {
     }
   };
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    try {
+      const avatarUrl = await uploadAvatarDoctor(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        avatar: reader.result, // Gambar dalam format Base64
+        avatar: avatarUrl, // Update URL avatar setelah berhasil diunggah
       }));
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error("Gagal mengunggah avatar:", error);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
-      // Fetch data untuk tags
       const updatedTags = formData.tags
         .map((tagId) => {
           const tag = tags.find((t) => t.id === tagId);
           return tag ? { id: tag.id, name: tag.name } : null;
         })
         .filter(Boolean);
-  
+
       const updatedData = {
         ...formData,
+        experience: parseInt(formData.experience, 10),
         title: selectedTitle?.name,
         tags: updatedTags,
       };
-  
-      console.log('Data yang akan dikirim:', updatedData); // Tambahkan console log untuk melihat perubahan data
-  
+
       await updateProfileDoctor(updatedData);
-  
+
       Swal.fire({
         icon: "success",
-        title: "Profil Berhasil Diupdate",
+        title: "Profil Sudah Terlengkapi",
         showConfirmButton: false,
         timer: 1500,
       });
-  
+
       navigate("/dokter/dashboard");
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -156,11 +159,9 @@ const LengkapiProfile = () => {
         text:
           error.response?.data?.message ||
           "Terjadi kesalahan saat memperbarui profil.",
-        showConfirmButton: true,
       });
     }
   };
-  
 
   return (
     <div className="max-w-4xl mx-auto mt-8 p-8 bg-gray-50 rounded-lg shadow-lg">
@@ -232,6 +233,45 @@ const LengkapiProfile = () => {
               </label>
             </div>
           </div>
+        </div>
+
+        <div className="mt-5">
+          <label className="block text-m font-medium text-gray-700">
+            Tanggal Lahir
+          </label>
+          <input
+            type="date"
+            name="date_of_birth"
+            value={formData.date_of_birth || ""}
+            onChange={handleChange}
+            className="mt-2 block w-full px-4 py-2 border border-teal-900 rounded-lg"
+          />
+        </div>
+
+        <div className="mt-5">
+          <label className="block text-m font-medium text-gray-700">
+            No HP
+          </label>
+          <input
+            type="text"
+            name="no_hp"
+            value={formData.no_hp || ""}
+            onChange={handleChange}
+            className="mt-2 block w-full px-4 py-2 border border-teal-900 rounded-lg"
+          />
+        </div>
+
+        <div className="mt-5">
+          <label className="block text-m font-medium text-gray-700">
+            Alamat
+          </label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address || ""}
+            onChange={handleChange}
+            className="mt-2 block w-full px-4 py-2 border border-teal-900 rounded-lg"
+          />
         </div>
 
         {/* Seksi Informasi Profesional */}
@@ -308,6 +348,20 @@ const LengkapiProfile = () => {
               type="text"
               name="str_number"
               value={formData.str_number}
+              onChange={handleChange}
+              className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* jadwal */}
+          <div className="mt-5">
+            <label className="block text-m font-medium text-gray-700">
+              Jadwal Praktik
+            </label>
+            <input
+              type="text"
+              name="schedule"
+              value={formData.schedule}
               onChange={handleChange}
               className="w-full mt-2 border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
