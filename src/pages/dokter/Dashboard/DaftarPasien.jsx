@@ -1,46 +1,78 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "../../../components/dokter/Navbar";
 import Sidebar from "../../../components/dokter/Sidebar";
-import { getConsultations } from "../../../api/doctor/doctor"; // Import fungsi untuk mengambil konsultasi
+import { getConsultations } from "../../../api/doctor/doctor";
 
-const DaftarPassien = () => {
-  const [patients, setPatients] = useState([]); // Menyimpan data pasien
-  const [loading, setLoading] = useState(true); // Menangani status loading
-  const [error, setError] = useState(null); // Menangani error jika ada
+const DaftarPasien = () => {
+  const [patients, setPatients] = useState([]);
 
-  // Fungsi untuk mendapatkan data pasien
   useEffect(() => {
-    const fetchPatients = async () => {
+    const fetchConsultations = async () => {
       try {
-        const response = await getConsultations(); // Memanggil API untuk mendapatkan daftar pasien
-        if (response.status === "success") {
-          setPatients(response.data); // Menyimpan data pasien ke state
-        }
-      } catch (err) {
-        setError(`Gagal memuat data pasien: ${err.message}`); // Menampilkan detail error
-      } finally {
-        setLoading(false);
+        const data = await getConsultations();
+        setPatients(groupByEmail(data.data));
+      } catch (error) {
+        console.error("Error fetching consultations:", error);
       }
     };
 
-    fetchPatients();
+    fetchConsultations();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>Loading...</p>
-      </div>
-    );
-  }
+  const groupByEmail = (patients) => {
+    const grouped = {};
+    patients.forEach((patient) => {
+      if (!grouped[patient.user.email]) {
+        grouped[patient.user.email] = [];
+      }
+      grouped[patient.user.email].push(patient);
+    });
+    return grouped;
+  };
 
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
+  // ngambil id terakhir konsultasi 
+  // kalo email nya duplikat jadi pas di klik card pasien nya bakal masuk
+  // ke id konsultasi terakhir
+  const getLatestConsultationId = (consultations) => {
+    return consultations.length > 0
+      ? consultations[consultations.length - 1].id
+      : null;
+  };
+
+  // buat usia
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    let birth;
+  
+    if (birthDate.includes("/")) {
+      const birthDateParts = birthDate.split("/");
+      birth = new Date(
+        birthDateParts[2],
+        birthDateParts[1] - 1,
+        birthDateParts[0]
+      );
+    } else if (birthDate.includes("-")) {
+      const birthDateParts = birthDate.split("-");
+      birth = new Date(
+        birthDateParts[0],
+        birthDateParts[1] - 1,
+        birthDateParts[2]
+      );
+    } else {
+      console.error("Format tanggal tidak diketahui:", birthDate);
+      return 0;
+    }
+  
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
 
   return (
     <>
@@ -48,55 +80,63 @@ const DaftarPassien = () => {
       <Sidebar />
       <div className="w-full lg:ps-72">
         <div className="p-4 sm:p-6 space-y-6">
-          {/* Container untuk Judul dan Kartu */}
           <div className="flex flex-col items-center">
-            {/* Judul */}
             <h2 className="text-xl font-semibold mb-4 dark:text-neutral-300 w-full max-w-2xl">
               Daftar Pasien
             </h2>
-            {/* Container Kartu */}
             <div className="flex flex-col items-center justify-center gap-4 w-full">
-              {patients.map((patient, index) => (
-                <a
-                  key={index}
-                  className="group flex flex-row w-full h-[76px] max-w-2xl bg-white border shadow-sm rounded-xl hover:shadow-md focus:outline-none focus:shadow-md transition dark:bg-neutral-900 dark:border-neutral-800"
-                  href="#"
-                >
-                  {/* Gambar Pasien */}
-                  <img
-                    // Menggunakan foto profil default untuk pasien
-                    src="/images/admin/admin-profil.png"
-                    alt={`${patient.user.name}'s photo`}
-                    className="w-12 h-12 rounded-full m-4 object-cover"
-                  />
-                  {/* Informasi Pasien */}
-                  <div className="flex flex-col justify-center flex-grow p-4">
-                    <h3 className="group-hover:text-blue-600 font-semibold text-gray-800 dark:group-hover:text-neutral-400 dark:text-neutral-200">
-                      ayuni
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-neutral-500">
-                      21 Tahun | mahasiswa
-                    </p>
-                  </div>
-                  {/* Ikon Panah */}
-                  <div className="flex items-center me-4">
-                    <svg
-                      className="shrink-0 size-5 text-gray-800 dark:text-neutral-200"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+              {Object.keys(patients).map((email, index) => {
+                const latestConsultationId = getLatestConsultationId(
+                  patients[email]
+                );
+                const latestConsultation = patients[email].find(
+                  (c) => c.id === latestConsultationId
+                );
+
+                return (
+                  <div
+                    key={index}
+                    className="flex flex-row w-full h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
+                  >
+                    <img
+                      src={
+                        latestConsultation.user.avatar ||
+                        "/images/admin/admin-profil.png"
+                      }
+                      className="w-14 h-14 rounded-full m-2 object-cover mx-2"
+                      alt="Profil Pasien"
+                    />
+                    <div className="flex flex-col justify-center flex-grow p-4">
+                      <h3 className="font-semibold text-gray-800">
+                        {latestConsultation.user.username}
+                      </h3>
+                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                        {calculateAge(latestConsultation.user.tgl_lahir)} Tahun
+                        | {latestConsultation.user.pekerjaan}
+                      </p>
+                    </div>
+                    <a
+                      href={`detail-passien/${latestConsultation.id}`}
+                      className="flex items-center me-4"
                     >
-                      <path d="m9 18 6-6-6-6" />
-                    </svg>
+                      <svg
+                        className="shrink-0 size-5 text-gray-800 dark:text-neutral-200"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <path d="m9 18 6-6-6-6" />
+                      </svg>
+                    </a>
                   </div>
-                </a>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
@@ -105,4 +145,4 @@ const DaftarPassien = () => {
   );
 };
 
-export default DaftarPassien;
+export default DaftarPasien;
