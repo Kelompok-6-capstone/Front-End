@@ -3,7 +3,8 @@ import {
   getProfileDoctor,
   updateProfileDoctor,
   getTitles,
-  getTags,
+  uploadAvatarDoctor,
+  deleteAvatarDoctor,
 } from "../../../api/doctor/doctor";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/dokter/Navbar";
@@ -12,7 +13,6 @@ import Swal from "sweetalert2";
 
 const EditProfileDokter = () => {
   const [titles, setTitles] = useState([]);
-  const [tags, setTags] = useState([]);
   const [formData, setFormData] = useState({
     username: "",
     no_hp: "",
@@ -26,7 +26,6 @@ const EditProfileDokter = () => {
     jenis_kelamin: "",
     title: "",
     avatar: "",
-    tags: [],
   });
   const [selectedTitle, setSelectedTitle] = useState(null);
   const navigate = useNavigate();
@@ -48,26 +47,22 @@ const EditProfileDokter = () => {
           jenis_kelamin: profileData.data.jenis_kelamin,
           title: profileData.data.title?.id.toString() || "",
           avatar: profileData.data.avatar,
-          tags: profileData.data.specialists?.map((spec) => spec.id) || [],
         });
       } catch (error) {
         console.error("Failed to fetch profile:", error);
       }
     };
 
-    const fetchTitlesAndTags = async () => {
+    const fetchTitles = async () => {
       try {
         const fetchedTitles = await getTitles();
         setTitles(fetchedTitles);
-
-        const fetchedTags = await getTags();
-        setTags(fetchedTags);
       } catch (error) {
         console.error("Failed to fetch titles or tags:", error);
       }
     };
 
-    fetchTitlesAndTags();
+    fetchTitles();
     fetchProfile();
   }, []);
 
@@ -83,21 +78,6 @@ const EditProfileDokter = () => {
         ...prevFormData,
         title: value,
       }));
-    } else if (name === "tags") {
-      const updatedTags = [...formData.tags];
-      const selectedTagsId = parseInt(value, 10);
-
-      if (updatedTags.includes(selectedTagsId)) {
-        const index = updatedTags.indexOf(selectedTagsId);
-        updatedTags.splice(index, 1);
-      } else {
-        updatedTags.push(selectedTagsId);
-      }
-
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        tags: updatedTags,
-      }));
     } else {
       setFormData((prevFormData) => ({
         ...prevFormData,
@@ -106,45 +86,55 @@ const EditProfileDokter = () => {
     }
   };
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
+    try {
+      const avatarUrl = await uploadAvatarDoctor(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        avatar: reader.result, // Gambar dalam format Base64
+        avatar: avatarUrl, // Update URL avatar setelah berhasil diunggah
       }));
-    };
-    reader.readAsDataURL(file);
+    } catch (error) {
+      console.error("Gagal mengunggah avatar:", error);
+    }
+  };
+
+  const handleDeleteAvatar = async () => {
+    try {
+      await deleteAvatarDoctor();
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        avatar: null, // Kosongkan URL avatar setelah berhasil dihapus
+      }));
+    } catch (error) {
+      console.error("Gagal menghapus avatar:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Gagal",
+        text:
+          error.response?.data?.message ||
+          "Terjadi kesalahan saat menghapus foto.",
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Fetch data untuk tags
-      const updatedTags = formData.tags
-        .map((tagId) => {
-          const tag = tags.find((t) => t.id === tagId);
-          return tag ? { id: tag.id, name: tag.name } : null;
-        })
-        .filter(Boolean);
-
       const updatedData = {
         ...formData,
+        experience: parseInt(formData.experience, 10),
         title: selectedTitle?.name,
-        tags: updatedTags,
       };
-
-      console.log("Data yang akan dikirim:", updatedData); // Tambahkan console log untuk melihat perubahan data
 
       await updateProfileDoctor(updatedData);
 
       Swal.fire({
         icon: "success",
-        title: "Profil Berhasil Diupdate",
+        title: "Perubahan Berhasil Disimpan",
         showConfirmButton: false,
         timer: 1500,
       });
@@ -158,7 +148,6 @@ const EditProfileDokter = () => {
         text:
           error.response?.data?.message ||
           "Terjadi kesalahan saat memperbarui profil.",
-        showConfirmButton: true,
       });
     }
   };
@@ -195,12 +184,7 @@ const EditProfileDokter = () => {
                 </label>
                 <button
                   type="button"
-                  onClick={() =>
-                    setFormData((prevFormData) => ({
-                      ...prevFormData,
-                      avatar: null,
-                    }))
-                  }
+                  onClick={handleDeleteAvatar}
                   className="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-500"
                 >
                   Hapus
