@@ -19,7 +19,6 @@ export default function DetailProfileChat() {
                         </div>
                     </div>
                 </div>
-
                 <div className="mt-6">
                     <h4 className="text-center text-black text-base font-semibold">Bidang Keahlian</h4>
                     <div className="flex flex-wrap justify-center gap-2 mt-3">
@@ -28,7 +27,6 @@ export default function DetailProfileChat() {
                         <span className="px-3 py-1 bg-teal-50 rounded-md text-teal-600 text-xs font-medium">Trauma</span>
                     </div>
                 </div>
-
                 <div className="mt-8">
                     <h4 className="text-neutral-950 text-base font-semibold">Catatan Keluhan Pasien</h4>
                     <div className="mt-3 p-4 bg-white rounded-lg border border-neutral-300 max-h-52 overflow-y-auto">
@@ -43,7 +41,6 @@ export default function DetailProfileChat() {
                         </p>
                     </div>
                 </div>
-
                 {/* <div className="mt-8 flex justify-center">
                     <button className="px-4 py-2 bg-teal-500 text-white text-sm font-semibold rounded-lg hover:bg-teal-600">
                         Mau ubah keluhan?
