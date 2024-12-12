@@ -10,6 +10,8 @@ import ProtectedRoute from "./ProtectedRoute";
 import FormKeluhanPage from "../pages/user/FormKeluhanPage";
 import DetailPembayaranPage from "../pages/user/DetailPembayaranPage";
 import ChatDokterPage from "../pages/user/ChatDokterPage";
+import AktivitasPage from "../pages/user/AktivitasPage";
+import DetailAktivitasPage from "../pages/user/DetailAktivitasPage";
 
 const UserRoutes = () => (
     <Routes>
@@ -82,6 +84,22 @@ const UserRoutes = () => (
             element={
                 <ProtectedRoute>
                     <ChatDokterPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/aktivitas"
+            element={
+                <ProtectedRoute>
+                    <AktivitasPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/detail-aktivitas"
+            element={
+                <ProtectedRoute>
+                    <DetailAktivitasPage />
                 </ProtectedRoute>
             }
         />
