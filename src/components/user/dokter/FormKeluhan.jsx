@@ -94,30 +94,6 @@ export default function FormKeluhan() {
                                 className="w-full mt-1 p-3 border border-gray-200 rounded-lg shadow-sm text-gray-500"
                             />
                         </div>
-                        <div className="flex flex-wrap gap-4">
-                            <div className="flex-1 min-w-[150px]">
-                                <label htmlFor="durasi-keluhan" className="block text-gray-800 text-base font-semibold">
-                                    Durasi Keluhan
-                                </label>
-                                <input
-                                    type="text"
-                                    id="durasi-keluhan"
-                                    placeholder="Durasi"
-                                    className="w-full mt-1 p-3 border border-gray-200 rounded-lg shadow-sm text-gray-500"
-                                />
-                            </div>
-                            <div className="flex-1 min-w-[150px]">
-                                <label htmlFor="hari" className="block text-gray-800 text-base font-semibold">
-                                    Hari
-                                </label>
-                                <input
-                                    type="text"
-                                    id="hari"
-                                    placeholder="Hari"
-                                    className="w-full mt-1 p-3 border border-gray-200 rounded-lg shadow-sm text-gray-500"
-                                />
-                            </div>
-                        </div>
                         <div>
                             <Link to="/user/detail-pembayaran">
                                 <button
