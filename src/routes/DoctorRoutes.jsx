@@ -1,4 +1,3 @@
-import React from "react";
 import { Routes, Route } from "react-router-dom";
 import RegisterDoctorPage from "../pages/dokter/RegisterDoctorPage";
 import VerifyOtpDoctorPage from "../pages/dokter/VerifyOTPPage";
@@ -14,6 +13,7 @@ import SettingsProfile from "../pages/dokter/Settings/SettingsProfileDokter";
 import EditProfile from "../pages/dokter/Settings/EditProfileDokter";
 import FAQ from "../pages/dokter/Dashboard/FAQ";
 import InformasiAPK from "../pages/dokter/Dashboard/InformasiAPK";
+import DetailRiwayatKonsul from "../pages/dokter/Dashboard/DetailRiwayatKonsul";
 
 const DoctorRoutes = () => (
   <Routes>
@@ -37,13 +37,14 @@ const DoctorRoutes = () => (
       }
     />
     <Route
-      path="detail-passien"
+      path="detail-passien/:id"
       element={
         <DoctorProtectedRoute>
           <DetailPasien />
         </DoctorProtectedRoute>
       }
     />
+
     <Route
       path="profile-dokter"
       element={
@@ -100,6 +101,15 @@ const DoctorRoutes = () => (
       element={
         <DoctorProtectedRoute>
           <LengkapiProfile />
+        </DoctorProtectedRoute>
+      }
+    />
+
+    <Route
+      path="detail-konsul/:id"
+      element={
+        <DoctorProtectedRoute>
+          <DetailRiwayatKonsul />
         </DoctorProtectedRoute>
       }
     />

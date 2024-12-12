@@ -261,6 +261,28 @@ export const getConsultations = async () => {
   }
 };
 
+// fungsi untuk detail pasien dan konsultasi
+export const getConsultationsDetails = async (id) => {
+  try {
+    const response = await axiosInstanceDoctor.get(`/doctor/consultations/${id}`);
+    return response.data; // Mengembalikan data dari response
+  } catch (error) {
+    console.error('Error fetching consultations:', error);
+    throw error; // Melempar error agar bisa ditangani di halaman pemanggil
+  }
+};
+
+// Fungsi untuk detail konsultasi
+export const getDetailConsultations = async () => {
+  try {
+    const response = await axiosInstanceDoctor.get("/doctor/consultations/${id}");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching consultations:", error);
+    throw error;
+  }
+};
+
 // Fungsi untuk kirim rekomendasi
 export const SendRecommendation = async (id, recommendation) => {
   try {
