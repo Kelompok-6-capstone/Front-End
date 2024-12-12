@@ -10,7 +10,6 @@ const VerifyOtpDoctorPage = () => {
         code: "",
     });
     const [errorMessage, setErrorMessage] = useState("");
-    const [resendMessage, setResendMessage] = useState("");
     const [isResending, setIsResending] = useState(false);
     const otpRefs = useRef([]);
     const navigate = useNavigate();
@@ -61,13 +60,12 @@ const VerifyOtpDoctorPage = () => {
           setErrorMessage(error?.response?.data?.message || 'Kode OTP salah atau sudah kedaluwarsa.');
         }
       };      
-    
 
-    const handleResendOtp = async () => {
+      const handleResendOtp = async () => {
         setErrorMessage("");
         setIsResending(true);
         try {
-            await resendDoctorOtp({ email: formData.email });
+            await resendDoctorOtp({ email: formData.email }); // Memanggil fungsi yang sudah Anda buat
             Swal.fire({
                 icon: "success",
                 title: "Berhasil!",
@@ -77,12 +75,12 @@ const VerifyOtpDoctorPage = () => {
             Swal.fire({
                 icon: "error",
                 title: "Gagal",
-                text: error?.response?.data?.message || "Gagal mengirim ulang kode OTP.",
+                text: error || "Gagal mengirim ulang kode OTP.",
             });
         } finally {
             setIsResending(false);
         }
-    };
+    };    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
