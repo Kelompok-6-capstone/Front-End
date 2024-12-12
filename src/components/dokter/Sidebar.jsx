@@ -14,6 +14,7 @@ const Sidebar = () => {
   const sidebarRef = useRef(null);
   const [status, setStatus] = useState(false);
   const isActivePage = (path) => location.pathname === path;
+  const [isLoading, setIsLoading] = useState(true);
 
   // untuk mendapatkan nama halaman berdasarkan pathname
   const getPageName = (pathname) => {
@@ -53,6 +54,7 @@ const Sidebar = () => {
       try {
         const response = await getProfileDoctor();
         setProfile(response.data);
+        setIsLoading(false); // Set loading to false once data is loaded
       } catch (error) {
         console.error("Gagal memuat profil dokter:", error);
       }
@@ -85,6 +87,12 @@ const Sidebar = () => {
 
   return (
     <>
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-50 z-40 ${
+          isSidebarOpen ? "block" : "hidden"
+        } lg:hidden`}
+        style={{ backdropFilter: "blur(5px)" }}
+      />
       <div className="sticky top-0 inset-x-0 z-20 bg-white border-y px-4 sm:px-6 lg:px-8 lg:hidden">
         <div className="flex items-center py-2">
           {/* Navigation Toggle */}
@@ -115,7 +123,6 @@ const Sidebar = () => {
               <path d="m8 9 3 3-3 3" />
             </svg>
           </button>
-          {/* End Navigation Toggle */}
           {/* Breadcrumb */}
           <ol className="ms-3 flex items-center whitespace-nowrap">
             <li className="flex items-center text-sm text-gray-800">
@@ -143,26 +150,22 @@ const Sidebar = () => {
               {getPageName(location.pathname)}
             </li>
           </ol>
-          {/* End Breadcrumb */}
         </div>
       </div>
 
-      {/* sidebar */}
+      {/* Sidebar */}
       <div
         id="hs-application-sidebar"
         ref={sidebarRef}
-        className={`hs-overlay  [--auto-close:lg]
-          hs-overlay-open:translate-x-0
-          -translate-x-full transition-all duration-300 transform
-          fixed inset-y-0 start-0 z-[60]
-          bg-[#ECFEFF] border-gray-200
-          lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 flex w-[277px] h-full px-[24px)] flex-col items-center gap-[var(--Spacing-32, 32px)] flex-shrink-0
-          ${
-            isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-          } lg:translate-x-0`}
+        className={`hs-overlay [--auto-close:lg] hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform fixed inset-y-0 start-0 z-[60] bg-[#ECFEFF] border-gray-200 lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 flex w-[277px] h-full -px-[4px] flex-col items-center gap-[var(--Spacing-32, 32px)] flex-shrink-0 ${
+          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } lg:translate-x-0`}
         role="dialog"
         tabIndex={-1}
         aria-label="Sidebar"
+        style={{
+          minHeight: "100vh", // Ensure the sidebar takes the full height
+        }}
       >
         <div className="relative flex flex-col h-full max-h-full">
           <div className="px-5 pt-4 justify-center flex flex-col items-center gap-y-8">
@@ -174,27 +177,52 @@ const Sidebar = () => {
             >
               <img src="/images/Calmind.svg" alt="logo" />
             </a>
-            {/* foto dokter */}
-            <div className="relative flex flex-col justify-center items-center mb-[36px]">
-              <img
-                src={profile?.avatar || "/images/dokter/foto-dokter.png"}
-                alt="Profile"
-                className="w-24 h-24 rounded-full"
-              />
-              <span
-                className={`absolute bottom-16 right-9 w-3 h-3 rounded-full ${
-                  status ? "bg-green-500" : "bg-gray-400"
-                }`}
-              ></span>
-              <h1 className="text-xl mt-4 font-semibold">
-                {profile?.username}
-              </h1>
-              <p className="text-center text-sm">Dokter</p>
+
+            {/* Foto Dokter */}
+            <div className="relative flex flex-col justify-center items-center mt-2 -mb-[30px] min-h-[200px]">
+              {isLoading ? (
+                <div
+                  className="animate-spin inline-block w-6 h-6 border-[3px] border-current border-t-transparent text-blue-600 rounded-full dark:text-blue-500"
+                  role="status"
+                  aria-label="loading"
+                >
+                  <span className="sr-only">Loading...</span>
+                </div>
+              ) : (
+                <>
+                  <img
+                    src={profile?.avatar}
+                    alt="Profile"
+                    className="w-24 h-24 rounded-full border border-cyan-900"
+                  />
+                  <span
+                    className={`absolute bottom-6 right-4 w-3 h-3 rounded-full ${
+                      status ? "bg-green-500" : "bg-gray-400"
+                    }`}
+                  ></span>
+                  <h1 className="text-xl mt-4 font-semibold">
+                    {profile?.username}
+                  </h1>
+                  <p className="text-center text-sm">Dokter</p>
+                </>
+              )}
             </div>
           </div>
 
           {/* Content */}
-          <div className="h-full overflow-y-auto  text-center text-[14px] font-semibold [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300">
+          <div
+            className="h-full overflow-y-auto text-center text-[14px] font-semibold mt-8"
+            style={{
+              scrollbarWidth: "none", // Firefox
+              msOverflowStyle: "none", // Internet Explorer/Edge
+            }}
+          >
+            {" "}
+            <style>
+              {` /* Untuk browser berbasis Webkit seperti Chrome, Safari, dan Edge */
+                .no-scrollbar::-webkit-scrollbar {
+                display: none; }`}
+            </style>
             <nav
               className="hs-accordion-group p-3 w-full flex flex-col flex-wrap"
               data-hs-accordion-always-open=""
@@ -252,7 +280,9 @@ const Sidebar = () => {
                 {/* Dropdown Pengaturan */}
                 <li className="relative">
                   <button
-                    className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg w-full hover:bg-[#22D3EE] focus:outline-none"
+                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg w-full hover:bg-[#22D3EE] focus:outline-none ${
+                      isSettingsOpen ? "bg-[#22D3EE]" : ""
+                    }`}
                     onClick={() => setIsSettingsOpen(!isSettingsOpen)}
                   >
                     <img src="/images/gear.svg" alt="settings" />
@@ -265,11 +295,19 @@ const Sidebar = () => {
                       }`}
                     />
                   </button>
-                  {isSettingsOpen && (
-                    <ul className="space-y-5 mt-3 ml-10">
+                  <div
+                    className={`overflow-hidden transition-max-height duration-500 ease-in-out ${
+                      isSettingsOpen ? "max-h-[500px]" : "max-h-0"
+                    }`}
+                  >
+                    <ul className="space-y-5 mt-4 ml-10">
                       <li>
                         <Link
-                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
+                          className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] w-full focus:outline-none ${
+                            isActivePage("/dokter/settings/profile-dokter")
+                              ? "bg-[#22D3EE]"
+                              : ""
+                          }`}
                           to="/dokter/settings/profile-dokter"
                         >
                           <img src="/images/Profil.svg" alt="Profile" />
@@ -278,13 +316,10 @@ const Sidebar = () => {
                       </li>
 
                       <li className="flex items-center justify-between gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]">
-                        <Link
-                          to="/dokter/settings/profil"
-                          className="flex items-center gap-x-3.5"
-                        >
+                        <button className="flex items-center gap-x-3.5">
                           <img src="/images/eye.svg" alt="Profile" />
                           Status
-                        </Link>
+                        </button>
                         <label className="inline-flex items-center cursor-pointer ml-8">
                           <input
                             type="checkbox"
@@ -299,13 +334,10 @@ const Sidebar = () => {
                       </li>
 
                       <li className="flex items-center justify-between gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]">
-                        <Link
-                          to="/dokter/settings/notifikasi"
-                          className="flex items-center gap-x-3.5"
-                        >
+                        <button className="flex items-center gap-x-3.5">
                           <img src="/images/Bell.svg" alt="Notifikasi" />
                           Notifikasi
-                        </Link>
+                        </button>
                         <label className="inline-flex items-center cursor-pointer ml-8">
                           <input
                             type="checkbox"
@@ -325,7 +357,11 @@ const Sidebar = () => {
 
                       <li>
                         <Link
-                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
+                          className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] w-full focus:outline-none ${
+                            isActivePage("/dokter/settings/FAQ")
+                              ? "bg-[#22D3EE]"
+                              : ""
+                          }`}
                           to="/dokter/settings/FAQ"
                         >
                           <img src="/images/Question.svg" alt="Bantuan" />
@@ -334,7 +370,11 @@ const Sidebar = () => {
                       </li>
                       <li>
                         <Link
-                          className="flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE]"
+                          className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] w-full focus:outline-none ${
+                            isActivePage("/dokter/settings/tentang-APK")
+                              ? "bg-[#22D3EE]"
+                              : ""
+                          }`}
                           to="/dokter/settings/tentang-APK"
                         >
                           <img src="/images/Info.svg" alt="Tentang" />
@@ -342,7 +382,7 @@ const Sidebar = () => {
                         </Link>
                       </li>
                     </ul>
-                  )}
+                  </div>
                 </li>
 
                 <li>
