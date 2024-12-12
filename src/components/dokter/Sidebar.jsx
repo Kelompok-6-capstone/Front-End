@@ -1,13 +1,18 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { getProfileDoctor, logoutDoctor } from "../../api/doctor/doctor";
+import {
+  getProfileDoctor,
+  logoutDoctor,
+  updateDoctorStatus,
+} from "../../api/doctor/doctor";
 
 const Sidebar = () => {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [profile, setProfile] = useState(null); // Simpan profil dokter
+  const [profile, setProfile] = useState(null);
   const sidebarRef = useRef(null);
+  const [status, setStatus] = useState(false);
   const isActivePage = (path) => location.pathname === path;
 
   // untuk mendapatkan nama halaman berdasarkan pathname
@@ -24,9 +29,9 @@ const Sidebar = () => {
 
   const handleLogout = async () => {
     try {
-      await logoutDoctor(); // Memanggil fungsi logout dari API
+      await logoutDoctor();
     } catch (error) {
-      console.error("Gagal logout:", error); // Tangani error jika ada
+      console.error("Gagal logout:", error);
       alert("Logout gagal. Silakan coba lagi.");
     }
   };
@@ -47,7 +52,7 @@ const Sidebar = () => {
     const fetchDoctorProfile = async () => {
       try {
         const response = await getProfileDoctor();
-        setProfile(response.data); // Simpan data profil
+        setProfile(response.data);
       } catch (error) {
         console.error("Gagal memuat profil dokter:", error);
       }
@@ -55,6 +60,28 @@ const Sidebar = () => {
 
     fetchDoctorProfile();
   }, []);
+
+  useEffect(() => {
+    const fetchDoctorStatus = async () => {
+      try {
+        const response = await getProfileDoctor();
+        setStatus(response.data.is_active);
+      } catch (error) {
+        console.error("Gagal memuat status dokter:", error);
+      }
+    };
+    fetchDoctorStatus();
+  }, []);
+
+  const handleStatusToggle = async () => {
+    try {
+      const newStatus = !status;
+      await updateDoctorStatus(newStatus);
+      setStatus(newStatus);
+    } catch {
+      alert("Gagal memperbarui status. Silakan coba lagi.");
+    }
+  };
 
   return (
     <>
@@ -148,16 +175,21 @@ const Sidebar = () => {
               <img src="/images/Calmind.svg" alt="logo" />
             </a>
             {/* foto dokter */}
-            <div className="flex flex-col justify-center items-center mb-[36px]">
+            <div className="relative flex flex-col justify-center items-center mb-[36px]">
               <img
                 src={profile?.avatar || "/images/dokter/foto-dokter.png"}
                 alt="Profile"
                 className="w-24 h-24 rounded-full"
               />
+              <span
+                className={`absolute bottom-16 right-9 w-3 h-3 rounded-full ${
+                  status ? "bg-green-500" : "bg-gray-400"
+                }`}
+              ></span>
               <h1 className="text-xl mt-4 font-semibold">
                 {profile?.username}
               </h1>
-              <p className="stext-center text-sm">Dokter</p>
+              <p className="text-center text-sm">Dokter</p>
             </div>
           </div>
 
@@ -257,9 +289,8 @@ const Sidebar = () => {
                           <input
                             type="checkbox"
                             className="sr-only peer"
-                            onChange={(e) =>
-                              console.log("Status Toggle:", e.target.checked)
-                            }
+                            checked={status}
+                            onChange={handleStatusToggle}
                           />
                           <div className="w-8 h-4 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-500 transition-all relative">
                             <div className="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-all peer-checked:translate-x-4"></div>
