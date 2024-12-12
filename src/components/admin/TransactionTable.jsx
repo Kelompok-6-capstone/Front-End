@@ -110,7 +110,7 @@ const TransactionTable = () => {
         Transaksi
       </h1>
 
-      <div className="mb-4">
+      <div className="mb-4 border-b-[1px]">
         <button
           className={`px-4 py-2 mr-2 rounded-t-lg ${
             activeTab === "seluruh"
