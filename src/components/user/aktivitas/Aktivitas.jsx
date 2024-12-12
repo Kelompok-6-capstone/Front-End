@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom'
 export default function Aktivitas() {
     return (
         <>
-            <Link to="/user/detail-aktivitas">
-                <div className="w-full max-w-[854px] p-4 bg-white rounded-lg shadow border border-neutral-300">
+
+            <div className="w-full max-w-[854px] p-4 bg-white rounded-lg shadow border border-neutral-300">
+                <Link to="/user/detail-aktivitas">
                     <div className="flex items-start">
                         <img
                             className="w-[114px] h-[126px] rounded-md"
@@ -20,18 +21,20 @@ export default function Aktivitas() {
                             </div>
                         </div>
                     </div>
-                    <div className="mt-6 flex justify-between items-center border-t border-neutral-300 pt-4">
-                        <div className="flex items-center">
-                            <div className="px-4 py-2 bg-gray-500 text-white text-xs font-medium font-['Poppins'] rounded-md">
-                                Selesai
-                            </div>
+                </Link>
+                <div className="mt-6 flex justify-between items-center border-t border-neutral-300 pt-4">
+                    <div className="flex items-center">
+                        <div className="px-4 py-2 bg-gray-500 text-white text-xs font-medium font-['Poppins'] rounded-md">
+                            Selesai
                         </div>
+                    </div>
+                    <a href="/user/dokter">
                         <button className="w-52 h-[41px] bg-teal-900 text-neutral-100 text-xs font-semibold font-['Poppins'] rounded-md flex justify-center items-center">
                             Buat Janji Lagi
                         </button>
-                    </div>
+                    </a>
                 </div>
-            </Link>
+            </div>
         </>
     )
 }
