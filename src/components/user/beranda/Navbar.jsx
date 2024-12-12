@@ -43,7 +43,7 @@ export default function Navbar() {
               Artikel
             </a>
             <a
-              href="#"
+              href="/user/aktivitas"
               className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
             >
               Aktivitas Saya
