@@ -1,16 +1,61 @@
-import React from "react";
-// import Navbar from "../../components/dokter/Navbar";
+import { useState, useEffect } from "react";
+import axiosInstanceDoctor from "../../../utils/axiosInstanceDoctor";
+import { SendRecommendation } from "../../../api/doctor/doctor";
 
 const DetailPasien = () => {
-  return (
-    // <>
-    //   <Navbar
-    //     title="Detail Pasien"
-    //     showSearch={false}
-    //     showBell={false}
-    //     showBackIcon={true}
-    //   />
+  const [patientData, setPatientData] = useState({
+    nama: "",
+    pekerjaan: "",
+    usia: "",
+  });
+  const [recommendation, setRecommendation] = useState("");
 
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const monthDiff = today.getMonth() - birth.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birth.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
+
+  useEffect(() => {
+    const fetchPatientData = async () => {
+      try {
+        const response = await axiosInstanceDoctor.get(
+          "/doctor/consultations/{id}"
+        );
+        const { user, description } = response.data.data;
+        setPatientData({
+          nama: user.nama,
+          pekerjaan: user.pekerjaan,
+          usia: calculateAge(user.usia),
+          keluhan: description
+        });
+      } catch (error) {
+        console.error("Error fetching patient data:", error);
+      }
+    };
+
+    fetchPatientData();
+  }, []);
+
+  const HandleSendRecommendation = async () => {
+    try {
+      await SendRecommendation(patientData.id, recommendation); // Panggil langsung helper function
+      console.log("Rekomendasi berhasil dikirim");
+      setRecommendation(""); // Reset input setelah pengiriman
+    } catch (error) {
+      console.error("Gagal mengirim rekomendasi:", error);
+    }
+  };
+
+  return (
     <div className="bg-gray-50 min-h-screen">
       {/* Navbar */}
       <div className="bg-cyan-50 text-white px-6 py-4 flex items-center justify-between fixed top-0 w-full z-10">
@@ -36,9 +81,9 @@ const DetailPasien = () => {
                 alt="Pasien"
                 className="rounded-full mx-auto w-30 h-30 mb-4"
               />
-              <h2 className="text-lg font-semibold">Ahmad Santoso</h2>
-              <p className="text-sm text-gray-500">30 Tahun</p>
-              <p className="text-sm text-gray-500">Pegawai Negeri</p>
+              <h2 className="text-lg font-semibold">{patientData.nama}</h2>
+              <p className="text-sm text-gray-500">{patientData.usia} Tahun</p>
+              <p className="text-sm text-gray-500">{patientData.pekerjaan}</p>
             </div>
           </div>
 
@@ -66,14 +111,20 @@ const DetailPasien = () => {
                 </div>
               </div>
             </div>
-            {/* Input Chat */}
+
+            {/* Input Chat Rekomendasi*/}
             <div className="mt-4 relative flex items-center">
               <input
                 type="text"
                 placeholder="Ketik Pesan..."
+                value={recommendation}
+                onChange={(e) => setRecommendation(e.target.value)}
                 className="flex-1 border border-teal-900 rounded-lg p-2 text-sm pl-10"
               />
-              <button className="absolute right-2 p-2">
+              <button
+                onClick={HandleSendRecommendation}
+                className="absolute right-2 p-2"
+              >
                 <img
                   src="/public/images/send.svg"
                   alt="Pasien"
@@ -87,13 +138,7 @@ const DetailPasien = () => {
           <div className="col-span-1 bg-white h-[302px] p-4 rounded-lg border border-teal-900 h-56 overflow-y-auto">
             <h3 className="text-md font-semibold mb-2">Keluhan</h3>
             <p className="text-sm text-gray-500">
-              Saya merasa cemas hampir setiap hari, terutama ketika saya
-              memikirkan pekerjaan saya. Saya selalu merasa seperti ada sesuatu
-              yang salah, bahkan jika saya sudah mengerjakan tugas saya dengan
-              baik. Rasanya seperti saya tidak cukup baik atau saya akan membuat
-              kesalahan besar yang akan merusak semuanya. Saya sering terjaga
-              larut malam, memikirkan apakah saya sudah melakukan semuanya
-              dengan benar.
+              {patientData.keluhan}
             </p>
           </div>
 

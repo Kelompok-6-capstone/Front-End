@@ -1,19 +1,108 @@
-import React, { useState } from "react";
-import useSortData from "../../hooks/useSortData";
+import React, { useState, useEffect } from "react";
+import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
+import axiosInstance from "../../utils/axiosInstance";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
-const TransactionTable = ({ data }) => {
+const TransactionTable = () => {
+  const [data, setData] = useState([]);
   const { sortedData, sortConfig, requestSort } = useSortData(data);
   const [activeTab, setActiveTab] = useState("seluruh");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const filteredData = sortedData.filter((transaction) => {
-    if (activeTab === "seluruh") return true;
-    if (activeTab === "proses")
-      return transaction.statusKonsultasi === "Proses";
-    if (activeTab === "selesai")
-      return transaction.statusKonsultasi === "Selesai";
-    return true;
-  });
+  useEffect(() => {
+    fetchData();
+  }, [activeTab]);
+
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const token = Cookies.get("token_admin");
+      if (!token) {
+        setError("No admin token found");
+        return;
+      }
+
+      let endpoint = "/admin/consultations";
+      if (activeTab === "proses") {
+        endpoint = "/admin/consultations/pending";
+      } else if (activeTab === "approved") {
+        endpoint = "/admin/consultations/approve";
+      }
+
+      const response = await axiosInstance.get(endpoint, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (response.data.success) {
+        setData(response.data.data);
+      } else {
+        setError("Failed to fetch data");
+      }
+    } catch (err) {
+      setError(err.response?.data || err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusChange = async (id) => {
+    try {
+      const result = await Swal.fire({
+        title: "Apakah Anda yakin menyetujui transaksi ini?",
+        text: "Anda tidak akan dapat mengubah status transaksi setelah disetujui!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Ya, setujui!",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        const token = Cookies.get("token_admin");
+        if (!token) {
+          setError("Token admin tidak ditemukan");
+          return;
+        }
+
+        const response = await axiosInstance.put(
+          `/admin/consultations/${id}/approve`,
+          { status: "paid" },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.data.success) {
+          setData((prevData) =>
+            prevData.map((item) =>
+              item.id === id ? { ...item, status: "approved" } : item
+            )
+          );
+          Swal.fire("Disetujui!", "Transaksi telah disetujui.", "success");
+        } else {
+          setError("Gagal memperbarui status");
+          Swal.fire("Kesalahan!", "Gagal menyetujui transaksi.", "error");
+        }
+      }
+    } catch (err) {
+      setError(err.response?.data || err.message);
+      Swal.fire(
+        "Kesalahan!",
+        "Terjadi kesalahan saat menyetujui transaksi.",
+        "error"
+      );
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <div className="p-6">
@@ -65,9 +154,6 @@ const TransactionTable = ({ data }) => {
                 <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                   Id
                 </th>
-                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                  Id Pasien
-                </th>
                 <th
                   className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
                   onClick={() => requestSort("namaPasien")}
@@ -82,41 +168,57 @@ const TransactionTable = ({ data }) => {
                 </th>
                 <th
                   className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                  onClick={() => requestSort("statusKonsultasi")}
+                  onClick={() => requestSort("status")}
                 >
-                  Status Konsultasi{" "}
-                  {getSortIcon(sortConfig, "statusKonsultasi")}
+                  Status Konsultasi {getSortIcon(sortConfig, "status")}
+                </th>
+                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                  Action
                 </th>
               </tr>
             </thead>
             <tbody className="bg-cyan-50">
-              {filteredData.map((transaction) => (
-                <tr key={transaction.id}>
+              {sortedData.map((transaction) => (
+                <tr className="text-center" key={transaction.id}>
                   <td className="px-6 py-4 border-r border-l border-opacity-15 border-[#000]">
                     {transaction.id}
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.idPasien}
+                    {transaction.user.username}
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.namaPasien}
+                    {transaction.order_id}
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.idKonsultasi}
-                  </td>
-                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.keluhan}
+                    {transaction.description}
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                     <span
                       className={`px-3 py-1 rounded-full text-sm ${
-                        transaction.statusKonsultasi === "Selesai"
+                        transaction.status === "approved"
                           ? "bg-green-100 text-green-800"
                           : "bg-yellow-100 text-yellow-800"
                       }`}
                     >
-                      {transaction.statusKonsultasi}
+                      {transaction.status}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                    {transaction.status === "pending" ? (
+                      <button
+                        onClick={() => handleStatusChange(transaction.id)}
+                        className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-1 px-2 rounded"
+                      >
+                        Approve
+                      </button>
+                    ) : (
+                      <button
+                        disabled
+                        className="bg-gray-300 text-gray-500 text-sm font-medium py-1 px-2 rounded cursor-not-allowed"
+                      >
+                        Approved
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
