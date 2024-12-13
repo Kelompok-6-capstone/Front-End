@@ -17,10 +17,13 @@ const DoctorTable = ({ data }) => {
                 Id
               </th>
               <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
+                className="px-20 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
                 onClick={() => requestSort("nama")}
               >
-                Username {getSortIcon(sortConfig, "nama")}
+                Nama {getSortIcon(sortConfig, "nama")}
+              </th>
+              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                Status
               </th>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Email
@@ -49,15 +52,6 @@ const DoctorTable = ({ data }) => {
               >
                 Harga {getSortIcon(sortConfig, "harga")}
               </th>
-              <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                onClick={() => requestSort("rating")}
-              >
-                Rating {getSortIcon(sortConfig, "rating")}
-              </th>
-              <th className="px-28 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                Jadwal Praktik
-              </th>
               <th className="px-10 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Action
               </th>
@@ -72,6 +66,13 @@ const DoctorTable = ({ data }) => {
                 <td className="px-10 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.username}
                 </td>
+                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                  <span
+                    className="px-[15px] py-[10px] rounded-full">
+                    {doctor.is_active ? "Online" : "Offline"}
+                  </span>
+                </td>
+
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.email}
                 </td>
@@ -89,12 +90,6 @@ const DoctorTable = ({ data }) => {
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.harga}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.rating}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.jadwalPraktik}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   <div className="flex gap-3">
