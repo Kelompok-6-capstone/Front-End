@@ -56,7 +56,7 @@ const UserRoutes = () => (
             }
         />
         <Route
-            path="/form-keluhan"
+            path="/form-keluhan/:doctorId"
             element={
                 <ProtectedRoute>
                     <FormKeluhanPage />
