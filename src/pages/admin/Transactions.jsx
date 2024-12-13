@@ -1,6 +1,5 @@
 import React from "react";
 import TransactionTable from "../../components/admin/TransactionTable";
-import { transactionData } from "../../data/admin/transactionData";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 
@@ -10,7 +9,7 @@ const TransactionPage = () => {
       <Navbar />
       <Sidebar />
       <div className="w-full lg:mx-2 lg:ps-[270px]">
-        <TransactionTable data={transactionData} />
+        <TransactionTable />
       </div>
     </>
   );
