@@ -5,6 +5,8 @@ import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
 import { useFetchPatients } from "../../hooks/admin/useFetchPatients";
 import { useFetchDoctors } from "../../hooks/admin/useFetchDocters";
+import HeaderPatientTable from "../../components/admin/HeaderPatientTable";
+import HeaderDoctorTable from "../../components/admin/HeaderDoctorTable";
 
 export default function UsersPage() {
   const [activeTab, setActiveTab] = useState("all");
@@ -70,10 +72,16 @@ export default function UsersPage() {
           ) : (
             <div className="space-y-8">
               {(activeTab === "all" || activeTab === "patient") && (
-                <PatientTable data={patientData} />
+                <>
+                  <HeaderPatientTable />
+                  <PatientTable data={patientData} />
+                </>
               )}
               {(activeTab === "all" || activeTab === "doctor") && (
-                <DoctorTable data={doctorData} />
+                <>
+                  <HeaderDoctorTable />
+                  <DoctorTable data={doctorData} />
+                </>
               )}
             </div>
           )}

@@ -66,7 +66,7 @@ const MainDashboard = () => {
           {/* End Breadcrumb */}
         </div>
       </div>
-      <div className="w-full lg:mx-2 lg:ps-64">
+      <div className="w-full lg:mx-2 lg:ps-[265px]">
         <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
           {/* Grid */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
