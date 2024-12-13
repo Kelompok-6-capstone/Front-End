@@ -3,6 +3,7 @@ import { useState } from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 import { useDeletePatient } from "../../hooks/admin/useDeletePatients";
+import HeaderPatientTable from "./HeaderPatientTable";
 
 const PatientTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
@@ -10,7 +11,7 @@ const PatientTable = ({ data }) => {
     useDeletePatient();
   const [patients, setPatients] = useState(data);
 
-   const handleDelete = async (id) => {
+  const handleDelete = async (id) => {
     const success = await deletePatient(id);
     if (success) {
       // Filter pasien yang tersisa setelah penghapusan
@@ -20,10 +21,8 @@ const PatientTable = ({ data }) => {
   };
 
   return (
-    <div className="text-center">
-      <h2 className="text-[24px] not-italic font-semibold text-center mb-4 mt-6">
-        Daftar Pasien
-      </h2>
+    <>
+      <HeaderPatientTable />
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-cyan-50">
@@ -110,7 +109,7 @@ const PatientTable = ({ data }) => {
         </table>
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
-    </div>
+    </>
   );
 };
 

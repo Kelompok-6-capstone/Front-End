@@ -1,14 +1,13 @@
 import React from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
+import HeaderDoctorTable from "./HeaderDoctorTable";
 
 const DoctorTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
   return (
-    <div className="text-center">
-      <h2 className="text-[24px] not-italic font-semibold text-center mb-4 mt-6">
-        Daftar Dokter
-      </h2>
+    <>
+      <HeaderDoctorTable />
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-cyan-50">
@@ -67,8 +66,7 @@ const DoctorTable = ({ data }) => {
                   {doctor.username}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  <span
-                    className="px-[15px] py-[10px] rounded-full">
+                  <span className="px-[15px] py-[10px] rounded-full">
                     {doctor.is_active ? "Online" : "Offline"}
                   </span>
                 </td>
@@ -106,7 +104,7 @@ const DoctorTable = ({ data }) => {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 };
 
