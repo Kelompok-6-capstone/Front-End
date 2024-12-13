@@ -29,12 +29,13 @@ export default function DetailPembayaran() {
                     </div>
                 </div>
             </div>
-            <div className="w-full max-w-2xl mx-auto px-4">
-                <button className="w-full h-14 px-4 py-2 bg-teal-900 rounded-md flex justify-center items-center transition duration-300 transform hover:bg-teal-700 hover:scale-105 hover:shadow-lg">
-                    <span className="text-center text-neutral-100 text-base font-bold font-['Poppins']">Lanjutkan Pembayaran</span>
-                </button>
-            </div>
-
+            <a href="">
+                <div className="w-full max-w-2xl mx-auto px-4">
+                    <button className="w-full h-14 px-4 py-2 bg-teal-900 rounded-md flex justify-center items-center transition duration-300 transform hover:bg-teal-700 hover:scale-105 hover:shadow-lg">
+                        <span className="text-center text-neutral-100 text-base font-bold">Lanjutkan Pembayaran</span>
+                    </button>
+                </div>
+            </a>
         </>
     )
 }

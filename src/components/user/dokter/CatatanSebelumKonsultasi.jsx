@@ -32,11 +32,7 @@ export default function CatatanSebelumKonsultasi() {
                         </li>
                     </ol>
                 </div>
-                <button className="w-full py-2 bg-teal-900 rounded-md text-center text-white text-sm font-semibold hover:bg-teal-700">
-                    <a href="/user/form-keluhan">
-                        Buat Janji
-                    </a>
-                </button>
+                
             </div>
         </>
     )

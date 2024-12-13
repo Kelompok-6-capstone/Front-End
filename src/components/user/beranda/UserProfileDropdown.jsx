@@ -5,7 +5,10 @@ import { confirmLogout } from '../../../api/auth/logoutUser';
 
 const UserProfileDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const [userName, setUserName] = useState('');
+    const [userProfile, setUserProfile] = useState({
+        username: '',
+        avatar: ''
+    });
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -27,7 +30,10 @@ const UserProfileDropdown = () => {
                 });
 
                 if (response.data.success) {
-                    setUserName(response.data.data.username); // Memperbarui state dengan nama pengguna
+                    setUserProfile({
+                        username: response.data.data.username,
+                        avatar: response.data.data.avatar || '/images/user/avatar.png', // Gunakan avatar dari API jika ada
+                    });
                 } else {
                     setError('Failed to fetch user profile');
                 }
@@ -54,11 +60,11 @@ const UserProfileDropdown = () => {
             >
                 <img
                     className="w-10 h-10 rounded-full object-cover"
-                    src="/images/user/avatar.png"
+                    src={userProfile.avatar}
                     alt="Avatar User"
                 />
                 <span className="hidden sm:block text-black text-base font-semibold">
-                    {loading ? 'Loading...' : userName || 'User'}
+                    {loading ? 'Loading...' : userProfile.username || 'User'}
                 </span>
             </div>
 
@@ -73,7 +79,7 @@ const UserProfileDropdown = () => {
                             Profile
                         </a>
                         <div
-                            onClick={confirmLogout} // Panggil fungsi konfirmasi logout
+                            onClick={confirmLogout}
                             className="block px-4 py-2 text-red-500 rounded-md hover cursor-pointer focus:outline-none"
                         >
                             Logout
