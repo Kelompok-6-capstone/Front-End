@@ -1,13 +1,11 @@
 import React from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
-import HeaderDoctorTable from "./HeaderDoctorTable";
 
 const DoctorTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
   return (
     <>
-      <HeaderDoctorTable />
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-cyan-50">
