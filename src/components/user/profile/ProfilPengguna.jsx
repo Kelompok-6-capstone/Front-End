@@ -112,6 +112,9 @@ const ProfilPengguna = () => {
                     icon: "success",
                     title: "Berhasil!",
                     text: "Avatar berhasil diunggah!",
+                }).then(() => {
+                    // Refresh halaman setelah notifikasi
+                    window.location.reload();
                 });
             } catch (err) {
                 Swal.fire({
@@ -191,7 +194,7 @@ const ProfilPengguna = () => {
                     {[
                         { label: "Nama Lengkap", name: "username" },
                         { label: "Email", name: "email", readOnly: true },
-                        { label: "Nomor Telpon", name: "no_hp" },
+                        { label: "Nomor Telpon", name: "no_hp", type: "number" },
                         { label: "Alamat", name: "alamat" },
                         { label: "Tanggal Lahir", name: "tgl_lahir", type: "date" },
                         { label: "Jenis Kelamin", name: "jenis_kelamin" },
@@ -233,9 +236,8 @@ const ProfilPengguna = () => {
                                     value={formData[field.name] || ""}
                                     onChange={handleChange}
                                     readOnly={field.readOnly || false}
-                                    className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                                        field.readOnly ? "bg-gray-100 cursor-not-allowed" : ""
-                                    }`}
+                                    className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 ${field.readOnly ? "bg-gray-100 cursor-not-allowed" : ""
+                                        }`}
                                 />
                             )}
                         </div>
