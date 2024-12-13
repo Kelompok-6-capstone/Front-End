@@ -26,7 +26,7 @@ const TransactionTable = () => {
       }
 
       let endpoint = "/admin/consultations";
-      if (activeTab === "proses") {
+      if (activeTab === "Proses") {
         endpoint = "/admin/consultations/pending";
       } else if (activeTab === "approved") {
         endpoint = "/admin/consultations/approve";
@@ -123,21 +123,21 @@ const TransactionTable = () => {
         </button>
         <button
           className={`px-4 py-2 mr-2 rounded-t-lg ${
-            activeTab === "proses"
+            activeTab === "Proses"
               ? "border-b-2 border-cyan-400 text-black"
               : "text-gray-500"
           }`}
-          onClick={() => setActiveTab("proses")}
+          onClick={() => setActiveTab("Proses")}
         >
           Proses Transaksi
         </button>
         <button
           className={`px-4 py-2 rounded-t-lg ${
-            activeTab === "selesai"
+            activeTab === "Selesai"
               ? "border-b-2 border-cyan-400 text-black"
               : "text-gray-500"
           }`}
-          onClick={() => setActiveTab("selesai")}
+          onClick={() => setActiveTab("Selesai")}
         >
           Transaksi Selesai
         </button>
@@ -173,6 +173,15 @@ const TransactionTable = () => {
                   Status Konsultasi {getSortIcon(sortConfig, "status")}
                 </th>
                 <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                  Nama Dokter
+                </th>
+                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                  Harga
+                </th>
+                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                  Status Pembayaran
+                </th>
+                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                   Action
                 </th>
               </tr>
@@ -194,13 +203,44 @@ const TransactionTable = () => {
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                     <span
-                      className={`px-[11px] py-[10px] rounded-full text-sm ${
+                      className={`px-[15px] py-[10px] rounded-full text-sm font-medium ${
                         transaction.status === "approved"
                           ? "bg-[#CCFBF1] text-[#115E59]"
-                          : "bg-[#FEF9C3] text-[#854D0E]"
+                          : transaction.status === "pending"
+                          ? "bg-[#FEF9C3] text-[#854D0E]"
+                          : "bg-[#E0E7FF] text-[#3730A3]"
                       }`}
                     >
-                      {transaction.status}
+                      {transaction.status === "approved"
+                        ? "Selesai"
+                        : transaction.status === "pending"
+                        ? "Proses"
+                        : transaction.status}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                    {transaction.doctor.username}
+                  </td>
+                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                    {transaction.doctor.price}
+                  </td>
+                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                    <span
+                      className={`px-[15px] py-[10px] rounded-full text-sm font-medium ${
+                        transaction.payment_status === "paid"
+                          ? "bg-[#CCFBF1] text-[#115E59]"
+                          : transaction.payment_status === ""
+                          ? "bg-[#FEF9C3] text-[#854D0E]"
+                          : "bg-red-400 text-white"
+                      }`}
+                    >
+                      {transaction.payment_status === "paid"
+                        ? "Selesai"
+                        : transaction.payment_status === ""
+                        ? "Proses"
+                        : transaction.payment_status === "failed"
+                        ? "gagal"
+                        : transaction.payment_status}
                     </span>
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
@@ -231,3 +271,4 @@ const TransactionTable = () => {
 };
 
 export default TransactionTable;
+
