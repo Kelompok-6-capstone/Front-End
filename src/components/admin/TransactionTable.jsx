@@ -5,6 +5,19 @@ import axiosInstance from "../../utils/axiosInstance";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
+const LoadingSpinner = () => {
+  return (
+    <div className="flex justify-center items-center h-[60vh]">
+      <div className="flex flex-col items-center">
+        <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-4 text-gray-600 font-medium">
+          Memuat data transaksi...
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const TransactionTable = () => {
   const [data, setData] = useState([]);
   const { sortedData, sortConfig, requestSort } = useSortData(data);
@@ -28,7 +41,7 @@ const TransactionTable = () => {
       let endpoint = "/admin/consultations";
       if (activeTab === "Proses") {
         endpoint = "/admin/consultations/pending";
-      } else if (activeTab === "approved") {
+      } else if (activeTab === "Selesai") {
         endpoint = "/admin/consultations/approve";
       }
 
@@ -101,8 +114,26 @@ const TransactionTable = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (loading) {
+    return (
+      <div className="p-6">
+        <h1 className="font-[Poppins] text-[32px] not-italic font-medium leading-[normal] mb-5">
+          Transaksi
+        </h1>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+  if (error) {
+    return (
+      <div className="p-6">
+        <h1 className="font-[Poppins] text-[32px] not-italic font-medium leading-[normal] mb-5">
+          Transaksi
+        </h1>
+        <p className="text-red-500 font-medium">Error: {error}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
