@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 export default function Aktivitas() {
     return (
         <>
-
             <div className="w-full max-w-[854px] p-4 bg-white rounded-lg shadow border border-neutral-300">
                 <Link to="/user/detail-aktivitas">
                     <div className="flex items-start">
