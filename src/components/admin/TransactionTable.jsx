@@ -5,6 +5,19 @@ import axiosInstance from "../../utils/axiosInstance";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
+const LoadingSpinner = () => {
+  return (
+    <div className="flex justify-center items-center h-[40vh]">
+      <div className="flex flex-col items-center">
+        <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-4 text-gray-600 font-medium">
+          Memuat data transaksi...
+        </p>
+      </div>
+    </div>
+  );
+};
+
 const TransactionTable = () => {
   const [data, setData] = useState([]);
   const { sortedData, sortConfig, requestSort } = useSortData(data);
@@ -26,9 +39,9 @@ const TransactionTable = () => {
       }
 
       let endpoint = "/admin/consultations";
-      if (activeTab === "proses") {
+      if (activeTab === "Proses") {
         endpoint = "/admin/consultations/pending";
-      } else if (activeTab === "approved") {
+      } else if (activeTab === "Selesai") {
         endpoint = "/admin/consultations/approve";
       }
 
@@ -101,9 +114,6 @@ const TransactionTable = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
   return (
     <div className="p-6">
       <h1 className="font-[Poppins] text-[32px] not-italic font-medium leading-[normal] mb-5">
@@ -123,109 +133,157 @@ const TransactionTable = () => {
         </button>
         <button
           className={`px-4 py-2 mr-2 rounded-t-lg ${
-            activeTab === "proses"
+            activeTab === "Proses"
               ? "border-b-2 border-cyan-400 text-black"
               : "text-gray-500"
           }`}
-          onClick={() => setActiveTab("proses")}
+          onClick={() => setActiveTab("Proses")}
         >
           Proses Transaksi
         </button>
         <button
           className={`px-4 py-2 rounded-t-lg ${
-            activeTab === "selesai"
+            activeTab === "Selesai"
               ? "border-b-2 border-cyan-400 text-black"
               : "text-gray-500"
           }`}
-          onClick={() => setActiveTab("selesai")}
+          onClick={() => setActiveTab("Selesai")}
         >
           Transaksi Selesai
         </button>
       </div>
 
-      <h2 className="text-[24px] not-italic font-semibold text-center mb-4 mt-6">
-        Daftar Pasien
-      </h2>
-      <div className="rounded-lg border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-cyan-50">
-              <tr>
-                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                  Id
-                </th>
-                <th
-                  className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                  onClick={() => requestSort("namaPasien")}
-                >
-                  Nama Pasien {getSortIcon(sortConfig, "namaPasien")}
-                </th>
-                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                  Id Konsultasi
-                </th>
-                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                  Keluhan
-                </th>
-                <th
-                  className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                  onClick={() => requestSort("status")}
-                >
-                  Status Konsultasi {getSortIcon(sortConfig, "status")}
-                </th>
-                <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-cyan-50">
-              {sortedData.map((transaction) => (
-                <tr className="text-center" key={transaction.id}>
-                  <td className="px-6 py-4 border-r border-l border-opacity-15 border-[#000]">
-                    {transaction.id}
-                  </td>
-                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.user.username}
-                  </td>
-                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.order_id}
-                  </td>
-                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.description}
-                  </td>
-                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    <span
-                      className={`px-3 py-1 rounded-full text-sm ${
-                        transaction.status === "approved"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
+      {loading ? (
+        <LoadingSpinner />
+      ) : error ? (
+        <p className="text-red-500 font-medium">Error: {error}</p>
+      ) : (
+        <>
+          <h2 className="text-[24px] not-italic font-semibold text-center mb-4 mt-6">
+            Daftar Pasien
+          </h2>
+          <div className="rounded-lg border overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-cyan-50">
+                  <tr>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Id
+                    </th>
+                    <th
+                      className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
+                      onClick={() => requestSort("namaPasien")}
                     >
-                      {transaction.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                    {transaction.status === "pending" ? (
-                      <button
-                        onClick={() => handleStatusChange(transaction.id)}
-                        className="bg-blue-500 hover:bg-blue-700 text-white text-sm font-medium py-1 px-2 rounded"
-                      >
-                        Approve
-                      </button>
-                    ) : (
-                      <button
-                        disabled
-                        className="bg-gray-300 text-gray-500 text-sm font-medium py-1 px-2 rounded cursor-not-allowed"
-                      >
-                        Approved
-                      </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                      Nama Pasien {getSortIcon(sortConfig, "namaPasien")}
+                    </th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Id Konsultasi
+                    </th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Keluhan
+                    </th>
+                    <th
+                      className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
+                      onClick={() => requestSort("status")}
+                    >
+                      Status Konsultasi {getSortIcon(sortConfig, "status")}
+                    </th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Nama Dokter
+                    </th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Harga
+                    </th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Status Pembayaran
+                    </th>
+                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="bg-cyan-50">
+                  {sortedData.map((transaction) => (
+                    <tr className="text-center" key={transaction.id}>
+                      <td className="px-6 py-4 border-r border-l border-opacity-15 border-[#000]">
+                        {transaction.id}
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        {transaction.user.username}
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        {transaction.order_id}
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        {transaction.description}
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        <span
+                          className={`px-[15px] py-[10px] rounded-full text-sm font-medium ${
+                            transaction.status === "approved"
+                              ? "bg-[#CCFBF1] text-[#115E59]"
+                              : transaction.status === "pending"
+                              ? "bg-[#FEF9C3] text-[#854D0E]"
+                              : "bg-[#E0E7FF] text-[#3730A3]"
+                          }`}
+                        >
+                          {transaction.status === "approved"
+                            ? "Selesai"
+                            : transaction.status === "pending"
+                            ? "Proses"
+                            : transaction.status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        {transaction.doctor.username}
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        {transaction.doctor.price}
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        <span
+                          className={`px-[15px] py-[10px] rounded-full text-sm font-medium ${
+                            transaction.payment_status === "paid"
+                              ? "bg-[#CCFBF1] text-[#115E59]"
+                              : transaction.payment_status === ""
+                              ? "bg-[#FEF9C3] text-[#854D0E]"
+                              : "bg-red-400 text-white"
+                          }`}
+                        >
+                          {transaction.payment_status === "paid"
+                            ? "Selesai"
+                            : transaction.payment_status === ""
+                            ? "Proses"
+                            : transaction.payment_status === "failed"
+                            ? "gagal"
+                            : transaction.payment_status}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                        {transaction.status === "pending" ? (
+                          <button
+                            onClick={() => handleStatusChange(transaction.id)}
+                            className="bg-[#14B8A6] hover:bg-[#1e635b] text-white text-sm font-medium py-2 px-3 rounded-lg"
+                          >
+                            Approve
+                          </button>
+                        ) : (
+                          <button
+                            disabled
+                            className="bg-gray-300 text-gray-500 text-sm font-medium py-2 px-3 rounded-lg cursor-not-allowed"
+                          >
+                            Approved
+                          </button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
