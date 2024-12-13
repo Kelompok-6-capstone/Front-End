@@ -3,7 +3,6 @@ import { useState } from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 import { useDeletePatient } from "../../hooks/admin/useDeletePatients";
-import HeaderPatientTable from "./HeaderPatientTable";
 
 const PatientTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
@@ -22,7 +21,6 @@ const PatientTable = ({ data }) => {
 
   return (
     <>
-      <HeaderPatientTable />
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-cyan-50">
