@@ -194,10 +194,10 @@ const TransactionTable = () => {
                   </td>
                   <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                     <span
-                      className={`px-3 py-1 rounded-full text-sm ${
+                      className={`px-[11px] py-[10px] rounded-full text-sm ${
                         transaction.status === "approved"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
+                          ? "bg-[#CCFBF1] text-[#115E59]"
+                          : "bg-[#FEF9C3] text-[#854D0E]"
                       }`}
                     >
                       {transaction.status}
