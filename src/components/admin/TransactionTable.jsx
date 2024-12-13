@@ -159,9 +159,21 @@ const TransactionTable = () => {
         <p className="text-red-500 font-medium">Error: {error}</p>
       ) : (
         <>
-          <h2 className="text-[24px] not-italic font-semibold text-center mb-4 mt-6">
-            Daftar Pasien
-          </h2>
+          <div className="flex justify-between items-center px-6 py-4 bg-white">
+            <div className="flex-1">
+              <h2 className="text-[24px] not-italic font-semibold text-center">
+                Daftar Transaksi
+              </h2>
+            </div>
+            <a
+              href="https://dashboard.sandbox.midtrans.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-gray-600 hover:bg-gray-700 text-white text-sm font-medium py-2 px-4 rounded-lg"
+            >
+              Lihat ke Midtrans
+            </a>
+          </div>
           <div className="rounded-lg border overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full">
