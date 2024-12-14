@@ -7,6 +7,7 @@ import {
 } from "../../../api/doctor/doctor";
 import Loading from "../../../components/user/Loading";
 import Swal from "sweetalert2";
+import Navbar from "../../../components/dokter/Navbar";
 
 const DetailPassien = () => {
   const { id } = useParams();
@@ -159,24 +160,9 @@ const DetailPassien = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Navbar */}
-      <div className="bg-cyan-50 text-white px-6 py-4 flex items-center justify-between fixed top-0 w-full z-10">
-        <Link
-          to="/dokter/daftar-passien"
-          className="text-white font-semibold text-sm bg-white px-2 py-2 rounded-lg"
-        >
-          <img
-            src="/public/images/kembali.svg"
-            alt="Kembali ke Daftar Pasien"
-            className="w-4 h-4"
-          />
-        </Link>
-        <h1 className="text-2xl font-bold text-teal-900">Detail Pasien</h1>
-        <div></div>
-      </div>
-
+    <Navbar/>
       {/* Konten Halaman */}
-      <div className="flex justify-center items-center mt-20">
+      <div className="flex justify-center items-center mt-4">
         <div className="bg-white w-full p-12 grid grid-cols-6 gap-6">
           {/*card 1 --> data pasien */}
           <div className="col-span-2 bg-cyan-50 p-4 h-[305px] w-[320px] border border-teal-900 rounded-lg">

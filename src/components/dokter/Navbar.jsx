@@ -8,7 +8,12 @@ const Navbar = () => {
 
   // Konfigurasi untuk menentukan elemen yang muncul di setiap halaman
   const navbarConfig = {
-    "/dokter/pasien-tertangani": {
+    "/dokter/daftar-pasien-tertangani": {
+      showSearch: true,
+      showBell: true,
+      showBack: true,
+    },
+    "/dokter/daftar-pasien-baru": {
       showSearch: true,
       showBell: true,
       showBack: true,
