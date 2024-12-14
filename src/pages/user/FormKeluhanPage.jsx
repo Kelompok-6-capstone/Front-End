@@ -7,7 +7,7 @@ export default function FormKeluhanPage() {
     return (
         <div>
             <Navbar />
-            <div className="lg:px-[100px] lg:me-5 mt-32 p-3">
+            <div className="lg:px-[100px] lg:me-5 mt-28 p-3">
                 <FormKeluhan />
             </div>
             <Footer />
