@@ -14,7 +14,7 @@ import EditProfile from "../pages/dokter/Settings/EditProfileDokter";
 import FAQ from "../pages/dokter/Dashboard/FAQ";
 import InformasiAPK from "../pages/dokter/Dashboard/InformasiAPK";
 import DetailRiwayatKonsul from "../pages/dokter/Dashboard/DetailRiwayatKonsul";
-import PasienDitangani from "../pages/dokter/Dashboard/PasiendiTangani";
+import PasienDitangani from "../pages/dokter/Dashboard/PasienDiTangani";
 
 const DoctorRoutes = () => (
   <Routes>
