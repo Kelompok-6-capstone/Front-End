@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import Navbar from "../../../components/dokter/Navbar";
 import { getConsultations } from "../../../api/doctor/doctor";
 
-const PasienDitangani = () => {
+const PasienBaru = () => {
   const [patients, setPatients] = useState([]);
 
   useEffect(() => {
     const fetchConsultations = async () => {
       try {
         const response = await getConsultations();
-        const expiredPatients = response.data
-          .filter((consultation) => consultation.status === "expired")
+        const newPatients = response.data
+          .filter((consultation) => consultation.status === "approved")
           .map((consultation) => ({
             id: consultation.id,
             nama: consultation.user.username,
@@ -22,7 +22,7 @@ const PasienDitangani = () => {
               consultation.user.avatar || "/images/admin/admin-profil.png",
           }));
 
-        setPatients(expiredPatients);
+        setPatients(newPatients);
       } catch (error) {
         console.error("Failed to fetch consultations:", error);
       }
@@ -36,9 +36,7 @@ const PasienDitangani = () => {
       <Navbar />
       <div className="p-12 bg-white min-h-screen flex justify-center">
         <div>
-          <h2 className="text-xl font-semibold mb-4">
-            Pasien Sudah Di Tangani
-          </h2>
+          <h2 className="text-xl font-semibold mb-4">Pasien Baru</h2>
           <div className="grid grid-cols-1 gap-4">
             {patients.length > 0 ? (
               patients.map((pasien, idx) => (
@@ -92,4 +90,4 @@ const PasienDitangani = () => {
   );
 };
 
-export default PasienDitangani;
+export default PasienBaru;

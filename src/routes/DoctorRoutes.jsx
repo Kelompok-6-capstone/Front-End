@@ -15,6 +15,7 @@ import FAQ from "../pages/dokter/Dashboard/FAQ";
 import InformasiAPK from "../pages/dokter/Dashboard/InformasiAPK";
 import DetailRiwayatKonsul from "../pages/dokter/Dashboard/DetailRiwayatKonsul";
 import PasienDitangani from "../pages/dokter/Dashboard/PasienDiTangani";
+import PasienBaru from "../pages/dokter/Dashboard/PasienBaru";
 
 const DoctorRoutes = () => (
   <Routes>
@@ -30,10 +31,18 @@ const DoctorRoutes = () => (
       }
     />
      <Route
-      path="pasien-tertangani"
+      path="daftar-pasien-tertangani"
       element={
         <DoctorProtectedRoute>
           <PasienDitangani />
+        </DoctorProtectedRoute>
+      }
+    />
+       <Route
+      path="daftar-pasien-baru"
+      element={
+        <DoctorProtectedRoute>
+          <PasienBaru />
         </DoctorProtectedRoute>
       }
     />

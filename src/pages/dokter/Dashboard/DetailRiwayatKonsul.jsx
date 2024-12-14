@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getConsultationsDetails } from "../../../api/doctor/doctor";
 import Loading from "../../../components/user/Loading";
+import Navbar from "../../../components/dokter/Navbar";
 
 const DetailRiwayatKonsul = () => {
   const { id } = useParams();
@@ -24,10 +25,6 @@ const DetailRiwayatKonsul = () => {
     fetchData();
   }, [id]);
 
-  if (!consultationData) {
-    return <div className="text-center mt-4">Data tidak ditemukan</div>;
-  }
-
   if (loading) {
     return <Loading />;
   }
@@ -36,26 +33,9 @@ const DetailRiwayatKonsul = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Navbar */}
-      <div className="bg-cyan-50 text-white px-6 py-4 flex items-center justify-between fixed top-0 w-full z-10">
-        <Link
-          to={`/dokter/detail-passien/${consultationData.id}`}
-          className="text-white font-semibold text-sm bg-white px-2 py-2 rounded-lg"
-        >
-          <img
-            src="/public/images/kembali.svg"
-            alt="Kembali"
-            className="w-4 h-4"
-          />
-        </Link>
-        <h1 className="text-2xl font-bold text-teal-900">
-          Detail Riwayat Konsultasi
-        </h1>
-        <div></div>
-      </div>
-
+      <Navbar />
       {/* Konten Halaman */}
-      <div className="flex justify-center items-start mt-28 px-6 mb-10">
+      <div className="flex justify-center items-start mt-16 px-6 mb-10">
         <div className="grid grid-cols-3 gap-x-8 gap-y-4 max-w-6xl">
           {/* Profil Pasien */}
           <div className="col-span-1 bg-cyan-50 p-6 border border-teal-900 -ml-10 rounded-lg h-[305px] w-[320px]">
