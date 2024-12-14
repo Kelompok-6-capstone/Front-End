@@ -2,12 +2,22 @@ import React from 'react';
 import ArtikelCard from './ArtikelCard';
 import useFetchArticles from '../../../hooks/user/useFetchArticles';
 import Loading from '../Loading';
+import axiosInstanceUser from '../../../utils/axiosInstanceUser';
 
 const DaftarSemuaArtikel = () => {
-    const { articles, loading, error } = useFetchArticles('https://api.calmind.site/user/artikel');
+    const fetchArticles = async () => {
+        try {
+            const response = await axiosInstanceUser.get('/user/artikel');
+            return response.data;
+        } catch (error) {
+            throw error.response?.data?.message || 'Terjadi kesalahan saat mengambil artikel.';
+        }
+    };
+
+    const { articles, loading, error } = useFetchArticles(fetchArticles);
 
     if (loading) return <Loading />;
-    if (error) return <div className='mt-36'>Error: {error}</div>;
+    if (error) return <div className="mt-36">Error: {error}</div>;
 
     return (
         <section id="artikel" className="bg-white px-3 lg:px-0 lg:mt-7">

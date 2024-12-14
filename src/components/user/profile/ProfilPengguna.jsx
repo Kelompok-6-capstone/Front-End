@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstanceUser from "../../../utils/axiosInstanceUser";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
@@ -34,7 +34,7 @@ const ProfilPengguna = () => {
         const fetchUserProfile = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get("https://api.calmind.site/user/profile", {
+                const response = await axiosInstanceUser.get("/user/profile", {
                     headers: getAuthHeaders(),
                 });
                 setFormData(response.data.data);
@@ -71,7 +71,7 @@ const ProfilPengguna = () => {
         if (result.isConfirmed) {
             try {
                 setLoading(true);
-                await axios.put("https://api.calmind.site/user/profile", formData, {
+                await axiosInstanceUser.put("/user/profile", formData, {
                     headers: getAuthHeaders(),
                 });
                 Swal.fire({
@@ -98,7 +98,7 @@ const ProfilPengguna = () => {
             avatarData.append("avatar", file);
             try {
                 setLoading(true);
-                const response = await axios.post("https://api.calmind.site/user/upload-avatar", avatarData, {
+                const response = await axiosInstanceUser.post("/user/upload-avatar", avatarData, {
                     headers: {
                         "Content-Type": "multipart/form-data",
                         ...getAuthHeaders(),
@@ -128,7 +128,7 @@ const ProfilPengguna = () => {
     const handleAvatarDelete = async () => {
         try {
             setLoading(true);
-            await axios.delete("https://api.calmind.site/user/delete-avatar", {
+            await axiosInstanceUser.delete("/user/delete-avatar", {
                 headers: getAuthHeaders(),
             });
             setFormData((prevState) => ({ ...prevState, avatar: "" }));
@@ -233,9 +233,8 @@ const ProfilPengguna = () => {
                                     value={formData[field.name] || ""}
                                     onChange={handleChange}
                                     readOnly={field.readOnly || false}
-                                    className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                                        field.readOnly ? "bg-gray-100 cursor-not-allowed" : ""
-                                    }`}
+                                    className={`w-full px-3 py-2 border border-neutral-300 rounded-md focus:outline-none focus:ring-2 focus:ring-teal-500 ${field.readOnly ? "bg-gray-100 cursor-not-allowed" : ""
+                                        }`}
                                 />
                             )}
                         </div>

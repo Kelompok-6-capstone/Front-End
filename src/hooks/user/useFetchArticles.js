@@ -1,30 +1,5 @@
 import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
-
-// Utility function to handle API requests with Authorization token
-const fetchAPI = async (url) => {
-    try {
-        // Retrieve the token from Cookies
-        const token = Cookies.get("token_user");
-
-        // Set the Authorization header if the token exists
-        const headers = {
-            "Content-Type": "application/json",
-            ...(token && { Authorization: `Bearer ${token}` }), // Include token if available
-        };
-
-        const response = await fetch(url, { headers });
-
-        if (!response.ok) {
-            throw new Error(`Failed to fetch data: ${response.statusText}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error("Error in fetchAPI:", error);
-        throw error;
-    }
-};
+import axiosInstanceUser from "../../utils/axiosInstanceUser"; 
 
 // Custom hook for fetching all articles
 export const useFetchArticles = () => {
@@ -36,10 +11,10 @@ export const useFetchArticles = () => {
         const getArticles = async () => {
             try {
                 setLoading(true);
-                const data = await fetchAPI("https://api.calmind.site/user/artikel");
-                setArticles(data.data || []); // Assuming the response has a "data" field with articles
+                const response = await axiosInstanceUser.get("/user/artikel"); // Axios request using custom instance
+                setArticles(response.data.data || []); // Assuming the response has a "data" field with articles
             } catch (err) {
-                setError(err.message);
+                setError(err.message); // Catch and display error
             } finally {
                 setLoading(false);
             }
@@ -64,10 +39,10 @@ export const useFetchArticleById = (id) => {
                 if (!id) {
                     throw new Error("Article ID is required.");
                 }
-                const data = await fetchAPI(`https://api.calmind.site/user/artikel/${id}`);
-                setArticle(data.data || null); // Assuming the response has a "data" field with a single article
+                const response = await axiosInstanceUser.get(`/user/artikel/${id}`);
+                setArticle(response.data.data || null); // Assuming the response has a "data" field with a single article
             } catch (err) {
-                setError(err.message);
+                setError(err.message); // Catch and display error
             } finally {
                 setLoading(false);
             }
