@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import Cookies from 'js-cookie';
+import { useParams, useNavigate } from 'react-router-dom';
+import axiosInstanceUser from '../../../utils/axiosInstanceUser';
 
 export default function FormKeluhan() {
     const { doctorId } = useParams(); // Menangkap ID dokter dari URL
@@ -8,7 +8,6 @@ export default function FormKeluhan() {
 
     const [formData, setFormData] = useState({
         nama: '',
-        usia: '',
         gender: '',
         noTelp: '',
         judulKeluhan: '',
@@ -18,31 +17,19 @@ export default function FormKeluhan() {
     useEffect(() => {
         // Fetch data profil pengguna saat komponen dirender
         const fetchProfile = async () => {
-            const token = Cookies.get("token_user");
             try {
-                const response = await fetch('https://api.calmind.site/user/profile', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-                const result = await response.json();
+                const response = await axiosInstanceUser.get('/user/profile');
 
-                if (result.success) {
-                    // Menghitung usia berdasarkan tanggal lahir
-                    const birthDate = new Date(result.data.tgl_lahir);
-                    const currentYear = new Date().getFullYear();
-                    const usia = currentYear - birthDate.getFullYear();
+                if (response.data.success) {
                     setFormData((prevData) => ({
                         ...prevData,
-                        nama: result.data.username || '',
-                        usia: usia || '',
-                        gender: result.data.jenis_kelamin || '',
-                        noTelp: result.data.no_hp || '',
+                        nama: response.data.data.username || '',
+                        gender: response.data.data.jenis_kelamin || '',
+                        noTelp: response.data.data.no_hp || '',
                     }));
-                    console.log('Profil pengguna:', result.data);
+                    // console.log('Profil pengguna:', response.data.data);
                 } else {
-                    console.error('Gagal mengambil profil pengguna:', result.message);
+                    console.error('Gagal mengambil profil pengguna:', response.data.message);
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -63,22 +50,15 @@ export default function FormKeluhan() {
             title: formData.judulKeluhan,
             description: formData.deskripsiKeluhan
         };
-        const token = Cookies.get("token_user");
+
         try {
-            const response = await fetch('https://api.calmind.site/user/consultations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify(payload)
-            });
-            const result = await response.json();
-            if (result.success) {
-                const paymentUrlWithDoctorId = `${result.data.payment_url}?doctorId=${doctorId}`;
+            const response = await axiosInstanceUser.post('/user/consultations', payload);
+
+            if (response.data.success) {
+                const paymentUrlWithDoctorId = `${response.data.data.payment_url}?doctorId=${doctorId}`;
                 window.location.href = paymentUrlWithDoctorId;
             } else {
-                alert(`Gagal mengirim data: ${result.message}`);
+                alert(`Gagal mengirim data: ${response.data.message}`);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -105,20 +85,6 @@ export default function FormKeluhan() {
                                 placeholder="Masukkan Nama Lengkap"
                                 className="w-full mt-1 p-3 border border-gray-200 rounded-lg shadow-sm text-gray-500"
                                 readOnly
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="usia" className="block text-gray-800 text-base font-semibold">
-                                Usia
-                            </label>
-                            <input
-                                type="number"
-                                id="usia"
-                                name="usia"
-                                value={formData.usia}
-                                onChange={handleChange}
-                                placeholder="Tulis Usia Kamu"
-                                className="w-full mt-1 p-3 border border-gray-200 rounded-lg shadow-sm text-gray-500"
                             />
                         </div>
                         <div>

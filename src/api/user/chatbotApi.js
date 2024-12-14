@@ -1,23 +1,11 @@
-// File: /src/api/chatbotApi.js
-
-import axios from "axios";
-import Cookies from "js-cookie";
+import axiosInstanceUser from "../../utils/axiosInstanceUser";
 
 const sendMessageToApi = async (inputMessage) => {
     try {
-        // Ambil token dari cookies
-        const token = Cookies.get("token_user");
-
-        // Panggil API chatbot
-        const response = await axios.post(
-            "https://api.calmind.site/user/chatbot",
-            { message: inputMessage },
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            }
-        );
+        // Panggil API chatbot menggunakan axiosInstanceUser
+        const response = await axiosInstanceUser.post("/user/chatbot", {
+            message: inputMessage,
+        });
 
         // Validasi dan bersihkan respon dari bot
         const botReply = response.data?.data?.response?.trim()
@@ -28,9 +16,7 @@ const sendMessageToApi = async (inputMessage) => {
     } catch (error) {
         console.error("Kesalahan saat memanggil API: ", error);
         console.error("Detail respons error: ", error.response?.data);
-        throw new Error(
-            "Maaf, terjadi kesalahan. Silakan coba lagi nanti."
-        );
+        throw new Error("Maaf, terjadi kesalahan. Silakan coba lagi nanti.");
     }
 };
 
