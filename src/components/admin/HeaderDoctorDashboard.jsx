@@ -1,18 +1,17 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const HeaderPatientDashboard = () => {
+const HeaderDoctorDashboard = () => {
   const navigate = useNavigate();
 
   const handleClickAllUser = () => {
     navigate("/admin/users");
   };
-
   return (
     <div className="flex justify-between items-center text-black bg-cyan-50 py-4 px-6 border-[1px] border-opacity-15 border-[#000]">
       <div className="flex flex-col">
         <h1 className="text-2xl font-semibold text-black mb-2">
-          Pengguna Pasien
+          Pengguna Dokter
         </h1>
         <h1 className="text-base text-[#737373]">
           Menambahkan Pengguna, Mengedit, Menghapus, Dan Lain-Lain
@@ -28,4 +27,4 @@ const HeaderPatientDashboard = () => {
   );
 };
 
-export default HeaderPatientDashboard;
+export default HeaderDoctorDashboard;
