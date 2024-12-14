@@ -1,7 +1,45 @@
-import Cookies from "js-cookie";
-import axios from "axios";
+import axiosInstanceUser from '../../utils/axiosInstanceUser';
 
-const BASE_URL = "https://api.calmind.site";
+/**
+ * Fetch all doctors.
+ * @returns {Promise<Object>} Response data from the API.
+ */
+export const fetchDoctors = async () => {
+    try {
+        const response = await axiosInstanceUser.get('/user/doctors');
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Gagal mengambil data dokter.');
+        } else if (error.request) {
+            throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.');
+        } else {
+            throw new Error(error.message || 'Terjadi kesalahan.');
+        }
+    }
+};
+
+/**
+ * Search doctors based on query.
+ * @param {string} query - The search term to find doctors.
+ * @returns {Promise<Object>} Response data from the API.
+ */
+export const searchDoctors = async (query) => {
+    try {
+        const response = await axiosInstanceUser.get('/user/doctors/search', {
+            params: { query },
+        });
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            throw new Error(error.response.data.message || 'Gagal mencari data dokter.');
+        } else if (error.request) {
+            throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.');
+        } else {
+            throw new Error(error.message || 'Terjadi kesalahan.');
+        }
+    }
+};
 
 /**
  * Fetch doctor details by ID.
@@ -10,30 +48,19 @@ const BASE_URL = "https://api.calmind.site";
  */
 export const fetchDoctorById = async (id) => {
     try {
-        if (!id || typeof id !== "number") {
-            throw new Error("Parameter ID tidak valid. Pastikan ID adalah angka.");
+        if (!id || typeof id !== 'number') {
+            throw new Error('Parameter ID tidak valid. Pastikan ID adalah angka.');
         }
 
-        const token = Cookies.get("token_user");
-        if (!token) {
-            throw new Error("Token tidak tersedia. Pastikan Anda sudah login.");
-        }
-
-        const url = `${BASE_URL}/user/doctors/${id}`;
-        const response = await axios.get(url, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
+        const response = await axiosInstanceUser.get(`/user/doctors/${id}`);
         return response.data;
     } catch (error) {
         if (error.response) {
-            throw new Error(error.response.data.message || "Gagal mengambil detail dokter.");
+            throw new Error(error.response.data.message || 'Gagal mengambil detail dokter.');
         } else if (error.request) {
-            throw new Error("Tidak dapat terhubung ke server. Periksa koneksi internet Anda.");
+            throw new Error('Tidak dapat terhubung ke server. Periksa koneksi internet Anda.');
         } else {
-            throw new Error(error.message || "Terjadi kesalahan yang tidak diketahui.");
+            throw new Error(error.message || 'Terjadi kesalahan yang tidak diketahui.');
         }
     }
 };

@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import axios from 'axios';
+import axiosInstanceUser from '../../../utils/axiosInstanceUser';
 
 export default function HeroSection() {
     const [username, setUsername] = useState('');
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
         const fetchUserName = async () => {
             try {
@@ -16,15 +15,9 @@ export default function HeroSection() {
                     setLoading(false);
                     return;
                 }
-
-                const response = await axios.get('https://api.calmind.site/user/profile', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
+                const response = await axiosInstanceUser.get('/user/profile');
                 if (response.data.success) {
-                    setUsername(response.data.data.username); // Set username dari API
+                    setUsername(response.data.data.username);
                 } else {
                     setUsername('Guest');
                 }
@@ -35,7 +28,6 @@ export default function HeroSection() {
                 setLoading(false);
             }
         };
-
         fetchUserName();
     }, []);
 

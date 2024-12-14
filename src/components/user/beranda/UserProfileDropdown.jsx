@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Cookies from 'js-cookie'; // Import pustaka untuk mengelola cookies
+import Cookies from 'js-cookie';
 import { confirmLogout } from '../../../api/auth/logoutUser';
+import axiosInstanceUser from '../../../utils/axiosInstanceUser';
 
 const UserProfileDropdown = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -22,13 +23,7 @@ const UserProfileDropdown = () => {
                     setLoading(false);
                     return;
                 }
-
-                const response = await axios.get('https://api.calmind.site/user/profile', {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
+                const response = await axiosInstanceUser.get('/user/profile');
                 if (response.data.success) {
                     setUserProfile({
                         username: response.data.data.username,
