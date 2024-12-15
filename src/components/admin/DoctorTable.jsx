@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
+import { useDeleteDoctor } from "../../hooks/admin/useDeleteDoctor";
 
 const DoctorTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
+  const { deleteDoctor, deletedDoctorId, loading, error } = useDeleteDoctor();
+  const [doctors, setDoctors] = useState(data);
+
+  const handleDelete = async (id) => {
+    const success = await deleteDoctor(id);
+    if (success) {
+      // Filter dokter yang tersisa setelah penghapusan
+      const updatedDoctors = doctors.filter((doctor) => doctor.id !== id);
+      setDoctors(updatedDoctors); // Perbarui state dokter
+    }
+  };
+
   return (
     <>
       <div className="overflow-x-auto">
@@ -68,7 +81,6 @@ const DoctorTable = ({ data }) => {
                     {doctor.is_active ? "Online" : "Offline"}
                   </span>
                 </td>
-
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.email}
                 </td>
@@ -92,8 +104,15 @@ const DoctorTable = ({ data }) => {
                     <button>
                       <img src="/images/admin/edit-button.svg" alt="edit" />
                     </button>
-                    <button>
-                      <img src="/images/admin/trash-button.svg" alt="trash" />
+                    <button
+                      onClick={() => handleDelete(doctor.id)}
+                      disabled={loading && deletedDoctorId === doctor.id}
+                    >
+                      {loading && deletedDoctorId === doctor.id ? (
+                        "Menghapus..."
+                      ) : (
+                        <img src="/images/admin/trash-button.svg" alt="trash" />
+                      )}
                     </button>
                   </div>
                 </td>
@@ -101,6 +120,7 @@ const DoctorTable = ({ data }) => {
             ))}
           </tbody>
         </table>
+        {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
     </>
   );
