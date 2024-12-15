@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleClickProfile = () => {
+    navigate("/admin/profile");
+  };
 
   return (
     <>
@@ -63,6 +69,7 @@ const Navbar = () => {
                 <button
                   type="button"
                   className="size-[24px] relative inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none"
+                  onClick={handleClickProfile}
                 >
                   <img src="/images/admin/profile.svg" alt="" />
                   <span className="sr-only">Profile</span>
