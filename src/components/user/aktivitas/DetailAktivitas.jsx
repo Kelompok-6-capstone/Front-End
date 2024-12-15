@@ -1,56 +1,77 @@
-import React from 'react'
+import React from 'react';
 
 export default function DetailAktivitas() {
     return (
-        <div>
-            <div className="max-w-[854px] p-4 bg-white rounded-lg shadow border border-neutral-300">
-                <div className="flex items-start">
-                    <img
-                        className="w-[114px] h-[126px] rounded-md"
-                        src="/images/user/dokter-rina.png"
-                        alt="Gambar profile dokter"
-                    />
-                    <div className="ml-6">
-                        <h2 className="text-cyan-900 text-xl font-medium font-['Poppins']">Dr. Rina Maharani</h2>
-                        <p className="text-neutral-400 text-base font-normal font-['Poppins']">Psikiatri Umum</p>
-                        <p className="text-neutral-400 text-base font-normal font-['Poppins']">Senin 19 November 2024</p>
+        <div className="max-w-full h-auto bg-white rounded-lg shadow border border-neutral-300 p-4 sm:p-6 md:w-[854px] relative">
+            <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
+                <img
+                    className="w-[114px] h-[126px] rounded-md"
+                    src="https://via.placeholder.com/114x126"
+                    alt="Dokter"
+                />
+                <div className="flex flex-col gap-1 text-center sm:text-left">
+                    <div className="text-cyan-900 text-lg sm:text-xl font-medium">
+                        Dr. Rina Maharani
+                    </div>
+                    <div className="text-neutral-400 text-sm sm:text-base">
+                        Psikiatri Umum
+                    </div>
+                    <div className="text-neutral-400 text-sm sm:text-base">
+                        Senin 19 November 2024
                     </div>
                 </div>
-                <div className="mt-6 border-t border-neutral-300 pt-4 flex justify-between items-center">
-                    <div className="px-4 py-2 bg-gray-500 text-white text-xs font-medium font-['Poppins'] rounded-md">
-                        Selesai
-                    </div>
-                    <p className="text-black text-base font-semibold font-['Poppins']">Tanggal Transaksi</p>
-                    <p className="text-cyan-950 text-sm font-normal font-['Poppins']">05/12/2024 14:32</p>
+            </div>
+            <div className="mt-6 border-t border-neutral-300 pt-3 flex justify-center sm:justify-start">
+                <div className="bg-gray-500 text-white text-xs font-medium py-2 px-4 rounded-md">
+                    Selesai
                 </div>
-                <div className="mt-6">
-                    <h3 className="text-black text-base font-semibold font-['Poppins']">Data Pasien</h3>
-                    <div className="mt-4 space-y-3">
-                        <div className="flex justify-between">
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">Nama:</span>
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">Ahmad Santoso</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">Umur:</span>
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">30 Tahun</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">Jenis Kelamin:</span>
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">Laki-laki</span>
-                        </div>
-                        <div className="flex justify-between">
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">No. Telpon:</span>
-                            <span className="text-cyan-950 text-sm font-normal font-['Poppins']">0896-xxxx-xxxx</span>
-                        </div>
+            </div>
+            <div className="mt-6">
+                <div className="text-black text-base font-semibold">
+                    Tanggal Transaksi
+                </div>
+                <div className="text-cyan-950 text-sm font-normal mt-2">
+                    05/12/2024 14:32
+                </div>
+            </div>
+            <div className="mt-6">
+                <div className="text-black text-base font-semibold">
+                    Data Pasien
+                </div>
+                <div className="mt-3 space-y-3">
+                    <div className="flex justify-between text-sm sm:text-base">
+                        <span className="text-cyan-950">Nama</span>
+                        <span className="text-cyan-950">Ahmad Santoso</span>
+                    </div>
+                    <div className="flex justify-between text-sm sm:text-base">
+                        <span className="text-cyan-950">Jenis Kelamin</span>
+                        <span className="text-cyan-950">Laki-Laki</span>
+                    </div>
+                    <div className="flex justify-between text-sm sm:text-base">
+                        <span className="text-cyan-950">No Telpon</span>
+                        <span className="text-cyan-950">08123456789</span>
                     </div>
                 </div>
-                <div className="mt-6">
-                    <h3 className="text-black text-base font-semibold font-['Poppins']">Detail Keluhan</h3>
-                    <p className="mt-2 text-cyan-950 text-sm font-normal font-['Poppins'] leading-relaxed">
-                        Lorem ipsum dolor sit amet consectetur. Varius massa morbi lectus in. Lectus in penatibus dictum risus tincidunt porttitor. Adipiscing sed in cras egestas dignissim a faucibus. Neque mattis integer felis non adipiscing risus massa ut. Neque magna vitae eget mattis vel. Blandit aenean at est maecenas amet sagittis auctor vel massa.
-                    </p>
+            </div>
+            <div className="mt-6">
+                <div className="text-black text-base font-semibold">
+                    Detail Keluhan
+                </div>
+                <div className="text-cyan-950 text-sm font-normal mt-2">
+                    Dokter, saya merasa sangat cemas dan terbebani oleh tekanan akademis akhir-akhir ini.
+                    Setiap malam, saat saya mencoba untuk tidur, pikiran saya tidak bisa berhenti memikirkan segala tugas, ujian, dan proyek yang harus diselesaikan.
+                    Ini membuat saya merasa sangat gelisah dan sulit untuk memulai tidur, meskipun saya merasa sangat lelah.
+                </div>
+            </div>
+            <div className="mt-6">
+                <div className="text-black text-base font-semibold">
+                    Rekomendasi Dokter
+                </div>
+                <div className="text-cyan-950 text-sm font-normal mt-2">
+                    Lorem ipsum dolor sit amet consectetur. Eget morbi hendrerit molestie risus amet feugiat vel.
+                    Euismod metus fermentum elit ipsum nisl accumsan donec.
                 </div>
             </div>
         </div>
-    )
+    );
 }
