@@ -12,6 +12,7 @@ import DetailPembayaranPage from "../pages/user/DetailPembayaranPage";
 import ChatDokterPage from "../pages/user/ChatDokterPage";
 import AktivitasPage from "../pages/user/AktivitasPage";
 import DetailAktivitasPage from "../pages/user/DetailAktivitasPage";
+import StatusPembayaranPage from "../pages/user/StatusPembayaranPage";
 
 const UserRoutes = () => (
     <Routes>
@@ -96,10 +97,18 @@ const UserRoutes = () => (
             }
         />
         <Route
-            path="/detail-aktivitas"
+            path="/detail-aktivitas/:id"
             element={
                 <ProtectedRoute>
                     <DetailAktivitasPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/status-pembayaran"
+            element={
+                <ProtectedRoute>
+                    <StatusPembayaranPage />
                 </ProtectedRoute>
             }
         />
