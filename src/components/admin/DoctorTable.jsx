@@ -99,10 +99,10 @@ const DoctorTable = ({ data }) => {
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.harga}
                 </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  <div className="flex gap-3">
+                <td className="py-4 border-r border-opacity-15 border-[#000]">
+                  <div className="flex gap-1 items-center justify-center w-32">
                     <button>
-                      <img src="/images/admin/edit-button.svg" alt="edit" />
+                      <img src="/images/admin/action.svg" alt="action" />
                     </button>
                     <button
                       onClick={() => handleDelete(doctor.id)}
