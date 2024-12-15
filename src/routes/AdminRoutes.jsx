@@ -6,6 +6,7 @@ import UsersPage from "../pages/admin/Users";
 import TransactionPage from "../pages/admin/Transactions";
 import ArticlesPage from "../pages/admin/ArticlesPage";
 import AdminProtectedRoute from "./AdminProtectedRoute";
+import Profile from "../pages/admin/Profile";
 
 const AdminRoutes = () => (
     <Routes>
@@ -39,6 +40,14 @@ const AdminRoutes = () => (
             element={
                 <AdminProtectedRoute>
                     <ArticlesPage />
+                </AdminProtectedRoute>
+            }
+        />
+        <Route
+            path="profile"
+            element={
+                <AdminProtectedRoute>
+                    <Profile />
                 </AdminProtectedRoute>
             }
         />

@@ -1,4 +1,5 @@
 import React from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -8,8 +9,39 @@ import Cookies from "js-cookie";
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [profile, setProfile] = useState({ username: "", avatar: "" });
 
   const isActive = (path) => location.pathname === path;
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const token = Cookies.get("token_admin");
+        if (!token) {
+          Swal.fire({
+            icon: "error",
+            title: "Error",
+            text: "No admin token found",
+          });
+          return;
+        }
+        const response = await axiosInstance.get("admin/profil", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (response.data.success) {
+          setProfile(response.data.data);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: "Failed to load profile.",
+        });
+      }
+    };
+    fetchProfile();
+  }, []);
 
   const handleLogout = async () => {
     try {
@@ -77,9 +109,21 @@ const Sidebar = () => {
               <img src="/images/Calmind.svg" alt="logo" />
             </a>
             <div className="flex flex-col justify-center items-center mb-[36px]">
-              <img src="/images/admin/admin-profil.png" alt="admin-profile" />
+              {profile.avatar ? (
+                <img
+                  src={profile.avatar}
+                  alt="admin-profile"
+                  className="w-16 h-16 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-gray-300 flex items-center justify-center">
+                  <span className="text-2xl font-bold text-gray-600">
+                    {profile.username?.charAt(0)?.toUpperCase() || "A"}
+                  </span>
+                </div>
+              )}
               <h1 className="text-[#000] text-center text-[16px] not-italic font-semibold leading-[normal]">
-                Dafa Azriel
+                {profile.username || "Admin"}
               </h1>
               <p className="text-[#000] text-center text-[12px] not-italic font-normal leading-[normal]">
                 Admin
