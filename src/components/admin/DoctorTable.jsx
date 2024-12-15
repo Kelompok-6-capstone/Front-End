@@ -1,14 +1,11 @@
 import React from "react";
-import useSortData from "../../hooks/useSortData";
+import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 
 const DoctorTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
   return (
-    <div className="text-center">
-      <h2 className="text-[24px] not-italic font-semibold text-center mb-4 mt-6">
-        Daftar Dokter
-      </h2>
+    <>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead className="bg-cyan-50">
@@ -17,10 +14,13 @@ const DoctorTable = ({ data }) => {
                 Id
               </th>
               <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
+                className="px-20 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
                 onClick={() => requestSort("nama")}
               >
                 Nama {getSortIcon(sortConfig, "nama")}
+              </th>
+              <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                Status
               </th>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Email
@@ -49,15 +49,6 @@ const DoctorTable = ({ data }) => {
               >
                 Harga {getSortIcon(sortConfig, "harga")}
               </th>
-              <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
-                onClick={() => requestSort("rating")}
-              >
-                Rating {getSortIcon(sortConfig, "rating")}
-              </th>
-              <th className="px-28 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
-                Jadwal Praktik
-              </th>
               <th className="px-10 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                 Action
               </th>
@@ -70,8 +61,14 @@ const DoctorTable = ({ data }) => {
                   {doctor.id}
                 </td>
                 <td className="px-10 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.nama}
+                  {doctor.username}
                 </td>
+                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
+                  <span className="px-[15px] py-[10px] rounded-full">
+                    {doctor.is_active ? "Online" : "Offline"}
+                  </span>
+                </td>
+
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   {doctor.email}
                 </td>
@@ -91,12 +88,6 @@ const DoctorTable = ({ data }) => {
                   {doctor.harga}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.rating}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.jadwalPraktik}
-                </td>
-                <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                   <div className="flex gap-3">
                     <button>
                       <img src="/images/admin/edit-button.svg" alt="edit" />
@@ -111,7 +102,7 @@ const DoctorTable = ({ data }) => {
           </tbody>
         </table>
       </div>
-    </div>
+    </>
   );
 };
 

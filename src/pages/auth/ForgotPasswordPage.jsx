@@ -18,7 +18,7 @@ const ForgotPasswordPage = () => {
                 </button>
                 <p className="text-center mt-4">
                     Remembered your password?{' '}
-                    <a href="/login" className="text-blue-500 hover:underline">
+                    <a href="/login/user" className="text-blue-500 hover:underline">
                         Login
                     </a>
                 </p>

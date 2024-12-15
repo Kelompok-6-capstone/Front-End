@@ -33,7 +33,7 @@ const RegisterPage = () => {
                 title: 'Registrasi Berhasil',
                 text: 'Silakan verifikasi OTP untuk melanjutkan.',
             }).then(() => {
-                navigate('/verify-otp'); // Redirect to /verify-otp
+                navigate('/verify-otp/user'); // Redirect to /verify-otp
             });
         } catch (err) {
             setError(err);
@@ -94,7 +94,7 @@ const RegisterPage = () => {
                     </button>
                     <p className="text-center mt-4">
                         Sudah punya Akun?{" "}
-                        <Link to="/login" className="text-blue-500 hover:underline">
+                        <Link to="/login/user" className="text-blue-500 hover:underline">
                             Login Disini
                         </Link>
                     </p>

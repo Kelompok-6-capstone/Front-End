@@ -1,13 +1,25 @@
 import { useState } from "react";
 import PatientTable from "../../components/admin/PatientTable";
 import DoctorTable from "../../components/admin/DoctorTable";
-import { patientData } from "../../data/admin/patientdata";
-import { doctorData } from "../../data/admin/DoctorData";
 import Navbar from "../../components/admin/Navbar";
 import Sidebar from "../../components/admin/Sidebar";
+import { useFetchPatients } from "../../hooks/admin/useFetchPatients";
+import { useFetchDoctors } from "../../hooks/admin/useFetchDocters";
+import HeaderPatientTable from "../../components/admin/HeaderPatientTable";
+import HeaderDoctorTable from "../../components/admin/HeaderDoctorTable";
 
-export function UsersPage() {
+export default function UsersPage() {
   const [activeTab, setActiveTab] = useState("all");
+  const {
+    patientData,
+    loading: loadingPatients,
+    error: errorPatients,
+  } = useFetchPatients();
+  const {
+    doctorData,
+    loading: loadingDoctors,
+    error: errorDoctors,
+  } = useFetchDoctors();
 
   return (
     <>
@@ -41,15 +53,38 @@ export function UsersPage() {
                 </button>
               ))}
             </nav>
+          </div>
+
+          {/* Konten Loading atau Data */}
+          {loadingPatients || loadingDoctors ? (
+            <div className="flex justify-center items-center h-[60vh]">
+              <div className="flex flex-col items-center">
+                <div className="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin"></div>
+                <p className="mt-4 text-gray-600 font-medium">
+                  Memuat data pengguna...
+                </p>
+              </div>
+            </div>
+          ) : errorPatients || errorDoctors ? (
+            <p className="text-red-500 font-medium">
+              Error: {errorPatients || errorDoctors}
+            </p>
+          ) : (
             <div className="space-y-8">
               {(activeTab === "all" || activeTab === "patient") && (
-                <PatientTable data={patientData} />
+                <>
+                  <HeaderPatientTable />
+                  <PatientTable data={patientData} />
+                </>
               )}
               {(activeTab === "all" || activeTab === "doctor") && (
-                <DoctorTable data={doctorData} />
+                <>
+                  <HeaderDoctorTable />
+                  <DoctorTable data={doctorData} />
+                </>
               )}
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.21.0",
     "axios": "^1.7.8",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.462.0",
     "preline": "^2.5.1",
     "react": "^18.3.1",
+    "react-datepicker": "^7.5.0",
     "react-dom": "^18.3.1",
     "react-router-dom": "^7.0.1",
+    "react-time-picker": "^7.0.0",
     "sweetalert2": "^11.14.5",
     "swiper": "^11.1.15"
   },
