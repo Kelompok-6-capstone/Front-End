@@ -33,11 +33,6 @@ const Sidebar = () => {
         }
       } catch (error) {
         console.error("Error fetching profile:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to load profile.",
-        });
       }
     };
     fetchProfile();
