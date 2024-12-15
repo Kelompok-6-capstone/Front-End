@@ -110,8 +110,8 @@ const AdminProfile = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
-      <div className="flex flex-col items-center space-y-4">
+    <div className="container mx-auto p-4 max-w-md mt-12">
+      <div className="flex flex-col items-center space-y-9">
         {/* Avatar Section */}
         <div className="relative">
           <div className="w-32 h-32 rounded-full bg-gray-100 overflow-hidden">
@@ -147,8 +147,9 @@ const AdminProfile = () => {
         </div>
 
         {/* Username Display */}
-        <div className="w-full px-4 py-2 border rounded-lg flex items-center space-x-2">
-          <span className="text-gray-600">{profile.username}</span>
+        <div className="w-full px-2 py-2 border-[1px] border-cyan-950 rounded-lg flex items-center space-x-2">
+          <img src="/images/admin/profile-admin.svg" alt="profil" />
+          <span className="text-cyan-900">{profile.username}</span>
         </div>
       </div>
     </div>
