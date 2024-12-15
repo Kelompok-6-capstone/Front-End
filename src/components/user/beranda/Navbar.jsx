@@ -23,7 +23,7 @@ export default function Navbar() {
               alt="Logo"
             />
           </a>
-          <div className="hidden sm:flex gap-8">
+          <div className="hidden sm:flex gap-10 lg:ms-56">
             <a
               href="/user/beranda"
               className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
@@ -34,7 +34,7 @@ export default function Navbar() {
               href="/user/dokter"
               className="text-cyan-950 font-semibold hover:text-cyan-700 transition duration-200"
             >
-              Cari Dokter
+              Daftar Dokter
             </a>
             <a
               href="/user/artikel"
