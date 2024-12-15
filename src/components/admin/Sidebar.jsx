@@ -63,7 +63,6 @@ const Sidebar = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("Logout response:", response); // Log respons dari server
 
       Cookies.remove("token_admin");
       Swal.fire({
@@ -160,17 +159,6 @@ const Sidebar = () => {
                     Transaksi
                   </Link>
                 </li>
-                <li className="hs-accordion" id="account-accordion">
-                  <Link
-                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/admin/statistics") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/admin/statistics"
-                  >
-                    <img src="/images/Chart.svg" alt="chart" />
-                    Statistik Bulanan
-                  </Link>
-                </li>
                 <li className="hs-accordion" id="projects-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
@@ -195,38 +183,13 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link
-                    className={`w-full flex gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/announcement") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/admin/announcement"
-                  >
-                    <img
-                      src="/images/annotation-information.svg"
-                      alt="information"
-                    />
-                    Pengumuman
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/report") ? "bg-[#22D3EE]" : ""
+                      isActive("/admin/profile") ? "bg-[#22D3EE]" : ""
                     }`}
-                    to="/admin/report"
+                    to="/admin/profile"
                   >
-                    <img src="/images/Message.svg" alt="message" />
-                    Laporan Pengguna
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/settings") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/admin/settings"
-                  >
-                    <img src="/images/gear.svg" alt="gear" />
-                    Pengaturan
+                    <img src="/images/admin/profile.svg" alt="profile" />
+                    Profile
                   </Link>
                 </li>
                 <li>
