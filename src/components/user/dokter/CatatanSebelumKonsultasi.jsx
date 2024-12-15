@@ -3,7 +3,7 @@ import React from 'react'
 export default function CatatanSebelumKonsultasi() {
     return (
         < >
-            <div className="w-full max-w-sm lg:w-72 flex flex-col items-start gap-3">
+            <div className="w-full max-w-sm lg:w-72 flex flex-col items-start gap-3 mt-5">
                 <div className="w-full p-3 bg-white rounded-md border border-neutral-300 flex flex-col gap-3">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-teal-50 rounded-md flex items-center">
@@ -32,7 +32,7 @@ export default function CatatanSebelumKonsultasi() {
                         </li>
                     </ol>
                 </div>
-                
+
             </div>
         </>
     )
