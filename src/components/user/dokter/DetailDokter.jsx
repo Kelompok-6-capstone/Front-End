@@ -46,7 +46,10 @@ export default function DetailDokter() {
                             Rp {doctor?.price?.toLocaleString() || '0'}
                         </div>
                     </div>
-                    <div className="mb-6">
+                    <div className="text-neutral-400 text-sm sm:text-base font-normal mb-3">
+                        {doctor.title}
+                    </div>
+                    {/* <div className="mb-6">
                         <h3 className="text-black text-lg lg:text-xl font-medium">Bidang Keahlian</h3>
                         <div className="flex flex-wrap gap-2 mt-2">
                             {(doctor?.specialties || []).map((specialty) => (
@@ -58,7 +61,7 @@ export default function DetailDokter() {
                                 </span>
                             ))}
                         </div>
-                    </div>
+                    </div> */}
                     <div className="mb-6">
                         <h3 className="text-black text-lg lg:text-xl font-medium">Jam Kerja</h3>
                         <p className="text-black text-base font-normal">{doctor?.schedule || 'Tidak tersedia'}</p>
