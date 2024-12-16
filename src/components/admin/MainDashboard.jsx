@@ -1,6 +1,13 @@
 import React from "react";
+import useProfileStore from "../../stores/useProfileStore";
+import { useEffect } from "react";
 
 const MainDashboard = () => {
+  const { fetchProfile } = useProfileStore();
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
   return (
     <>
       {/* ========== MAIN CONTENT ========== */}
