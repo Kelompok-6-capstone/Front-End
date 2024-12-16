@@ -5,11 +5,13 @@ import axiosInstance from "../../utils/axiosInstance";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 import useProfileStore from "../../stores/useProfileStore";
+import useSidebarStore from "../../stores/useSidebarStore";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { profile } = useProfileStore();
+  const { isOpen, toggleSidebar } = useSidebarStore();
 
   const isActive = (path) => location.pathname === path;
 
@@ -57,16 +59,18 @@ const Sidebar = () => {
     <>
       <div
         id="hs-application-sidebar"
-        className="hs-overlay  [--auto-close:lg]
-    hs-overlay-open:translate-x-0
-    -translate-x-full transition-all duration-300 transform
-    fixed inset-y-0 start-0 z-[60]
-    bg-[#ECFEFF] border-gray-200
-    lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 flex w-[277px] h-full px-[24px)] flex-col items-center gap-[var(--Spacing-32, 32px)] flex-shrink-0"
-        role="dialog"
-        tabIndex={-1}
-        aria-label="Sidebar"
+        className={`hs-overlay ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-all duration-300 fixed inset-y-0 start-0 z-[60] bg-[#ECFEFF] border-gray-200 lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 flex lg:w-[277px] h-full lg:px-[24px)] flex-col items-center gap-[var(--Spacing-32, 32px)] flex-shrink-0`}
       >
+        {isOpen && (
+          <button
+            className="absolute -right-20 -top-1 p-2 lg:hidden"
+            onClick={toggleSidebar}
+          >
+            <img src="/images/admin/sidebar-left.svg" alt="" />
+          </button>
+        )}
         <div className="relative flex flex-col h-full max-h-full">
           <div className="px-5 pt-4 justify-center flex flex-col items-center gap-y-8">
             {/* Logo */}
