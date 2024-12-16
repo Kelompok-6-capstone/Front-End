@@ -65,7 +65,7 @@ const Sidebar = () => {
       >
         {isOpen && (
           <button
-            className="absolute -right-20 -top-1 p-2 lg:hidden"
+            className="absolute -right-9 top-4 p-2 lg:hidden"
             onClick={toggleSidebar}
           >
             <img src="/images/admin/sidebar-left.svg" alt="" />
