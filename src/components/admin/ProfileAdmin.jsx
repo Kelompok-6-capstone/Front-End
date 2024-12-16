@@ -3,44 +3,21 @@ import axiosInstance from "../../utils/axiosInstance";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import { Pencil } from "lucide-react";
+import useProfileStore from "../../stores/useProfileStore";
 
 const AdminProfile = () => {
-  const [profile, setProfile] = useState({ username: "", avatar: "" });
+  const { profile, setProfile, fetchProfile } = useProfileStore();
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Fetch admin profile data
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = Cookies.get("token_admin");
-        if (!token) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No admin token found",
-          });
-          return;
-        }
-        const response = await axiosInstance.get("admin/profil", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (response.data.success) {
-          setProfile(response.data.data);
-          setImagePreview(response.data.data.avatar);
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to load profile.",
-        });
-      }
-    };
+    setImagePreview(profile.avatar);
+  }, [profile]);
+
+  useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [fetchProfile]);
 
   const handleImageUpload = async (file) => {
     try {
@@ -61,8 +38,9 @@ const AdminProfile = () => {
         }
       );
 
-      if (response.data?.success && response.data?.data?.avatar) {
-        return response.data.data.avatar;
+      if (response.data?.success && response.data?.data?.avatarUrl) {
+        setProfile({ ...profile, avatar: response.data.data.avatarUrl });
+        return response.data.data.avatarUrl;
       } else {
         throw new Error(response.data?.message || "Gagal mengupload gambar.");
       }
@@ -95,7 +73,6 @@ const AdminProfile = () => {
         const imageUrl = await handleImageUpload(file);
         setImage(imageUrl);
         setImagePreview(imageUrl);
-        setProfile((prev) => ({ ...prev, avatar: imageUrl }));
 
         Swal.fire({
           icon: "success",
