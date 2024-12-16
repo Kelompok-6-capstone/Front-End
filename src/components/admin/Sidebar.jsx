@@ -1,42 +1,17 @@
 import React from "react";
-import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import useProfileStore from "../../stores/useProfileStore";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({ username: "", avatar: "" });
+  const { profile } = useProfileStore();
 
   const isActive = (path) => location.pathname === path;
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = Cookies.get("token_admin");
-        if (!token) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No admin token found",
-          });
-          return;
-        }
-        const response = await axiosInstance.get("admin/profil", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (response.data.success) {
-          setProfile(response.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-      }
-    };
-    fetchProfile();
-  }, []);
 
   const handleLogout = async () => {
     try {
