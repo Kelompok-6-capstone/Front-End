@@ -16,7 +16,7 @@ const Navbar = () => {
       <nav className="px-4 sm:px-6 flex items-center w-full mx-auto">
         <div className="me-5 lg:me-2 lg:hidden">
           <button
-            className="p-1 w-11 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all"
+            className="w-8 absolute top-3 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600 transition-all"
             onClick={toggleSidebar}
           >
             {!isOpen && (
@@ -24,13 +24,13 @@ const Navbar = () => {
             )}
           </button>
         </div>
-        <div className="flex lg:me-2 lg:hidden">
+        <div className="flex relative -right-5 lg:me-2 lg:hidden">
           <a
             className="flex-none rounded-md text-xl inline-block font-semibold focus:outline-none focus:opacity-80"
             href="#"
             aria-label="Calmind"
           >
-            <img src="/images/Calmind.svg" alt="logo" />
+            <img className="w-28" src="/images/Calmind.svg" alt="logo" />
           </a>
         </div>
         <div className="w-full flex items-center justify-end">
