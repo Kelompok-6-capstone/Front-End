@@ -2,6 +2,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axiosInstanceUser from '../../../utils/axiosInstanceUser';
+import Stepper2 from './stepper/Stepper2';
 
 export default function DetailPembayaran() {
     const location = useLocation();
@@ -23,7 +24,7 @@ export default function DetailPembayaran() {
             title: formData.judulKeluhan,
             description: formData.deskripsiKeluhan,
         };
-    
+
         try {
             const response = await axiosInstanceUser.post('/user/consultations', payload);
             if (response.data.success) {
@@ -44,6 +45,7 @@ export default function DetailPembayaran() {
 
     return (
         <>
+            <Stepper2 />
             {/* Ilustrasi Pembayaran */}
             <div className="flex items-center justify-center h-full">
                 <img
