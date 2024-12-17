@@ -70,7 +70,7 @@ const PatientTable = ({ data }) => {
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="w-full">
+        <table className="w-full text-center">
           <thead className="bg-cyan-50">
             <tr>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
