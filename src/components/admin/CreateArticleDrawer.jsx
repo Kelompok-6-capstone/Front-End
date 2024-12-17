@@ -135,8 +135,10 @@ export default function CreateArticleDrawer({
             ? "Artikel berhasil diperbarui."
             : "Artikel berhasil ditambahkan.",
         });
+
+        // Panggil callback dan reload halaman
         onArticleCreated();
-        onClose();
+        window.location.reload(); // Reload halaman setelah artikel berhasil ditambahkan
       } else {
         throw new Error(
           response.data?.message || "Terjadi kesalahan tidak diketahui."
