@@ -1,4 +1,5 @@
 import React from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
@@ -10,8 +11,12 @@ import useSidebarStore from "../../stores/useSidebarStore";
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { profile } = useProfileStore();
+  const { profile, fetchProfile } = useProfileStore();
   const { isOpen, toggleSidebar } = useSidebarStore();
+
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
 
   const isActive = (path) => location.pathname === path;
 
