@@ -55,7 +55,7 @@ const PasienDitangani = () => {
                     <h3 className="font-semibold text-gray-800">
                       {pasien.nama}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-neutral-500">
+                    <p className="text-sm text-gray-500">
                       {pasien.umur} Tahun | {pasien.profesi}
                     </p>
                   </div>
@@ -64,7 +64,7 @@ const PasienDitangani = () => {
                     className="flex items-center me-4"
                   >
                     <svg
-                      className="shrink-0 size-5 text-gray-800 dark:text-neutral-200"
+                      className="shrink-0 size-5 text-gray-800"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"

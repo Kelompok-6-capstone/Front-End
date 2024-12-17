@@ -106,7 +106,7 @@ const DashboardDokter = () => {
                 pasienBaru.map((pasien, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-row w-[584px] h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
+                    className="flex flex-row w-[500px] h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
                   >
                     <img
                       src={pasien.avatar || "/images/admin/admin-profil.png"}
@@ -117,7 +117,7 @@ const DashboardDokter = () => {
                       <h3 className="font-semibold text-gray-800">
                         {pasien.nama}
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                      <p className="text-sm text-gray-500">
                         {pasien.umur} Tahun | {pasien.profesi}
                       </p>
                     </div>
@@ -126,7 +126,7 @@ const DashboardDokter = () => {
                       className="flex items-center me-4"
                     >
                       <svg
-                        className="shrink-0 size-5 text-gray-800 dark:text-neutral-200"
+                        className="shrink-0 size-5 text-gray-800"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -146,7 +146,7 @@ const DashboardDokter = () => {
                 <p className="text-gray-500">Belum ada pasien baru.</p>
               )}
             </div>
-            <div className="mt-4 flex justify-end w-[584px]">
+            <div className="mt-4 flex justify-end w-[500px]">
               <Link to="/dokter/daftar-pasien-baru">
                 <button className="px-4 py-2 w-[194px] bg-cyan-50 text-cyan-900 border border-cyan-900 rounded">
                   Lihat Semua
@@ -163,7 +163,7 @@ const DashboardDokter = () => {
                 pasienDitangani.map((pasien, idx) => (
                   <div
                     key={idx}
-                    className="flex flex-row w-[584px] h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
+                    className="flex flex-row w-[500px] h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
                   >
                     <img
                       src={pasien.avatar || "/images/admin/admin-profil.png"}
@@ -174,7 +174,7 @@ const DashboardDokter = () => {
                       <h3 className="font-semibold text-gray-800">
                         {pasien.nama}
                       </h3>
-                      <p className="text-sm text-gray-500 dark:text-neutral-500">
+                      <p className="text-sm text-gray-500">
                         {pasien.umur} Tahun | {pasien.profesi}
                       </p>
                     </div>
@@ -183,7 +183,7 @@ const DashboardDokter = () => {
                       className="flex items-center me-4"
                     >
                       <svg
-                        className="shrink-0 size-5 text-gray-800 dark:text-neutral-200"
+                        className="shrink-0 size-5 text-gray-800"
                         xmlns="http://www.w3.org/2000/svg"
                         width="24"
                         height="24"
@@ -205,7 +205,7 @@ const DashboardDokter = () => {
                 </p>
               )}
             </div>
-            <div className="mt-4 flex justify-end w-[584px]">
+            <div className="mt-4 flex justify-end w-[500px]">
               <Link to="/dokter/daftar-pasien-tertangani">
                 <button className="px-4 py-2 w-[194px] bg-cyan-50 text-cyan-900 border border-cyan-900 rounded">
                   Lihat Semua
@@ -220,7 +220,7 @@ const DashboardDokter = () => {
             {notifications.map((notification, idx) => (
               <div
                 key={idx}
-                className="w-[394px] h-[100px] bg-white border border-cyan-950 rounded-xl p-4 mb-4 flex items-center ml-[-70px]"
+                className="w-[385px] h-[100px] bg-white border border-cyan-950 rounded-xl p-4 mb-4 flex items-center ml-[-70px]"
               >
                 <img
                   src={notification.avatar || "/images/admin/admin-profil.png"}

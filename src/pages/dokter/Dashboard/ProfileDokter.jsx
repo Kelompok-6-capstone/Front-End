@@ -57,7 +57,7 @@ const ProfileDokter = () => {
       <Navbar />
       <Sidebar />
       {/* Container Utama */}
-      <div className="flex min-h-screen bg-gray-50 dark:bg-neutral-900">
+      <div className="flex min-h-screen bg-gray-50">
         {/* Sidebar Spacing */}
         <div className="hidden lg:block lg:w-72"></div>
         {/* Konten Utama */}
@@ -69,7 +69,7 @@ const ProfileDokter = () => {
               alt="Profile"
               className="w-24 h-24 rounded-full border border-gray-300 shadow-md"
             />
-            <h1 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+            <h1 className="text-xl font-semibold text-gray-800">
               {profile.username}
             </h1>
           </div>
@@ -83,7 +83,7 @@ const ProfileDokter = () => {
               >
                 <img src={item.icon} alt="icon" className="w-8 h-8" />
                 <div className="ml-5">
-                  <p className="text-gray-800 dark:text-neutral-200 font-medium">
+                  <p className="text-gray-800  :text-neutral-200 font-medium">
                     {item.title}
                   </p>
                 </div>
@@ -94,7 +94,7 @@ const ProfileDokter = () => {
           {/* Card Detail Dokter untuk About */}
           <div className="mt-6 w-full max-w-md space-y-4">
             <div className="bg-white border border-cyan-950 shadow-sm rounded-xl p-6 w-[426px] max-w-lg">
-              <p className="text-gray-600 dark:text-neutral-300">
+              <p className="text-gray-600  :text-neutral-300">
                 {detailDokter.experience}
               </p>
             </div>
