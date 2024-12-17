@@ -1,24 +1,56 @@
 import React, { useState, useEffect } from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
-import { useDeletePatient } from "../../hooks/admin/useDeletePatients";
+import Swal from "sweetalert2";
 import axiosInstance from "../../utils/axiosInstance";
 import Cookies from "js-cookie";
 
 const PatientTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
-  const { deletePatient, deletedPatientId, loading, error } =
-    useDeletePatient();
   const [patients, setPatients] = useState(data);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPatient, setSelectedPatient] = useState(null);
   const [doctorRecommendation, setDoctorRecommendation] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async (id) => {
-    const success = await deletePatient(id);
-    if (success) {
-      const updatedPatients = patients.filter((patient) => patient.id !== id);
-      setPatients(updatedPatients);
+    const confirmResult = await Swal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Data pasien ini akan dihapus secara permanen!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    });
+
+    if (!confirmResult.isConfirmed) return;
+
+    setIsDeleting(true);
+
+    try {
+      const token = Cookies.get("token_admin");
+      if (!token) {
+        throw new Error("No admin token found");
+      }
+
+      await axiosInstance.delete(`/admin/users/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      await Swal.fire("Berhasil!", "Data pasien telah dihapus.", "success");
+      window.location.reload(); // Reload the page after successful deletion
+    } catch (err) {
+      console.error("Gagal menghapus pasien:", err);
+      await Swal.fire(
+        "Gagal!",
+        err.response?.data?.message ||
+          "Terjadi kesalahan saat menghapus pasien.",
+        "error"
+      );
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -70,7 +102,7 @@ const PatientTable = ({ data }) => {
   return (
     <>
       <div className="overflow-x-auto">
-        <table className="w-full text-center">
+        <table className="w-full">
           <thead className="bg-cyan-50">
             <tr>
               <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
@@ -139,9 +171,9 @@ const PatientTable = ({ data }) => {
                     </button>
                     <button
                       onClick={() => handleDelete(patient.id)}
-                      disabled={loading && deletedPatientId === patient.id}
+                      disabled={isDeleting}
                     >
-                      {loading && deletedPatientId === patient.id ? (
+                      {isDeleting ? (
                         "Menghapus..."
                       ) : (
                         <img src="/images/admin/trash-button.svg" alt="trash" />
@@ -153,7 +185,6 @@ const PatientTable = ({ data }) => {
             ))}
           </tbody>
         </table>
-        {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
 
       {isModalOpen && (

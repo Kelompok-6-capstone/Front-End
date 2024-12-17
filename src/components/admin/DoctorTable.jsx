@@ -2,19 +2,55 @@ import React, { useState } from "react";
 import useSortData from "../../hooks/admin/useSortData";
 import { getSortIcon } from "../../utils/getSortIcon";
 import { useDeleteDoctor } from "../../hooks/admin/useDeleteDoctor";
+import axiosInstance from "../../utils/axiosInstance";
+import Cookies from "js-cookie";
 
 const DoctorTable = ({ data }) => {
   const { sortedData, sortConfig, requestSort } = useSortData(data);
   const { deleteDoctor, deletedDoctorId, loading, error } = useDeleteDoctor();
   const [doctors, setDoctors] = useState(data);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [doctorAbout, setDoctorAbout] = useState("");
 
   const handleDelete = async (id) => {
     const success = await deleteDoctor(id);
     if (success) {
       // Filter dokter yang tersisa setelah penghapusan
-      const updatedDoctors = doctors.filter((doctor) => doctor.id !== id);
-      setDoctors(updatedDoctors); // Perbarui state dokter
+      window.location.reload();
     }
+  };
+
+  const handleActionClick = async (doctor) => {
+    setSelectedDoctor(doctor);
+    setIsModalOpen(true);
+
+    try {
+      const token = Cookies.get("token_admin");
+      if (!token) {
+        throw new Error("No admin token found");
+      }
+
+      const response = await axiosInstance.get("/admin/alldocters", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const doctorData = response.data.data.find((doc) => doc.id === doctor.id);
+
+      if (doctorData) {
+        setDoctorAbout(doctorData.about || "Tidak ada informasi tambahan.");
+      } else {
+        setDoctorAbout("Data dokter tidak ditemukan.");
+      }
+    } catch (error) {
+      console.error("Error fetching doctor data:", error);
+      setDoctorAbout("Gagal mengambil data dokter.");
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedDoctor(null);
+    setDoctorAbout("");
   };
 
   return (
@@ -101,7 +137,7 @@ const DoctorTable = ({ data }) => {
                 </td>
                 <td className="py-4 border-r border-opacity-15 border-[#000]">
                   <div className="flex gap-1 items-center justify-center w-32">
-                    <button>
+                    <button onClick={() => handleActionClick(doctor)}>
                       <img src="/images/admin/action.svg" alt="action" />
                     </button>
                     <button
@@ -122,6 +158,25 @@ const DoctorTable = ({ data }) => {
         </table>
         {error && <p className="text-red-500 mt-4">{error}</p>}
       </div>
+
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-20 flex items-center justify-center p-4">
+          <div className="bg-white rounded-2xl shadow-lg max-w-md w-full mx-auto p-6">
+            <div className="flex flex-col items-center text-center">
+              <h2 className="text-xl font-bold mb-6">
+                Tentang Dokter {selectedDoctor?.username}
+              </h2>
+              <p>{doctorAbout}</p>
+              <button
+                onClick={closeModal}
+                className="mt-8 px-6 py-2 bg-slate-500 text-white rounded-md hover:bg-slate-700 transition-colors"
+              >
+                Kembali
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
