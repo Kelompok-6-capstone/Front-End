@@ -13,25 +13,32 @@ const Transaksi = () => {
   const fetchConsultations = async () => {
     try {
       const response = await getConsultations();
+      console.log("API Response:", response);
+  
       if (response?.data) {
         const formattedData = response.data.reduce((acc, consultation) => {
+          if (!consultation.created_at) {
+            console.warn("Missing created_at in consultation:", consultation);
+            return acc;
+          }
+  
           const dateObj = new Date(consultation.created_at);
           const formattedDate = `${dateObj.getDate().toString().padStart(2, "0")}-${(dateObj.getMonth() + 1)
             .toString()
             .padStart(2, "0")}-${dateObj.getFullYear()}`;
           const monthYear = `${dateObj.toLocaleString("id-ID", { month: "long" })} ${dateObj.getFullYear()}`;
-
+  
           const record = {
             date: formattedDate,
             month: dateObj.getMonth() + 1,
             year: dateObj.getFullYear(),
-            name: consultation.user.username,
-            amount: `Rp${consultation.doctor.price.toLocaleString("id-ID")},00`,
+            name: consultation.user?.username || "Tidak ada nama",
+            amount: "Rp. 100.000,00",
             status: consultation.payment_status === "paid" ? "Selesai" : "DiProses",
           };
-
+  
           const existingMonth = acc.find((item) => item.month === monthYear);
-
+  
           if (existingMonth) {
             existingMonth.records.push(record);
           } else {
@@ -40,10 +47,10 @@ const Transaksi = () => {
               records: [record],
             });
           }
-
+  
           return acc;
         }, []);
-
+  
         setData(formattedData);
         setFilteredData(formattedData);
       } else {
@@ -52,7 +59,7 @@ const Transaksi = () => {
     } catch (error) {
       console.error("Error fetching consultations:", error);
     }
-  };
+  };  
 
   // Fungsi untuk memfilter data berdasarkan bulan dan tahun
   const handleFilter = () => {

@@ -132,7 +132,7 @@ const DetailPassien = () => {
       });
       return;
     }
-  
+
     try {
       await SendRecommendation(id, recommendation);
       Swal.fire({
@@ -141,7 +141,7 @@ const DetailPassien = () => {
         text: "Rekomendasi berhasil dikirim.",
         confirmButtonText: "OK",
       });
-  
+
       setRecommendation("");
     } catch (error) {
       console.error("Gagal mengirim rekomendasi:", error);
@@ -160,7 +160,7 @@ const DetailPassien = () => {
 
   return (
     <div className="min-h-screen">
-    <Navbar/>
+      <Navbar />
       {/* Konten Halaman */}
       <div className="flex justify-center items-center mt-4">
         <div className="bg-white w-full p-12 grid grid-cols-6 gap-6">
@@ -180,7 +180,7 @@ const DetailPassien = () => {
 
           {/* card 2 --> riwayat konsultasi */}
           <div
-            className="col-span-2 bg-white p-4 -ml-24 h-[305px] w-[354px] rounded-lg border border-teal-900 overflow-y-auto"
+            className="col-span-2 bg-white p-4 -ml-14 h-[305px] w-[354px] rounded-lg border border-teal-900 overflow-y-auto"
             style={{
               scrollbarWidth: "none",
               msOverflowStyle: "none",
@@ -213,7 +213,7 @@ const DetailPassien = () => {
           </div>
 
           {/* card 3 --> chat passien */}
-          <div className="col-span-2 row-span-2 bg-white h-[634px] w-[570px] p-4 -ml-40 rounded-lg border border-teal-900 flex flex-col">
+          <div className="col-span-2 row-span-2 bg-white h-[634px] w-[470px] p-4 -ml-20 rounded-lg border border-teal-900 flex flex-col">
             <h3 className="text-lg font-semibold mb-4 text-center">
               Chat Pasien
             </h3>
@@ -263,7 +263,7 @@ const DetailPassien = () => {
           </div>
 
           {/* card 5 baris 2 --> rekomendasi */}
-          <div className="col-span-1 bg-white p-4 -ml-24 h-[305px] w-[354px] p-4 rounded-lg border border-teal-900">
+          <div className="col-span-1 bg-white p-4 -ml-14 h-[305px] w-[354px] p-4 rounded-lg border border-teal-900">
             <h3 className="text-md font-semibold mb-2">Beri Rekomendasi</h3>
             <textarea
               placeholder="Ketik Rekomendasi"
