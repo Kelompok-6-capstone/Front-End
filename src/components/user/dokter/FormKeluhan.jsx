@@ -1,8 +1,7 @@
-// Komponen FormKeluhan
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstanceUser from '../../../utils/axiosInstanceUser';
-// import Stepper from './Stepper';
+import Stepper1 from './stepper/Stepper1';
 
 export default function FormKeluhan() {
     const { doctorId } = useParams(); // Mendapatkan doctorId dari parameter URL
@@ -52,7 +51,7 @@ export default function FormKeluhan() {
 
     return (
         <>
-            {/* <Stepper /> */}
+            <Stepper1 />
             <div className="max-w-4xl mx-auto bg-white rounded-lg border border-neutral-300 p-6 space-y-6">
                 <h2 className="text-xl font-medium text-black mb-4">Informasi Pribadi</h2>
                 <form className="space-y-4">

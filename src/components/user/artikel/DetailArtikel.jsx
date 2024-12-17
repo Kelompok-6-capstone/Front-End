@@ -31,7 +31,7 @@ const DetailArtikel = () => {
     return (
         <section className="bg-white md:p-10 lg:-ms-10">
             <img
-                src={article.gambar || '/default-image.jpg'} // Gunakan default image jika `gambar` kosong
+                src={article.gambar}
                 alt={article.judul}
                 className="w-full h-64 object-cover rounded-lg mb-6"
             />

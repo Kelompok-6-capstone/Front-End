@@ -6,7 +6,7 @@ export default function StatusPembayaranPage() {
     return (
         <div>
             <Navbar />
-            <div className="">
+            <div className='lg:px-[100px] lg:me-5 mt-28'>
                 <StatusPembayaran />
             </div>
         </div>

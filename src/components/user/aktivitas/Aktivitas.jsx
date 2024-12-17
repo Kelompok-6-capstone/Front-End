@@ -68,7 +68,7 @@ export default function Aktivitas() {
                             <div className="flex items-center">
                                 <div className="flex items-center">
                                     <div
-                                        className={`px-4 py-2 text-white text-xs font-medium rounded-md ${aktivitas.payment_status === 'paid' ? 'bg-green-500' : 'bg-red-500'}`}
+                                        className={`px-4 py-2 text-white text-xs font-medium rounded-md ${aktivitas.payment_status === 'paid' ? 'bg-green-500' : 'bg-neutral-300'}`}
                                     >
                                         {aktivitas.payment_status === 'paid' ? 'Selesai' : 'Pending'}
                                     </div>

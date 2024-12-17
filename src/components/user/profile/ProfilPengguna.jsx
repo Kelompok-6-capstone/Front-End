@@ -25,6 +25,7 @@ const ProfilPengguna = () => {
         alamat: "",
         tgl_lahir: "",
         jenis_kelamin: "",
+        pekerjaan: "",
     });
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -90,6 +91,7 @@ const ProfilPengguna = () => {
             }
         }
     };
+    console.log(formData);
 
     const handleAvatarUpload = async (e) => {
         const file = e.target.files[0];
@@ -195,6 +197,7 @@ const ProfilPengguna = () => {
                         { label: "Nama Lengkap", name: "username" },
                         { label: "Email", name: "email", readOnly: true },
                         { label: "Nomor Telpon", name: "no_hp", type: "number" },
+                        { label: "Pekerjaan", name: "pekerjaan" },
                         { label: "Alamat", name: "alamat" },
                         { label: "Tanggal Lahir", name: "tgl_lahir", type: "date" },
                         { label: "Jenis Kelamin", name: "jenis_kelamin" },
