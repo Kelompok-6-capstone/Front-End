@@ -45,7 +45,7 @@ const DoctorTable = ({ data }) => {
                 Tanggal Lahir
               </th>
               <th
-                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
+                className="px-10 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
                 onClick={() => requestSort("domisili")}
               >
                 Domisili {getSortIcon(sortConfig, "domisili")}
@@ -57,7 +57,7 @@ const DoctorTable = ({ data }) => {
                 Spesialisasi {getSortIcon(sortConfig, "spesialisasi")}
               </th>
               <th
-                className="px-20 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
+                className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000] cursor-pointer"
                 onClick={() => requestSort("harga")}
               >
                 Harga {getSortIcon(sortConfig, "harga")}
@@ -67,7 +67,7 @@ const DoctorTable = ({ data }) => {
               </th>
             </tr>
           </thead>
-          <tbody className="bg-cyan-50">
+          <tbody className="bg-cyan-50 text-center">
             {sortedData.map((doctor) => (
               <tr key={doctor.id}>
                 <td className="px-6 py-4 border-r border-l border-opacity-15 border-[#000]">
@@ -85,19 +85,19 @@ const DoctorTable = ({ data }) => {
                   {doctor.email}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.noTelp}
+                  {doctor.no_hp}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.tanggalLahir}
+                  {doctor.date_of_birth}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.domisili}
+                  {doctor.address}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.spesialisasi}
+                  {doctor.title.name}
                 </td>
                 <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                  {doctor.harga}
+                  {doctor.price}
                 </td>
                 <td className="py-4 border-r border-opacity-15 border-[#000]">
                   <div className="flex gap-1 items-center justify-center w-32">
