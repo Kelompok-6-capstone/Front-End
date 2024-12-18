@@ -69,7 +69,7 @@ const RegisterDoctorPage = () => {
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <img
-                  src="../../../public/images/auth/user.svg"
+                src="/images/auth/user.svg"
                   alt="logo email"
                 />
               </div>
@@ -92,7 +92,7 @@ const RegisterDoctorPage = () => {
               />
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <img
-                  src="../../../public/images/auth/email.svg"
+                src="/images/auth/email.svg"
                   alt="logo email"
                 />
               </div>
