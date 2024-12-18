@@ -4,10 +4,10 @@ import Swal from "sweetalert2";
 import {
   getProfileDoctor,
   updateProfileDoctor,
-  getTitles,
   getTags,
-  uploadAvatarDoctor,
-} from "../../api/doctor/doctor";
+  getTitles,
+} from "../../api/doctor/profileDoctor";
+import { uploadAvatarDoctor } from "../../api/doctor/fotoDoctor";
 
 const LengkapiProfile = () => {
   const [titles, setTitles] = useState([]);
@@ -52,7 +52,11 @@ const LengkapiProfile = () => {
           tags: profileData.data.specialists?.map((spec) => spec.id) || [],
         });
       } catch (error) {
-        console.error("Failed to fetch profile:", error);
+        throw new Error(
+          error.response?.data?.message ||
+            error.message ||
+            "Gagal memuat profil."
+        );
       }
     };
 
@@ -64,7 +68,11 @@ const LengkapiProfile = () => {
         const fetchedTags = await getTags();
         setTags(fetchedTags);
       } catch (error) {
-        console.error("Failed to fetch titles or tags:", error);
+        throw new Error(
+          error.response?.data?.message ||
+            error.message ||
+            "Gagal memuat title atau tags."
+        );
       }
     };
 
@@ -116,10 +124,14 @@ const LengkapiProfile = () => {
       const avatarUrl = await uploadAvatarDoctor(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        avatar: avatarUrl, // Update URL avatar setelah berhasil diunggah
+        avatar: avatarUrl, 
       }));
     } catch (error) {
-      console.error("Gagal mengunggah avatar:", error);
+      throw new Error(
+        error.response?.data?.message ||
+          error.message ||
+          "Gagal mengunggah avatar."
+      );
     }
   };
 
@@ -152,7 +164,6 @@ const LengkapiProfile = () => {
 
       navigate("/dokter/dashboard");
     } catch (error) {
-      console.error("Failed to update profile:", error);
       Swal.fire({
         icon: "error",
         title: "Gagal",

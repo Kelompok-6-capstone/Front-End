@@ -3,15 +3,9 @@ import Sidebar from "../../../components/dokter/Sidebar";
 
 const InformasiAPK = () => (
   <>
-    {/* Navbar */}
     <Navbar />
-
-    {/* Container dengan Sidebar dan Konten */}
     <div className="flex">
-      {/* Sidebar */}
       <Sidebar />
-
-      {/* Konten Utama */}
       <div className="flex-grow bg-gray-50 p-8 min-h-screen lg:ml-[277px]">
         <div>
           <h2 className="text-xl font-semibold mb-4">Informasi Aplikasi</h2>

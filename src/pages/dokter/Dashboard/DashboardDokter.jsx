@@ -1,27 +1,43 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../../components/dokter/Navbar";
 import Sidebar from "../../../components/dokter/Sidebar";
-import { getConsultations } from "../../../api/doctor/doctor";
-import { Link } from "react-router-dom";
+import { getConsultations } from "../../../api/doctor/consultationsDoctor";
+import { Link, useNavigate } from "react-router-dom";
+import Loading from "../../../components/user/Loading";
 
 const DashboardDokter = () => {
   const [pasienBaru, setPasienBaru] = useState([]);
   const [pasienDitangani, setPasienDitangani] = useState([]);
-  const [notifications, setNotifications] = useState([])
+  const [notifications, setNotifications] = useState([]);
+  const [selectedNotification, setSelectedNotification] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  // Fungsi grupByEmail untuk mengelompokkan pasien berdasarkan email
+  const groupByEmail = (patients) => {
+    const grouped = {};
+    patients.forEach((item) => {
+      const email = item.user.email;
+      if (!grouped[email]) {
+        grouped[email] = [];
+      }
+      grouped[email].push(item);
+    });
+    return grouped;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getConsultations();
-        console.log("API Response:", response);
 
         if (response.data && Array.isArray(response.data)) {
           const data = response.data;
 
-          console.log("Fetched Data:", data);
+          const baru = data
+            .filter((item) => item.status === "approved")
+            .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)); //mengurtukan data pasein dari yang terbaru
 
-          // Filter pasien berdasarkan status
-          const baru = data.filter((item) => item.status === "approved");
           const ditangani = data.filter((item) => item.status === "expired");
 
           // Set data pasien baru
@@ -33,13 +49,19 @@ const DashboardDokter = () => {
                 new Date().getFullYear() -
                 new Date(item.user.tgl_lahir).getFullYear(),
               profesi: item.user.pekerjaan || "Tidak diketahui",
-              avatar: item.user.avatar,
+              avatar: item.user.avatar || "/images/admin/admin-profil.png",
             }))
           );
 
-          // Set data pasien yang sudah ditangani
+          // Grupkan pasien yang sudah ditangani berdasarkan email
+          const groupedPasien = groupByEmail(ditangani);
+          const pasienDitanganiArray = Object.values(groupedPasien)
+            .map((group) => group[group.length - 1])
+            .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)); // Urutkan berdasarkan tanggal
+
+          // Set data pasien sudah ditangani
           setPasienDitangani(
-            ditangani.map((item) => ({
+            pasienDitanganiArray.map((item) => ({
               id: item.id,
               nama: item.user.username,
               umur:
@@ -50,47 +72,64 @@ const DashboardDokter = () => {
             }))
           );
 
-          // Set notifikasi berdasarkan data dari API
-          const notificationsFromApi = data.map((item) => {
-            const baseNotification = {
-              title: "",
-              message: "",
-              time: new Date(item.updated_at).toLocaleString("id-ID", {
-                day: "numeric",
+          // Notifikasi
+          const sortedNotifications = data
+            .map((item) => ({
+              avatar: item.user.avatar,
+              title:
+                item.status === "approved"
+                  ? `Pasien Baru ${item.user.username}`
+                  : `Keluhan Baru dari ${item.user.username}`,
+              message: item.status === "expired" ? "Periksa keluhan ini." : "",
+              time: new Date(item.updated_at),
+              id: item.id,
+            }))
+            .filter(
+              (notification) => notification.message !== "Periksa keluhan ini."
+            )
+            .sort((a, b) => b.time - a.time);
+
+          // Format tanggal dan waktu menjadi string yang diinginkan
+          const formattedNotifications = sortedNotifications.map(
+            (notification) => ({
+              ...notification,
+              formattedTime: notification.time.toLocaleString("id-ID", {
+                day: "2-digit",
                 month: "long",
                 year: "numeric",
                 hour: "2-digit",
                 minute: "2-digit",
               }),
-            };
+            })
+          );
 
-            // Tentukan notifikasi berdasarkan status
-            if (item.status === "approved") {
-              return {
-                ...baseNotification,
-                title: `Pasien Baru Bernama ${item.user.username}`,
-              };
-            } else if (item.status === "expired") {
-              return {
-                ...baseNotification,
-                title: `Keluhan Baru dari ${item.user.username}`,
-                message: `Periksa dan tangani keluhan terbaru.`,
-              };
-            }
-            return null;
-          });
-
-          setNotifications(notificationsFromApi.filter(Boolean));
-        } else {
-          console.error("Unexpected API response structure:", response);
+          setNotifications(formattedNotifications);
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching consultations:", error);
+        setLoading(false);
       }
     };
 
-    fetchData();
+    // data akan berubah di halaman setiap 1 detik
+    // jadi jika ada notif dan pasien baru itu langsung muncul gak perlu refresh manual
+    const intervalId = setInterval(fetchData, 1000);
+    return () => clearInterval(intervalId);
   }, []);
+
+  const handlePatientClick = (patientId) => {
+    navigate(`/dokter/detail-passien/${patientId}`);
+  };
+
+  const handleNotificationClick = (notification) => {
+    setSelectedNotification(notification);
+    navigate(`/dokter/detail-passien/${notification.id}`);
+  };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <>
@@ -103,9 +142,10 @@ const DashboardDokter = () => {
             <h2 className="text-xl font-semibold mb-4">Pasien Baru</h2>
             <div className="grid grid-cols-1 gap-4">
               {pasienBaru.length > 0 ? (
-                pasienBaru.map((pasien, idx) => (
+                pasienBaru.slice(0, 2).map((pasien, idx) => (
                   <div
                     key={idx}
+                    onClick={() => handlePatientClick(pasien.id)}
                     className="flex flex-row w-[500px] h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
                   >
                     <img
@@ -121,10 +161,7 @@ const DashboardDokter = () => {
                         {pasien.umur} Tahun | {pasien.profesi}
                       </p>
                     </div>
-                    <a
-                      href={`detail-passien/${pasien.id}`}
-                      className="flex items-center me-4"
-                    >
+                    <button className="flex items-center me-4">
                       <svg
                         className="shrink-0 size-5 text-gray-800"
                         xmlns="http://www.w3.org/2000/svg"
@@ -136,10 +173,11 @@ const DashboardDokter = () => {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        onClick={() => handlePatientClick(pasien.id)}
                       >
                         <path d="m9 18 6-6-6-6" />
                       </svg>
-                    </a>
+                    </button>
                   </div>
                 ))
               ) : (
@@ -160,9 +198,10 @@ const DashboardDokter = () => {
             </h2>
             <div className="grid grid-cols-1 gap-4">
               {pasienDitangani.length > 0 ? (
-                pasienDitangani.map((pasien, idx) => (
+                pasienDitangani.slice(0, 2).map((pasien, idx) => (
                   <div
                     key={idx}
+                    onClick={() => handlePatientClick(pasien.id)}
                     className="flex flex-row w-[500px] h-[76px] max-w-2xl bg-white border border-cyan-950 rounded-xl"
                   >
                     <img
@@ -178,10 +217,7 @@ const DashboardDokter = () => {
                         {pasien.umur} Tahun | {pasien.profesi}
                       </p>
                     </div>
-                    <a
-                      href={`detail-passien/${pasien.id}`}
-                      className="flex items-center me-4"
-                    >
+                    <button className="flex items-center me-4">
                       <svg
                         className="shrink-0 size-5 text-gray-800"
                         xmlns="http://www.w3.org/2000/svg"
@@ -193,15 +229,16 @@ const DashboardDokter = () => {
                         strokeWidth="2"
                         strokeLinecap="round"
                         strokeLinejoin="round"
+                        onClick={() => handlePatientClick(pasien.id)}
                       >
                         <path d="m9 18 6-6-6-6" />
                       </svg>
-                    </a>
+                    </button>
                   </div>
                 ))
               ) : (
                 <p className="text-gray-500">
-                  Belum ada pasien yang di tangani.
+                  Belum ada pasien yang ditangani.
                 </p>
               )}
             </div>
@@ -215,33 +252,60 @@ const DashboardDokter = () => {
           </div>
 
           {/* Notifikasi */}
-          <div className="lg:col-span-1">
-            <h2 className="text-xl font-semibold mb-4">Notifikasi</h2>
-            {notifications.map((notification, idx) => (
-              <div
-                key={idx}
-                className="w-[385px] h-[100px] bg-white border border-cyan-950 rounded-xl p-4 mb-4 flex items-center ml-[-70px]"
-              >
-                <img
-                  src={notification.avatar || "/images/admin/admin-profil.png"}
-                  className="w-14 h-14 rounded-full m-2 object-cover mx-2"
-                  alt="Profil Notifikasi"
-                />
-                <div className="flex flex-col justify-center flex-grow p-4">
-                  <h3 className="text-l font-semibold text-blue-500">
-                    {notification.title}
-                  </h3>
-                  {notification.message && (
-                    <p className="text-sm text-gray-600 mt-1">
-                      {notification.message}
-                    </p>
-                  )}
-                  <p className="text-xs text-gray-500 mt-2">
-                    {notification.time}
-                  </p>
-                </div>
-              </div>
-            ))}
+          <div className="lg:col-span-1 -ml-24">
+            <h2 className="text-xl font-semibold mb-2">Notifikasi</h2>
+            <div
+              className="max-h-[470px] overflow-y-auto w-[385px] h-auto p-2"
+              style={{
+                scrollbarWidth: "none",
+                msOverflowStyle: "none",
+              }}
+            >
+              <style>
+                {` /* Untuk browser berbasis Webkit seperti Chrome, Safari, dan Edge */
+      .no-scrollbar::-webkit-scrollbar {
+      display: none; }`}
+              </style>
+              {notifications.length === 0 ? (
+                <p className="text-center text-gray-500">
+                  Tidak ada notifikasi
+                </p>
+              ) : (
+                notifications.map((notification, idx) => (
+                  <div
+                    key={idx}
+                    className={`w-[100%] h-[100px] bg-white border border-cyan-950 rounded-xl p-4 mb-4 flex items-center ${
+                      selectedNotification &&
+                      selectedNotification.id === notification.id
+                        ? "bg-blue-100"
+                        : ""
+                    }`}
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    <img
+                      src={
+                        notification.avatar || "/images/admin/admin-profil.png"
+                      }
+                      className="w-16 h-16 rounded-full object-cover mx-2 mr-6"
+                      alt="Profil Notifikasi"
+                    />
+                    <div className="flex flex-col justify-center flex-grow">
+                      <h3 className="text-l font-semibold text-blue-500">
+                        {notification.title}
+                      </h3>
+                      {notification.message && (
+                        <p className="text-sm text-gray-600 mt-1">
+                          {notification.message}
+                        </p>
+                      )}
+                      <p className="text-xs text-gray-500 mt-2">
+                        {notification.formattedTime}
+                      </p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

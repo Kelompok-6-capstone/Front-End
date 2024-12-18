@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../../components/dokter/Navbar";
-import { getConsultations } from "../../../api/doctor/doctor";
+import { getConsultations } from "../../../api/doctor/consultationsDoctor";
 
 const PasienDitangani = () => {
   const [patients, setPatients] = useState([]);
@@ -9,6 +9,7 @@ const PasienDitangani = () => {
     const fetchConsultations = async () => {
       try {
         const response = await getConsultations();
+  
         const expiredPatients = response.data
           .filter((consultation) => consultation.status === "expired")
           .map((consultation) => ({
@@ -19,17 +20,26 @@ const PasienDitangani = () => {
               new Date(consultation.user.tgl_lahir).getFullYear(),
             profesi: consultation.user.pekerjaan || "Tidak diketahui",
             avatar:
-              consultation.user.avatar || "/images/admin/admin-profil.png",
-          }));
-
+              consultation.user.avatar,
+            updatedAt: new Date(consultation.updated_at), 
+          }))
+          .sort((a, b) => b.updatedAt - a.updatedAt);
+  
         setPatients(expiredPatients);
       } catch (error) {
-        console.error("Failed to fetch consultations:", error);
+        throw new Error(
+          error.response?.data?.message ||
+          error.message ||
+          "Terjadi kesalahan saat memuat data konsultasi."
+        );
       }
     };
-
-    fetchConsultations();
-  }, []);
+    
+    const intervalId = setInterval(fetchConsultations, 1000);
+  
+    // Cleanup polling saat komponen unmount
+    return () => clearInterval(intervalId);
+  }, []);  
 
   return (
     <>

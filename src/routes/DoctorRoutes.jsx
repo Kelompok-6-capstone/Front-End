@@ -22,6 +22,7 @@ const DoctorRoutes = () => (
     <Route path="register" element={<RegisterDoctorPage />} />
     <Route path="verify-otp" element={<VerifyOtpDoctorPage />} />
     <Route path="login" element={<LoginDoctorPage />} />
+    <Route path="lengkapi-profile" element={<LengkapiProfile/>}/>
     <Route
       path="dashboard"
       element={
@@ -110,15 +111,6 @@ const DoctorRoutes = () => (
       element={
         <DoctorProtectedRoute>
           <InformasiAPK />
-        </DoctorProtectedRoute>
-      }
-    />
-
-    <Route
-      path="lengkapi-profile"
-      element={
-        <DoctorProtectedRoute>
-          <LengkapiProfile />
         </DoctorProtectedRoute>
       }
     />
