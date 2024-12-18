@@ -247,7 +247,7 @@ const DetailPassien = () => {
               />
               <button className="absolute right-2 p-2">
                 <img
-                  src="/public/images/send.svg"
+                  src="/images/send.svg"
                   alt="Kirim"
                   className="w-5 h-5"
                 />
