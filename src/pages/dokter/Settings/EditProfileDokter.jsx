@@ -3,9 +3,11 @@ import {
   getProfileDoctor,
   updateProfileDoctor,
   getTitles,
+} from "../../../api/doctor/profileDoctor";
+import {
   uploadAvatarDoctor,
   deleteAvatarDoctor,
-} from "../../../api/doctor/doctor";
+} from "../../../api/doctor/fotoDoctor";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/dokter/Navbar";
 import Sidebar from "../../../components/dokter/Sidebar";
@@ -49,7 +51,11 @@ const EditProfileDokter = () => {
           avatar: profileData.data.avatar,
         });
       } catch (error) {
-        console.error("Failed to fetch profile:", error);
+        throw new Error(
+          error.response?.data?.message ||
+            error.message ||
+            "Failed to fetch profile."
+        );
       }
     };
 
@@ -58,7 +64,11 @@ const EditProfileDokter = () => {
         const fetchedTitles = await getTitles();
         setTitles(fetchedTitles);
       } catch (error) {
-        console.error("Failed to fetch titles or tags:", error);
+        throw new Error(
+          error.response?.data?.message ||
+            error.message ||
+            "Failed to fetch titles or tags."
+        );
       }
     };
 
@@ -94,10 +104,14 @@ const EditProfileDokter = () => {
       const avatarUrl = await uploadAvatarDoctor(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
-        avatar: avatarUrl, // Update URL avatar setelah berhasil diunggah
+        avatar: avatarUrl,
       }));
     } catch (error) {
-      console.error("Gagal mengunggah avatar:", error);
+      throw new Error(
+        error.response?.data?.message ||
+          error.message ||
+          "Gagal mengunggah avatar."
+      );
     }
   };
 
@@ -106,10 +120,9 @@ const EditProfileDokter = () => {
       await deleteAvatarDoctor();
       setFormData((prevFormData) => ({
         ...prevFormData,
-        avatar: null, // Kosongkan URL avatar setelah berhasil dihapus
+        avatar: null,
       }));
     } catch (error) {
-      console.error("Gagal menghapus avatar:", error);
       Swal.fire({
         icon: "error",
         title: "Gagal",
@@ -141,7 +154,6 @@ const EditProfileDokter = () => {
 
       navigate("/dokter/profile-dokter");
     } catch (error) {
-      console.error("Failed to update profile:", error);
       Swal.fire({
         icon: "error",
         title: "Gagal",
@@ -167,9 +179,9 @@ const EditProfileDokter = () => {
             <div className="flex flex-col items-center">
               <div className="relative w-32 h-32 mb-4">
                 <img
-                  src={formData.avatar || "https://via.placeholder.com/150"}
-                  alt="Avatar"
-                  className="w-full h-full rounded-full border object-cover"
+                  src={formData?.avatar}
+                  alt="Doctor"
+                  className="w-full h-full rounded-full border border-cyan-900 object-cover"
                 />
               </div>
               <div className="flex gap-4">
@@ -192,6 +204,7 @@ const EditProfileDokter = () => {
               </div>
             </div>
 
+            {/* nama */}
             <div>
               <label>Nama Lengkap</label>
               <input
@@ -215,6 +228,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* jenis kelamin */}
             <div>
               <label>Jenis Kelamin</label>
               <div className="flex gap-6">
@@ -243,6 +257,7 @@ const EditProfileDokter = () => {
               </div>
             </div>
 
+            {/* tanggal lahir */}
             <div>
               <label>Tanggal Lahir</label>
               <input
@@ -254,6 +269,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* no hp */}
             <div>
               <label>No HP</label>
               <input
@@ -265,6 +281,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* alamat */}
             <div>
               <label>Alamat</label>
               <input
@@ -276,6 +293,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* bidang ahli */}
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Bidang
@@ -297,6 +315,7 @@ const EditProfileDokter = () => {
               </select>
             </div>
 
+            {/* pengalaman */}
             <div>
               <label>Pengalaman</label>
               <input
@@ -308,6 +327,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* No STR */}
             <div>
               <label>Nomor STR</label>
               <input
@@ -319,6 +339,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* Biaya */}
             <div>
               <label>Biaya</label>
               <input
@@ -331,6 +352,7 @@ const EditProfileDokter = () => {
               />
             </div>
 
+            {/* tentang dokter */}
             <div>
               <label>Tentang</label>
               <textarea

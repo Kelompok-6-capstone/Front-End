@@ -1,24 +1,25 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom"; // Tambahkan untuk navigasi
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../../components/dokter/Navbar";
 import Sidebar from "../../../components/dokter/Sidebar";
-import { getProfileDoctor } from "../../../api/doctor/doctor"; // API untuk mendapatkan profil dokter
+import { getProfileDoctor } from "../../../api/doctor/profileDoctor";
+import Loading from "../../../components/user/Loading";
 
 const SettingsProfileDokter = () => {
-  const [profile, setProfile] = useState(null); // State untuk menyimpan data profil
-  const [loading, setLoading] = useState(true); // State untuk indikasi loading
-  const [error, setError] = useState(null); // State untuk error handling
-  const navigate = useNavigate(); // Gunakan untuk navigasi
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await getProfileDoctor(); // Panggil API untuk mendapatkan profil
-        setProfile(response.data); // Simpan data profil ke state
+        const response = await getProfileDoctor();
+        setProfile(response.data);
       } catch (error) {
         setError(error.message || "Gagal memuat data profil");
       } finally {
-        setLoading(false); // Set loading selesai
+        setLoading(false);
       }
     };
 
@@ -26,11 +27,7 @@ const SettingsProfileDokter = () => {
   }, []);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p>Loading...</p>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (error) {
@@ -65,25 +62,21 @@ const SettingsProfileDokter = () => {
     <>
       <Navbar />
       <Sidebar />
-      {/* Container Utama */}
       <div className="flex min-h-screen bg-gray-50">
-        {/* Sidebar Spacing */}
         <div className="hidden lg:block lg:w-72"></div>
-        {/* Konten Utama */}
         <div className="flex-grow flex flex-col items-center px-4 py-8">
-          {/* Profile Image */}
           <div className="flex flex-col items-center space-y-4 mt-4">
             <img
-              src={profile.avatar || "/images/dokter/foto-dokter.png"}
-              alt="Profile"
-              className="w-24 h-24 rounded-full border border-gray-300 shadow-md"
+              src={profile?.avatar}
+              alt="Doctor"
+              className="w-24 h-24 rounded-full border border-cyan-900 object-cover"
             />
-            <h1 className="text-xl font-semibold text-gray-800 dark:text-neutral-200">
+            <h1 className="text-xl font-semibold text-gray-800">
               {profile.username}
             </h1>
           </div>
 
-          {/* Profile Details */}
+          {/* data dokter */}
           <div className="mt-6 w-full max-w-md space-y-4">
             {profileDetails.map((item, index) => (
               <div
@@ -92,9 +85,7 @@ const SettingsProfileDokter = () => {
               >
                 <img src={item.icon} alt="icon" className="w-8 h-8" />
                 <div className="ml-5">
-                  <p className="text-gray-800 dark:text-neutral-200 font-medium">
-                    {item.title}
-                  </p>
+                  <p className="text-gray-800 font-medium">{item.title}</p>
                 </div>
               </div>
             ))}
@@ -102,16 +93,14 @@ const SettingsProfileDokter = () => {
 
           <div className="mt-6 w-full max-w-md space-y-4">
             <div className="bg-white border border-cyan-950 shadow-sm rounded-xl p-6 w-[426px] max-w-lg">
-              <p className="text-gray-600 dark:text-neutral-300">
-                {detailDokter.tentangDokter}
-              </p>
+              <p className="text-gray-600">{detailDokter.tentangDokter}</p>
             </div>
           </div>
 
           {/* Tombol Edit */}
           <div className="mr-6 mt-6 w-full max-w-[426px]">
             <button
-              onClick={() => navigate("/dokter/edit-profile")} // Navigasikan ke halaman edit
+              onClick={() => navigate("/dokter/edit-profile")}
               className="bg-teal-700 text-white w-full px-2 py-2 rounded-md shadow-md transition"
             >
               Edit Profile

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../../components/dokter/Navbar";
-import { getConsultations } from "../../../api/doctor/doctor";
+import { getConsultations } from "../../../api/doctor/consultationsDoctor";
 
 const PasienBaru = () => {
   const [patients, setPatients] = useState([]);
@@ -9,6 +9,7 @@ const PasienBaru = () => {
     const fetchConsultations = async () => {
       try {
         const response = await getConsultations();
+  
         const newPatients = response.data
           .filter((consultation) => consultation.status === "approved")
           .map((consultation) => ({
@@ -19,17 +20,24 @@ const PasienBaru = () => {
               new Date(consultation.user.tgl_lahir).getFullYear(),
             profesi: consultation.user.pekerjaan || "Tidak diketahui",
             avatar:
-              consultation.user.avatar || "/images/admin/admin-profil.png",
-          }));
-
+              consultation.user.avatar,
+            createdAt: new Date(consultation.created_at),
+          }))
+          .sort((a, b) => b.createdAt - a.createdAt);
+  
         setPatients(newPatients);
       } catch (error) {
-        console.error("Failed to fetch consultations:", error);
+        throw new Error(
+          error.response?.data?.message ||
+          error.message ||
+          "Terjadi kesalahan saat memuat data konsultasi."
+        );
       }
     };
-
+  
     fetchConsultations();
   }, []);
+  
 
   return (
     <>
@@ -53,7 +61,7 @@ const PasienBaru = () => {
                     <h3 className="font-semibold text-gray-800">
                       {pasien.nama}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-neutral-500">
+                    <p className="text-sm text-gray-500">
                       {pasien.umur} Tahun | {pasien.profesi}
                     </p>
                   </div>
@@ -62,7 +70,7 @@ const PasienBaru = () => {
                     className="flex items-center me-4"
                   >
                     <svg
-                      className="shrink-0 size-5 text-gray-800 dark:text-neutral-200"
+                      className="shrink-0 size-5 text-gray-800"
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
                       height="24"

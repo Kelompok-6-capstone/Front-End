@@ -1,47 +1,24 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import useProfileStore from "../../stores/useProfileStore";
+import useSidebarStore from "../../stores/useSidebarStore";
 
 const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [profile, setProfile] = useState({ username: "", avatar: "" });
-
-  const isActive = (path) => location.pathname === path;
+  const { profile, fetchProfile } = useProfileStore();
+  const { isOpen, toggleSidebar } = useSidebarStore();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = Cookies.get("token_admin");
-        if (!token) {
-          Swal.fire({
-            icon: "error",
-            title: "Error",
-            text: "No admin token found",
-          });
-          return;
-        }
-        const response = await axiosInstance.get("admin/profil", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (response.data.success) {
-          setProfile(response.data.data);
-        }
-      } catch (error) {
-        console.error("Error fetching profile:", error);
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: "Failed to load profile.",
-        });
-      }
-    };
     fetchProfile();
-  }, []);
+  }, [fetchProfile]);
+
+  const isActive = (path) => location.pathname === path;
 
   const handleLogout = async () => {
     try {
@@ -63,7 +40,6 @@ const Sidebar = () => {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-      console.log("Logout response:", response); // Log respons dari server
 
       Cookies.remove("token_admin");
       Swal.fire({
@@ -88,16 +64,18 @@ const Sidebar = () => {
     <>
       <div
         id="hs-application-sidebar"
-        className="hs-overlay  [--auto-close:lg]
-    hs-overlay-open:translate-x-0
-    -translate-x-full transition-all duration-300 transform
-    fixed inset-y-0 start-0 z-[60]
-    bg-[#ECFEFF] border-gray-200
-    lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 flex w-[277px] h-full px-[24px)] flex-col items-center gap-[var(--Spacing-32, 32px)] flex-shrink-0"
-        role="dialog"
-        tabIndex={-1}
-        aria-label="Sidebar"
+        className={`hs-overlay ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-all duration-300 fixed inset-y-0 start-0 z-[60] bg-[#ECFEFF] border-gray-200 lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 flex lg:w-[277px] h-full lg:px-[24px)] flex-col items-center gap-[var(--Spacing-32, 32px)] flex-shrink-0`}
       >
+        {isOpen && (
+          <button
+            className="absolute -right-9 top-4 p-2 lg:hidden"
+            onClick={toggleSidebar}
+          >
+            <img src="/images/admin/sidebar-left.svg" alt="" />
+          </button>
+        )}
         <div className="relative flex flex-col h-full max-h-full">
           <div className="px-5 pt-4 justify-center flex flex-col items-center gap-y-8">
             {/* Logo */}
@@ -160,17 +138,6 @@ const Sidebar = () => {
                     Transaksi
                   </Link>
                 </li>
-                <li className="hs-accordion" id="account-accordion">
-                  <Link
-                    className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
-                      isActive("/admin/statistics") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/admin/statistics"
-                  >
-                    <img src="/images/Chart.svg" alt="chart" />
-                    Statistik Bulanan
-                  </Link>
-                </li>
                 <li className="hs-accordion" id="projects-accordion">
                   <Link
                     className={`flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] focus:outline-none ${
@@ -195,38 +162,13 @@ const Sidebar = () => {
                 </li>
                 <li>
                   <Link
-                    className={`w-full flex gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/announcement") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/admin/announcement"
-                  >
-                    <img
-                      src="/images/annotation-information.svg"
-                      alt="information"
-                    />
-                    Pengumuman
-                  </Link>
-                </li>
-                <li>
-                  <Link
                     className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/report") ? "bg-[#22D3EE]" : ""
+                      isActive("/admin/profile") ? "bg-[#22D3EE]" : ""
                     }`}
-                    to="/admin/report"
+                    to="/admin/profile"
                   >
-                    <img src="/images/Message.svg" alt="message" />
-                    Laporan Pengguna
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className={`w-full flex items-center gap-x-3.5 py-2 px-2.5 text-sm text-gray-800 rounded-lg hover:bg-[#22D3EE] ${
-                      isActive("/admin/settings") ? "bg-[#22D3EE]" : ""
-                    }`}
-                    to="/admin/settings"
-                  >
-                    <img src="/images/gear.svg" alt="gear" />
-                    Pengaturan
+                    <img src="/images/admin/profile.svg" alt="profile" />
+                    Profile
                   </Link>
                 </li>
                 <li>

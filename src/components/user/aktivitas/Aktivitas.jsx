@@ -14,7 +14,7 @@ export default function Aktivitas() {
                 // console.log('Response data:', response.data); 
                 if (response.data.success) {
                     setAktivitasData(response.data.data);
-                    // console.log('Aktivitas data:', response.data.data); 
+                    console.log('Aktivitas data:', response.data.data);
                 } else {
                     setError(response.data.message || 'Gagal memuat aktivitas.');
                 }
@@ -45,7 +45,7 @@ export default function Aktivitas() {
                             <div className="flex items-start">
                                 <img
                                     className="w-[114px] h-[126px] rounded-md"
-                                    src={aktivitas.doctor?.image || '/images/user/default-doctor.png'}
+                                    src={aktivitas.doctor?.avata || 'https://res.cloudinary.com/dnvxutvky/image/upload/v1734490946/aemxywyt4lovxwditlzm.png'}
                                     alt={`Gambar profile ${aktivitas.doctor?.avatar || 'dokter'}`}
                                 />
                                 <div className="ml-6 flex flex-col justify-between">
@@ -68,7 +68,7 @@ export default function Aktivitas() {
                             <div className="flex items-center">
                                 <div className="flex items-center">
                                     <div
-                                        className={`px-4 py-2 text-white text-xs font-medium rounded-md ${aktivitas.payment_status === 'paid' ? 'bg-green-500' : 'bg-red-500'}`}
+                                        className={`px-4 py-2 text-white text-xs font-medium rounded-md ${aktivitas.payment_status === 'paid' ? 'bg-green-500' : 'bg-neutral-300'}`}
                                     >
                                         {aktivitas.payment_status === 'paid' ? 'Selesai' : 'Pending'}
                                     </div>

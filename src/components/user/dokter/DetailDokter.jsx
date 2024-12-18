@@ -29,13 +29,14 @@ export default function DetailDokter() {
 
     return (
         <>
-            <div className="flex flex-col md:flex-row items-start md:items-center md:gap-8">
+            <div className="flex flex-col md:flex-row md:gap-8">
                 <div className="flex-shrink-0 mt-4">
                     <img
                         src={doctor?.avatar || '/images/user/dokter.png'}
                         alt={doctor?.username || 'Dokter'}
-                        className="lg:w-[286px] lg:h-[316.92px] rounded-[13.53px] md:mx-0 mb-6 lg:mb-0"
+                        className="lg:w-[286px] lg:h-[316.92px] rounded-[13.53px] md:mx-0 mb-4"
                     />
+                    <CatatanSebelumKonsultasi />
                 </div>
                 <div className="flex-1 lg:ms-20 md:mt-10">
                     <div className="mb-4 md:mb-2 flex">
@@ -50,18 +51,18 @@ export default function DetailDokter() {
                         {doctor.title}
                     </div>
                     {/* <div className="mb-6">
-                        <h3 className="text-black text-lg lg:text-xl font-medium">Bidang Keahlian</h3>
-                        <div className="flex flex-wrap gap-2 mt-2">
-                            {(doctor?.specialties || []).map((specialty) => (
-                                <span
-                                    key={specialty.id}
-                                    className="p-2 bg-teal-50 rounded-md text-teal-600 text-xs font-medium"
-                                >
-                                    {specialty.name}
-                                </span>
-                            ))}
-                        </div>
-                    </div> */}
+            <h3 className="text-black text-lg lg:text-xl font-medium">Bidang Keahlian</h3>
+            <div className="flex flex-wrap gap-2 mt-2">
+                {(doctor?.specialties || []).map((specialty) => (
+                    <span
+                        key={specialty.id}
+                        className="p-2 bg-teal-50 rounded-md text-teal-600 text-xs font-medium"
+                    >
+                        {specialty.name}
+                    </span>
+                ))}
+            </div>
+        </div> */}
                     <div className="mb-6">
                         <h3 className="text-black text-lg lg:text-xl font-medium">Jam Kerja</h3>
                         <p className="text-black text-base font-normal">{doctor?.schedule || 'Tidak tersedia'}</p>
@@ -78,7 +79,8 @@ export default function DetailDokter() {
                     </div>
                 </div>
             </div>
-            <CatatanSebelumKonsultasi />
+
+
             <button className="w-full max-w-sm lg:w-72 py-2 bg-teal-900 rounded-md text-center text-white text-sm font-semibold hover:bg-teal-700 mt-4">
                 <a href={`/user/form-keluhan/${id}`} className="text-white">
                     Buat Janji

@@ -4,6 +4,7 @@ import { getSortIcon } from "../../utils/getSortIcon";
 import axiosInstance from "../../utils/axiosInstance";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
+import TransactionModal from "./TransactionModal";
 
 const LoadingSpinner = () => {
   return (
@@ -24,6 +25,8 @@ const TransactionTable = () => {
   const [activeTab, setActiveTab] = useState("seluruh");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -114,6 +117,16 @@ const TransactionTable = () => {
     }
   };
 
+  const handleActionClick = (transaction) => {
+    setSelectedTransaction(transaction);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTransaction(null);
+  };
+
   return (
     <div className="p-6">
       <h1 className="font-[Poppins] text-[32px] not-italic font-medium leading-[normal] mb-5">
@@ -191,7 +204,7 @@ const TransactionTable = () => {
                     <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                       Id Konsultasi
                     </th>
-                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                    <th className="px-1 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                       Keluhan
                     </th>
                     <th
@@ -200,7 +213,7 @@ const TransactionTable = () => {
                     >
                       Status Konsultasi {getSortIcon(sortConfig, "status")}
                     </th>
-                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                    <th className="px-16 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                       Nama Dokter
                     </th>
                     <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
@@ -226,8 +239,13 @@ const TransactionTable = () => {
                       <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                         {transaction.order_id}
                       </td>
-                      <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
-                        {transaction.description}
+                      <td className="px-1 py-4 border-r border-opacity-15 border-[#000]">
+                        {/* Added this div to center the button */}
+                        <div className="flex gap-1 items-center justify-center w-32">
+                          <button onClick={() => handleActionClick(transaction)}>
+                            <img src="/images/admin/action.svg" alt="action" />
+                          </button>
+                        </div>
                       </td>
                       <td className="px-6 py-4 border-r border-opacity-15 border-[#000]">
                         <span
@@ -236,11 +254,11 @@ const TransactionTable = () => {
                               ? "bg-[#CCFBF1] text-[#115E59]"
                               : transaction.status === "pending"
                               ? "bg-[#FEF9C3] text-[#854D0E]"
-                              : "bg-[#E0E7FF] text-[#3730A3]"
+                              : "bg-red-400 text-white"
                           }`}
                         >
                           {transaction.status === "approved"
-                            ? "Selesai"
+                            ? "Disetujui"
                             : transaction.status === "pending"
                             ? "Proses"
                             : transaction.status}
@@ -296,8 +314,15 @@ const TransactionTable = () => {
           </div>
         </>
       )}
+      {/* Added TransactionModal here */}
+      <TransactionModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        transaction={selectedTransaction}
+      />
     </div>
   );
 };
 
 export default TransactionTable;
+

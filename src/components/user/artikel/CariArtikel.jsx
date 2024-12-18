@@ -31,9 +31,12 @@ export default function CariArtikel() {
             <div className="max-w-full px-4 py-5 bg-[#cfedf8] rounded-lg mt-4 mx-2 lg:mx-0">
                 <div className="flex flex-col gap-4">
                     <div className="text-center text-sky-900 text-xl sm:text-2xl font-semibold">
-                        Cari Artikel Sesuai Kebutuhan Anda
+                        Temukan Artikel Pilihan Anda
                     </div>
                     <div className="hidden lg:block">
+                        <div className="text-cyan-800 text-base font-semibold text-center">Jelajahi berbagai artikel menarik sesuai minat dan kebutuhan Anda</div>
+                    </div>
+                    {/* <div className="hidden lg:block">
                         <div className="flex flex-col sm:flex-row justify-start items-center gap-28">
                             <div className="p-2 flex items-center gap-2">
                                 <img src="/images/user/artikel/check-circle-2.svg" alt="check-circle" />
@@ -54,7 +57,7 @@ export default function CariArtikel() {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     {/* Input Pencarian */}
                     <div className="w-full">
                         <div className="flex items-center bg-white rounded-lg shadow border border-gray-200">
@@ -78,7 +81,7 @@ export default function CariArtikel() {
             </div>
 
             {/* Hasil Pencarian */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 p-4">
                 {debouncedQuery.trim() === "" ? (
                     allArticles.map((article) => (
                         <ArtikelCard

@@ -3,10 +3,13 @@ export { loginUser } from "./auth/loginUser";
 export { verifyOtp } from "./auth/verifyOtp";
 export { resendOtp } from "./auth/resendOtp";
 export {
-    getProfileDoctor,
-    loginDoctor,
-    logoutDoctor,
-    registerDoctor,
-    resendDoctorOtp,
-    verifyDoctorOtp
-} from "./doctor/doctor"
+  getProfileDoctor,
+  updateProfileDoctor,
+} from "../api/doctor/profileDoctor";
+export {
+  loginDoctor,
+  logoutDoctor,
+  registerDoctor,
+  verifyDoctorOtp,
+  resendDoctorOtp,
+} from "../api/doctor/authDoctor";
