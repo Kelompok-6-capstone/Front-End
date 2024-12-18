@@ -44,6 +44,16 @@ Berikut adalah hasil dari website kami dapat dilihat di link berikut
 
 ---
 
+## **Preview Aplikasi Calmind**
+- Preview Halaman Pengguna
+![Preview Halaman Pengguna](https://raw.githubusercontent.com/Kelompok-6-capstone/Front-End/refs/heads/development/public/images/readme/readme-pengguna.png)
+
+- Preview Halaman Dokter
+![Preview Halaman Dokter](https://raw.githubusercontent.com/Kelompok-6-capstone/Front-End/refs/heads/development/public/images/readme/readme-dokter.png)
+
+- Preview Halaman Admin
+![Preview Halaman Admin](https://raw.githubusercontent.com/Kelompok-6-capstone/Front-End/refs/heads/development/public/images/readme/readme-admin.png)
+
 ## 📂 **Struktur Folder Proyek**
 
 ```plaintext
