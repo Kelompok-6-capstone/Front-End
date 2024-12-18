@@ -50,7 +50,7 @@ Berikut adalah hasil dari website kami dapat dilihat di link berikut
 Calmind-FrontEnd/
 │
 ├── public/                 # File statis publik
-│   └── index.html          # File utama HTML
+│   └── images/             # File gambar
 │
 ├── src/                    # Sumber aplikasi
 │   ├── api/                # Panggilan API dengan Axios
