@@ -89,7 +89,7 @@ const Navbar = () => {
               onClick={() => navigate(-1)}
             >
               <img
-                src="/public/images/kembali.svg"
+                src="/images/kembali.svg"
                 alt="Kembali ke Daftar Pasien"
                 className="w-4 h-4"
               />
