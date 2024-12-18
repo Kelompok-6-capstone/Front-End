@@ -1,64 +1,100 @@
-# Calmind
+# 🌟 **Calmind**  
+**Calmind** adalah aplikasi yang dirancang untuk memberikan akses mudah dan terjangkau ke layanan kesehatan mental. Aplikasi ini menjadi jembatan bagi individu untuk terhubung dengan profesional melalui konsultasi online. Selain itu, Calmind menyediakan fitur edukasi, panduan relaksasi, dan chatbot AI interaktif untuk memberikan dukungan instan.
 
-**Calmind** is an app designed to provide easy and affordable access to mental health services. This application becomes a bridge for individuals to connect with professionals through online consultations. Additionally, Calmind is equipped with practical features such as educational articles, guided blending, and an interactive AI chatbot that can answer mental health-related questions responsively, helping users get instant information and support.
+## 📜 Link Deployment
 
----
-
-## Main Features
-
-### **User**
-1. **Doctor List**: Browse through a list of mental health specialists.
-2. **Complaint Submission Form**: Submit your complaints and symptoms for consultation.
-3. **Doctor Recommendations**: Receive advice and recommendations from doctors after submitting complaints.
-4. **Mental Health Articles**: Access various educational articles on mental health.
-5. **Automatic Payments with Midtrans**: Make secure payments via Midtrans integration.
-6. **Chat with Doctors**: Communicate your needs directly with doctors.
-7. **User Profile**: Manage your personal information.
-8. **Notifications**: Stay up-to-date with reminders and important information.
-9. **Homepage**: Access all major features from one page.
-10. **Login/Register**: Easily register or log in to your account.
-11. **AI Chatbot**: Get instant assistance via an AI-powered chatbot.
-
-### **Doctor**
-1. **Doctor List**: Manage doctor profiles and services.
-2. **Complaint Submission Form**: Access patient complaints directly.
-3. **Doctor Recommendations**: Send recommendations or diagnoses to patients.
-4. **Manual Payments**: Verify and manage payments manually.
-5. **Chat with Patients**: Communicate with patients in real-time.
-6. **User Profile**: Manage doctor data.
-7. **Notifications**: Get notifications about patient activities.
-8. **Homepage**: A control center for doctor features.
-9. **Login/Register**: Access doctor accounts easily.
-10. **AI Chatbot**: A virtual assistant for service needs.
-
-### **Admin**
-1. **User List**: View the list of application users.
-2. **Manage Users (CRUD)**: Add, edit, or delete user data.
-3. **Manage Transactions**: Monitor and manage user payments.
-4. **Manage Articles (CRUD)**: Publish and manage mental health articles.
-5. **User Activity**: Track user activities (priority 2).
-6. **Admin Profile**: Manage admin account information.
+Berikut adalah hasil dari website kami dapat dilihat di link berikut
+[Link Deployment](https://calmind6.netlify.app/)
 
 ---
 
-## Front-End Technologies
+## 🎯 **Fitur Utama**
 
-- **Frontend**: React, Vite, Tailwind CSS, Preline, Sweet Alert, JS-Cookie, etc.
+### 👤 **Pengguna**
+- **Daftar Dokter**: Jelajahi spesialis kesehatan mental yang tersedia.
+- **Form Pengaduan**: Ajukan keluhan dan gejala untuk konsultasi.
+- **Rekomendasi Dokter**: Dapatkan saran dan diagnosis langsung dari dokter.
+- **Artikel Kesehatan Mental**: Akses informasi edukatif seputar kesehatan mental.
+- **Pembayaran Otomatis (Midtrans)**: Proses pembayaran yang aman dan mudah.
+- **Chat dengan Dokter**: Komunikasikan kebutuhan Anda secara langsung.
+- **Profil Pengguna**: Kelola informasi pribadi Anda.
+- **Beranda**: Akses fitur utama dari satu halaman intuitif.
+- **Login/Daftar**: Registrasi atau masuk dengan mudah.
+- **Chatbot AI**: Bantuan instan melalui chatbot berbasis AI.
+
+### 🩺 **Dokter**
+- **Daftar Dokter**: Kelola profil dan layanan Anda sebagai dokter.
+- **Form Pengaduan**: Tinjau keluhan pasien secara langsung.
+- **Rekomendasi Dokter**: Berikan rekomendasi atau diagnosis kepada pasien.
+- **Pembayaran Manual**: Verifikasi dan kelola transaksi pembayaran.
+- **Chat dengan Pasien**: Komunikasi real-time dengan pasien.
+- **Profil Dokter**: Kelola informasi pribadi dan profesional Anda.
+- **Notifikasi**: Terima pemberitahuan terkait aktivitas pasien.
+- **Beranda**: Pusat kendali fitur dokter.
+- **Login/Daftar**: Akses akun dokter dengan mudah.
+- **Chatbot AI**: Asisten virtual untuk meningkatkan layanan.
+
+### 🔧 **Admin**
+- **Daftar Pengguna**: Lihat dan kelola daftar pengguna aplikasi.
+- **Kelola Pengguna (CRUD)**: Tambah, ubah, atau hapus data pengguna.
+- **Kelola Transaksi**: Pantau dan kelola pembayaran pengguna.
+- **Kelola Artikel (CRUD)**: Publikasi dan manajemen artikel kesehatan mental.
+- **Aktivitas Pengguna**: Lacak aktivitas pengguna secara real-time.
+- **Profil Admin**: Kelola informasi akun administrator.
+
+---
+
+## 📂 **Struktur Folder Proyek**
+
+```plaintext
+Calmind-FrontEnd/
+│
+├── public/                 # File statis publik
+│   └── index.html          # File utama HTML
+│
+├── src/                    # Sumber aplikasi
+│   ├── api/                # Panggilan API dengan Axios
+│   ├── assets/             # Gambar dan aset statis
+│   ├── components/         # Komponen UI yang reusable
+│   ├── data/               # Data statis atau mock
+│   ├── hooks/              # Custom React hooks
+│   ├── pages/              # Halaman utama aplikasi
+│   ├── routes/             # Konfigurasi navigasi
+│   ├── stores/             # State management global (Zustand)
+│   ├── utils/              # Helper functions
+│   ├── App.jsx             # Root component
+│   ├── index.css           # Styling global menggunakan Tailwind CSS
+│   └── main.jsx            # Entry point aplikasi
+│
+├── .env                    # Variabel lingkungan
+├── .gitignore              # File/folder yang diabaikan Git
+├── tailwind.config.js      # Konfigurasi Tailwind CSS
+├── vite.config.js          # Konfigurasi Vite
+└── README.md               # Dokumentasi proyek
+
+```
+
+
+
+## 🛠️ Teknologi yang Digunakan
+
+- **Bahasa Pemrograman**: Javascript
+- **Library**: React, Vite, Tailwind CSS, Preline, Sweet Alert, JS-Cookie, etc.
 - **State Management**: Zustand
 - **AI Chatbot**: Gemini API
-- **Hosting**: Netlify (Frontend)
+- **Hosting**: Netlify
 - **Version Control**: Git, GitHub
 
 ---
 
-## Installation and Configuration
+## Instalasi dan Konfigurasi
 
-1. Clone this repository:
+1. Clone repository:
    ```bash
-   git clone https://github.com/username/Front-End.git
+   git clone https://github.com/username/Kelompok-6-capstone/Front-End.git
    ```
 
-2. Navigate to the project directory:
+2. Navigasi ke proyek direktori:
    ```bash
    cd Front-End
    ```
@@ -68,18 +104,14 @@
    npm install
    ```
 
-4. Run the application:
+4. Jalankan aplikasi:
    ```bash
    npm run dev
    ```
 
-5. Configure environment variables:
+5. Mengonfigurasi variabel lingkungan:
    - `REACT_APP_API_URL`: Backend API URL
 
----
-
-## Contribution
-We welcome contributions from anyone interested in helping to develop **Calmind**. Please open an issue or pull request on GitHub to get started.
 
 ---
 
@@ -89,5 +121,5 @@ This project is licensed under the [MIT License](LICENSE).
 ---
 
 ## Contact
-For more information or inquiries, contact us at **calmind.support@example.com**.
+For more information or inquiries, contact us at **calmind.support@gmail.com**.
 
