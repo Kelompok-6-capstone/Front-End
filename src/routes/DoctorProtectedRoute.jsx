@@ -1,17 +1,53 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import { getProfileDoctor } from "../api/doctor/profileDoctor";
+import Loading from "../components/user/Loading";
 
 const DoctorProtectedRoute = ({ children }) => {
-  // Cek apakah token admin ada di cookie
+  const [profileValid, setProfileValid] = useState(null);
   const token = Cookies.get("token_doctor");
+  const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    const checkProfile = async () => {
+      try {
+        if (!token) {
+          setProfileValid(false);
+          setLoading(false);
+          return;
+        }
+
+        const response = await getProfileDoctor();
+
+        if (response.data) {
+          const profileData = response.data;
+          const isComplete =
+            profileData.name && profileData.specialization && profileData.phone;
+          setProfileValid(isComplete);
+        } else {
+          setProfileValid(false);
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+        setProfileValid(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkProfile();
+  }, [token]);
+
+  if (loading) {
+    return <Loading />;
+  }
   if (!token) {
-    // Jika token tidak ada, redirect ke halaman login
     return <Navigate to="/dokter/login" replace />;
   }
-
-  // Jika token ada, izinkan akses ke komponen anak
+  if (profileValid === false) {
+    return <Navigate to="/dokter/lengkapi-profile" replace />;
+  }
   return children;
 };
 

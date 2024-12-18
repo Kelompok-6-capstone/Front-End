@@ -1,10 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  getProfileDoctor,
-  logoutDoctor,
-  updateDoctorStatus,
-} from "../../api/doctor/doctor";
+import { getProfileDoctor } from "../../api/doctor/profileDoctor";
+import { updateDoctorStatus } from "../../api/doctor/statusDoctor";
+import { logoutDoctor } from "../../api/doctor/authDoctor";
 
 const Sidebar = () => {
   const location = useLocation();
@@ -20,10 +18,17 @@ const Sidebar = () => {
   const getPageName = (pathname) => {
     const pathMap = {
       "/dokter/dashboard": "Dashboard",
+      "/dokter/daftar-pasien-tertangani": "Daftar Pasien Tertangani",
+      "/dokter/daftar-pasien-baru": "Daftar Pasien Baru",
+      "/dokter/daftar-passien": "Daftar Semua Pasien",
+      "/dokter/detail-passien/:id": "Detail Pasien",
       "/dokter/profile-dokter": "Profile Dokter",
-      "/dokter/daftar-passien": "Daftar Pasien",
       "/dokter/transaksi": "Transaksi",
-      "/dokter/settings": "Pengaturan",
+      "/dokter/settings/profile-dokter": "Settings / Profile Dokter",
+      "/dokter/edit-profile": "Edit Profile",
+      "/dokter/settings/FAQ": "Settings / Bantuan",
+      "/dokter/settings/tentang-APK": "Pengaturan / Tentang Aplikasi",
+      "/dokter/detail-konsul/:id": "Detail Riwayat Konsultasi",
     };
     return pathMap[pathname] || "Halaman Tidak Dikenal";
   };
@@ -31,8 +36,7 @@ const Sidebar = () => {
   const handleLogout = async () => {
     try {
       await logoutDoctor();
-    } catch (error) {
-      console.error("Gagal logout:", error);
+    } catch {
       alert("Logout gagal. Silakan coba lagi.");
     }
   };
@@ -54,9 +58,14 @@ const Sidebar = () => {
       try {
         const response = await getProfileDoctor();
         setProfile(response.data);
-        setIsLoading(false); // Set loading to false once data is loaded
+        setIsLoading(false);
       } catch (error) {
-        console.error("Gagal memuat profil dokter:", error);
+        setIsLoading(false);
+        throw new Error(
+          error.response?.data?.message ||
+            error.message ||
+            "Terjadi kesalahan saat memuat profil dokter."
+        );
       }
     };
 
@@ -69,9 +78,14 @@ const Sidebar = () => {
         const response = await getProfileDoctor();
         setStatus(response.data.is_active);
       } catch (error) {
-        console.error("Gagal memuat status dokter:", error);
+        throw new Error(
+          error.response?.data?.message ||
+            error.message ||
+            "Terjadi kesalahan saat memuat status dokter."
+        );
       }
     };
+
     fetchDoctorStatus();
   }, []);
 
@@ -164,7 +178,7 @@ const Sidebar = () => {
         tabIndex={-1}
         aria-label="Sidebar"
         style={{
-          minHeight: "100vh", // Ensure the sidebar takes the full height
+          minHeight: "100vh",
         }}
       >
         <div className="relative flex flex-col h-full max-h-full">
@@ -193,17 +207,19 @@ const Sidebar = () => {
                   <img
                     src={profile?.avatar}
                     alt="Profile"
-                    className="w-24 h-24 rounded-full border border-cyan-900"
+                    className="w-24 h-24 rounded-full border border-cyan-900 object-cover"
                   />
-                  <span
-                    className={`absolute bottom-6 right-4 w-3 h-3 rounded-full ${
-                      status ? "bg-green-500" : "bg-gray-400"
-                    }`}
-                  ></span>
                   <h1 className="text-xl mt-4 font-semibold">
                     {profile?.username}
                   </h1>
-                  <p className="text-center text-sm">Dokter</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-center text-sm">Dokter</p>
+                    <span
+                      className={`w-3 h-3 rounded-full ${
+                        status ? "bg-green-500" : "bg-gray-400"
+                      }`}
+                    ></span>
+                  </div>
                 </>
               )}
             </div>
@@ -213,8 +229,8 @@ const Sidebar = () => {
           <div
             className="h-full overflow-y-auto text-center text-[14px] font-semibold mt-8"
             style={{
-              scrollbarWidth: "none", // Firefox
-              msOverflowStyle: "none", // Internet Explorer/Edge
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
             }}
           >
             {" "}
@@ -342,12 +358,7 @@ const Sidebar = () => {
                           <input
                             type="checkbox"
                             className="sr-only peer"
-                            onChange={(e) =>
-                              console.log(
-                                "Notifikasi Toggle:",
-                                e.target.checked
-                              )
-                            }
+                            onChange={(e) => e.target.checked}
                           />
                           <div className="w-8 h-4 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-blue-500 peer-checked:bg-blue-500 transition-all relative">
                             <div className="w-3 h-3 bg-white rounded-full absolute top-0.5 left-0.5 transform transition-all peer-checked:translate-x-4"></div>

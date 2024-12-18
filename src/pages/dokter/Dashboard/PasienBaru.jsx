@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../../../components/dokter/Navbar";
-import { getConsultations } from "../../../api/doctor/doctor";
+import { getConsultations } from "../../../api/doctor/consultationsDoctor";
 
 const PasienBaru = () => {
   const [patients, setPatients] = useState([]);
@@ -9,6 +9,7 @@ const PasienBaru = () => {
     const fetchConsultations = async () => {
       try {
         const response = await getConsultations();
+  
         const newPatients = response.data
           .filter((consultation) => consultation.status === "approved")
           .map((consultation) => ({
@@ -19,17 +20,24 @@ const PasienBaru = () => {
               new Date(consultation.user.tgl_lahir).getFullYear(),
             profesi: consultation.user.pekerjaan || "Tidak diketahui",
             avatar:
-              consultation.user.avatar || "/images/admin/admin-profil.png",
-          }));
-
+              consultation.user.avatar,
+            createdAt: new Date(consultation.created_at),
+          }))
+          .sort((a, b) => b.createdAt - a.createdAt);
+  
         setPatients(newPatients);
       } catch (error) {
-        console.error("Failed to fetch consultations:", error);
+        throw new Error(
+          error.response?.data?.message ||
+          error.message ||
+          "Terjadi kesalahan saat memuat data konsultasi."
+        );
       }
     };
-
+  
     fetchConsultations();
   }, []);
+  
 
   return (
     <>
