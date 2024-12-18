@@ -191,7 +191,7 @@ const TransactionTable = () => {
                     <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                       Id Konsultasi
                     </th>
-                    <th className="px-6 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
+                    <th className="px-40 py-3 text-sm font-semibold text-black border-[1px] border-opacity-15 border-[#000]">
                       Keluhan
                     </th>
                     <th
@@ -236,7 +236,7 @@ const TransactionTable = () => {
                               ? "bg-[#CCFBF1] text-[#115E59]"
                               : transaction.status === "pending"
                               ? "bg-[#FEF9C3] text-[#854D0E]"
-                              : "bg-[#E0E7FF] text-[#3730A3]"
+                              : "bg-red-400 text-white"
                           }`}
                         >
                           {transaction.status === "approved"
