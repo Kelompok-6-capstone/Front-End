@@ -15,7 +15,7 @@ export default function DetailProfileChat() {
                         <p className="text-neutral-400">Psikiatri Umum</p>
                         <div className="flex justify-center items-center gap-2 mt-2">
                             <span className="text-black text-sm font-semibold">Nomor STR:</span>
-                            <span className="text-black text-sm font-semibold">12345678910111231444</span>
+                            <span className="text-black text-sm font-semibold">STR-123456787</span>
                         </div>
                     </div>
                 </div>

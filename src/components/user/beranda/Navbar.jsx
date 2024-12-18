@@ -50,28 +50,29 @@ export default function Navbar() {
             </a>
           </div>
         </div>
-
         <div className="flex items-center gap-5">
           <UserProfileDropdown />
-          <button className="relative">
-            <img
-              className="w-6 h-6"
-              src="/images/user/chat.svg"
-              alt="Chat Icon"
-            />
-            <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+          <a href="/user/semua-chat">
+            <button className="relative">
+              <img
+                className="w-6 h-6"
+                src="/images/user/chat.svg"
+                alt="Chat Icon"
+              />
+              {/* <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
               3
-            </span>
-          </button>
+            </span> */}
+            </button>
+          </a>
           <button className="relative">
             <img
               className="w-6 h-6"
               src="/images/user/notif.svg"
               alt="Notification Icon"
             />
-            <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
+            {/* <span className="absolute top-0 right-0 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center">
               5
-            </span>
+            </span> */}
           </button>
           <div className="sm:hidden">
             <button

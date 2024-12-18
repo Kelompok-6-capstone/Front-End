@@ -13,6 +13,7 @@ import ChatDokterPage from "../pages/user/ChatDokterPage";
 import AktivitasPage from "../pages/user/AktivitasPage";
 import DetailAktivitasPage from "../pages/user/DetailAktivitasPage";
 import StatusPembayaranPage from "../pages/user/StatusPembayaranPage";
+import SemuaChatPage from "../pages/user/SemuaChatPage";
 
 const UserRoutes = () => (
     <Routes>
@@ -109,6 +110,14 @@ const UserRoutes = () => (
             element={
                 <ProtectedRoute>
                     <StatusPembayaranPage />
+                </ProtectedRoute>
+            }
+        />
+        <Route
+            path="/semua-chat"
+            element={
+                <ProtectedRoute>
+                    <SemuaChatPage />
                 </ProtectedRoute>
             }
         />
