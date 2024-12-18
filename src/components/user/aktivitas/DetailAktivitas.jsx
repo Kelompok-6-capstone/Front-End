@@ -43,7 +43,7 @@ export default function DetailAktivitas() {
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
                 <img
                     className="w-[114px] h-[126px] rounded-md"
-                    src={detailData.doctor?.image || '/images/user/default-doctor.png'}
+                    src={detailData.doctor?.avata || 'https://res.cloudinary.com/dnvxutvky/image/upload/v1734490946/aemxywyt4lovxwditlzm.png'}
                     alt={`Gambar profile ${detailData.doctor?.avatar || 'dokter'}`}
                 />
                 <div className="flex flex-col gap-1 text-center sm:text-left">
@@ -51,7 +51,7 @@ export default function DetailAktivitas() {
                         {detailData.doctor?.username || 'Nama Dokter Tidak Tersedia'}
                     </div>
                     <div className="text-neutral-400 text-sm sm:text-base">
-                        {detailData.doctor?.about || 'Spesialisasi Tidak Tersedia'}
+                        {detailData.doctor?.title || 'Spesialisasi Tidak Tersedia'}
                     </div>
                     <div className="text-neutral-400 text-sm sm:text-base">
                         {new Date(detailData.created_at).toLocaleDateString('id-ID', {

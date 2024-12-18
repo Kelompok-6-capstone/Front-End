@@ -26,7 +26,7 @@ export default function Stepper1() {
                         </span>
                     </div>
                     {index < steps.length - 1 && (
-                        <div className="flex-grow h-px bg-gray-200 hidden md:block"></div>
+                        <div className="flex-grow h-px bg-gray-200 hidden md:block mt-4"></div>
                     )}
                 </React.Fragment>
             ))}

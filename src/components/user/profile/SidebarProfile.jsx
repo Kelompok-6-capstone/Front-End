@@ -13,7 +13,6 @@ export default function SidebarProfile() {
             >
                 Sidebar
             </button>
-
             {/* Sidebar */}
             <div
                 className={`fixed top-0 left-0 h-full w-72 bg-white shadow-lg z-40 transform transition-transform duration-300 ${isOpen ? "translate-x-0" : "-translate-x-full"
@@ -26,7 +25,6 @@ export default function SidebarProfile() {
                 >
                     ✕
                 </button>
-
                 {/* Isi Sidebar */}
                 <div className="w-full h-full px-6 py-3 flex flex-col justify-start items-start gap-6 mt-20">
                     <div className="w-full p-2.5 border-b border-neutral-300 flex justify-start items-center gap-2.5">
@@ -35,7 +33,7 @@ export default function SidebarProfile() {
                         </Link>
                     </div>
                     <div className="w-full p-2.5 border-b border-neutral-200 flex justify-start items-center gap-2.5">
-                        <Link to="/user/bantuan" onClick={() => setIsOpen(false)}>
+                        <Link to="" onClick={() => setIsOpen(false)}>
                             <div className="text-black text-base font-medium">Bantuan</div>
                         </Link>
                     </div>

@@ -31,14 +31,27 @@ export default function JanjiKonsultasi() {
                                 className="w-full h-48 rounded-md object-cover md:w-48"
                             />
                             <div className="flex-grow">
-                                <div className="flex justify-between">
+                                <div className="flex justify-between mt-4">
                                     <div className="text-cyan-900 text-base font-semibold">{doctor.username}</div>
                                     <div className="text-cyan-900 text-lg font-normal">Rp {doctor.price.toLocaleString()}</div>
                                 </div>
                                 <div className="text-neutral-400 text-base font-normal mb-1">{doctor.title}</div>
                                 <div className="text-neutral-400 text-sm">{doctor.specialization}</div>
-                                <div className="mt-4 md:mt-0 md:float-right">
-                                    <JanjiKonsultasiButton dokter={doctor} />
+
+                                <div className="flex flex-wrap items-center gap-2 mt-20">
+                                    <div className="bg-teal-600 text-white px-2 py-1 rounded-md text-[10px] sm:text-xs font-medium flex items-center gap-2">
+                                        <img
+                                            src="/images/user/clock-10.svg"
+                                            alt="Clock"
+                                            className="w-4 h-4"
+                                        />
+                                        <span className="text-teal-50 font-medium tracking-tight">
+                                            Tersedia hari ini
+                                        </span>
+                                    </div>
+                                    <div className="ml-auto">
+                                        <JanjiKonsultasiButton dokter={doctor} />
+                                    </div>
                                 </div>
                             </div>
                         </div>
